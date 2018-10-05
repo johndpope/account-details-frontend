@@ -1,7 +1,7 @@
 {
   "name": "@transferwise/account-details-frontend",
-  "version": "0.0.1",
-  "description": "TransferWise Recipient Creation",
+  "version": "0.1.0",
+  "description": "TransferWise components for interacting with Account Details",
   "license": "MIT",
   "scripts": {
     "pretest": "",
