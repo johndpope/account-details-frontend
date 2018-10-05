@@ -18,10 +18,11 @@
     "less": "lessc demo/**/*.less demo/css/examples.css",
     "copy:jquery": "cp node_modules/jquery/dist/jquery.min.js demo/lib/",
     "copy:ui-router": "cp node_modules/@uirouter/angularjs/release/angular-ui-router.js demo/lib/",
+    "copy:styleguide": "cp node_modules/@transferwise/styleguide-components/js/styleguide-components.js demo/lib/",
     "copy:angular": "cp node_modules/angular/angular.min.js demo/lib/",
     "copy:bootstrap": "cp node_modules/bootstrap/dist/js/bootstrap.min.js demo/lib/; cp node_modules/bootstrap/dist/css/bootstrap.css demo/lib/",
     "copy:fonts": "mkdir demo/fonts; cp node_modules/bootstrap/fonts/*.* demo/fonts",
-    "copy:demo": "mkdir demo/lib; npm run copy:jquery; npm run copy:angular; npm run copy:bootstrap; npm run copy:fonts; npm run copy:ui-router;",
+    "copy:demo": "mkdir demo/lib; npm run copy:jquery; npm run copy:angular; npm run copy:bootstrap; npm run copy:fonts; npm run copy:ui-router; npm run copy:styleguide",
     "webpack": "webpack --watch",
     "copy-files-to-dist": "mkdir -p dist && cp package.json CHANGELOG.md README.md dist/",
     "deploy": "git-directory-deploy --directory dist --branch releases --username CircleCI --email circleci@transferwise.com",
@@ -43,7 +44,8 @@
   "homepage": "https://github.com/transferwise/account-details-frontend",
   "dependencies": {
     "angular": "^1.7.4",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "@transferwise/styleguide-components": "^3.4.1"
   },
   "devDependencies": {
     "@uirouter/angularjs": "^1.0.20",
@@ -79,7 +81,6 @@
     "live-server": "^1.1.0",
     "phantomjs-prebuilt": "^2.1.16",
     "release-to-github-with-changelog": "^1.2.0",
-    "styleguide-components": "git+https://github.com/transferwise/styleguide-components.git",
     "uglify-js": "^3.4.9",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^2.5.1",
