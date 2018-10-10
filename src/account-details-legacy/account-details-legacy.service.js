@@ -10,9 +10,11 @@ class AccountDetailsLegacyService {
       .filter(alternative => Object.keys(alternative.properties).length > 0);
 
     preppedAlternatives.forEach((alternative) => {
+      const extensions = currencyExtensions[currency]
+        && currencyExtensions[currency][alternative.type];
+
       alternative.properties = addMissingFields(alternative.properties, currency);
-      extendAlternative(alternative, currency);
-      updateFields(alternative.properties);
+      alternative.properties = extendProperties(alternative.properties, extensions);
     });
 
     return preppedAlternatives;
@@ -37,7 +39,7 @@ class AccountDetailsLegacyService {
   // Take flat error structure and map to model structure.
   formatErrorsForDisplay(errors) { // eslint-disable-line
     const errorMessagesObject = {};
-    if (errors && errors.forEach) {
+    if (Array.isArray(errors)) {
       errors.forEach((error) => {
         // Support 'nested.field' type paths, ONLY SUPPORTS SINGLE LEVEL OF NESTING
         if (error.path && error.path.indexOf('.') > 0) {
@@ -83,46 +85,39 @@ function addNameFields(fields, currency) {
   return angular.extend(basicNameField, fields);
 }
 
-function updateFields(fields) {
-  Object.keys(fields).forEach((key) => {
-    if (key === 'legalType') {
-      delete fields[key].control;
-    }
-    if (key === 'address') {
-      fields[key].title = 'Address details';
-    }
-  });
-}
-
-// TODO less side effecty
-function extendAlternative(alternative, currency) {
-  if (currencyExtensions[currency] &&
-      currencyExtensions[currency][alternative.type]) {
-    const extensions = currencyExtensions[currency][alternative.type];
-    alternative.properties = extendFields(alternative.properties, extensions);
+function extendProperties(properties, extensions) {
+  if (!extensions) {
+    return properties;
   }
+
+  const extendedProperties = {};
+  Object.keys(properties).forEach((key) => {
+    extendedProperties[key] = extendProperty(key, properties[key], extensions[key]);
+  });
+
+  return extendedProperties;
 }
 
-function extendFields(fields, extensions) {
-  const extendedFields = angular.extend({}, fields);
-  Object.keys(extensions).forEach((key) => {
-    if (extendedFields[key]) {
-      if (extendedFields[key].type !== 'object') {
-        // Extend existing field
-        angular.extend(extendedFields[key], extensions[key]);
-      } else {
-        // If we're dealing with a nested object, we must extend recursively
-        extendedFields[key].properties = extendFields(
-          extendedFields[key].properties,
-          extensions[key]
-        );
-      }
-    } else {
-      // Add new field
-      extendedFields[key] = extensions[key];
-    }
-  });
-  return extendedFields;
+function extendProperty(key, property, extensions) {
+  if (!extensions) {
+    return property;
+  }
+
+  if (key === 'legalType') {
+    delete property.control;
+  }
+  if (key === 'address') {
+    property.title = 'Address details';
+  }
+
+  if (property.type === 'object') {
+    // If we're dealing with a nested object, we must extend recursively
+    property.properties = extendProperties(property.properties, extensions);
+    return property;
+  }
+
+  // Extend existing field
+  return angular.extend(property, extensions);
 }
 
 /**
@@ -130,7 +125,7 @@ function extendFields(fields, extensions) {
  */
 const customNameFields = {
   ZAR: {
-    // TODO this isn't right
+    // TODO this isn't the correct name config for ZAR
     firstName: {
       type: 'string'
     },
@@ -139,7 +134,7 @@ const customNameFields = {
     }
   },
   RUB: {
-    // TODO this isn't right
+    // TODO this isn't the correct name config for RUB
     firstName: {
       type: 'string'
     },
