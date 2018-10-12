@@ -1,3 +1,7 @@
+# v0.4.0
+## Add a component for creating accounts of any currency
+Asks the user to choose the currency and then updates the form to ask for the
+correct fields.
 
 # v0.3.0
 ## Add a component for creating accounts of a specific currency
