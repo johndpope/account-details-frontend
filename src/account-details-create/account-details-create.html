@@ -1,5 +1,8 @@
 
-<form ng-submit="$ctrl.saveAccount()" novalidate=""
+<form
+  name="accountCreateForm"
+  novalidate
+  ng-submit="accountCreateForm.$valid && $ctrl.saveAccount()"
   ng-class="{'m-t-panel': $ctrl.alternatives.length > 1}">
   <tw-requirements-form
     ng-if="$ctrl.alternatives"

@@ -34,6 +34,8 @@
   currency="'USD'"
   profile="1234"
   on-change="myChangeHandler(model)"
+  on-save-success="mySuccessHandler()"
+  on-save-failure="myFailureHandler()"
 &gt;&lt;/account-details-create&gt;
 </pre>
 
@@ -45,6 +47,8 @@
             currency="'USD'"
             profile="1234"
             on-change="$ctrl.onModelChange(model)"
+            on-save-success="$ctrl.log('success')"
+            on-save-failure="$ctrl.log('failure')"
           ></account-details-create>
         </div>
       </div>

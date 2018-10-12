@@ -1,5 +1,3 @@
-
-
 class AccountDetailsCreateController {
   constructor($scope, AccountDetailsService) {
     this.$scope = $scope;
@@ -20,10 +18,7 @@ class AccountDetailsCreateController {
 
     this.$scope.$watch('$ctrl.model', (model, oldModel) => {
       if (model !== oldModel && this.onChange) {
-        console.log('changed');
         this.onChange({ model });
-      } else {
-        console.log('unchanged');
       }
     }, true);
   }
@@ -64,10 +59,15 @@ class AccountDetailsCreateController {
   saveAccount() {
     this.AccountDetailsService.save(this.model)
       .then(() => {
-
+        if (this.onSaveSuccess) {
+          this.onSaveSuccess();
+        }
       })
       .catch((errors) => {
         this.errors = errors;
+        if (this.onSaveFailure) {
+          this.onSaveFailure();
+        }
       });
   }
 }

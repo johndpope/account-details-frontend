@@ -19,6 +19,9 @@ class PageController {
   onModelChange(model) {
     this.model = model;
   }
+  log(message) { // eslint-disable-line
+    console.log(message);
+  }
 }
 
 module.config(['$compileProvider', ($compileProvider) => {

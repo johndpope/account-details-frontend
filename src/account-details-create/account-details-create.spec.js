@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Given a component for creating accounts', function() {
+describe('Given a component for creating accounts', function() {
   var $compile,
       $scope,
       $q,
@@ -18,23 +18,26 @@ fdescribe('Given a component for creating accounts', function() {
 
     AccountDetailsService = $injector.get('AccountDetailsService');
 
-    alternatives = [{
-      type: "alternativeType",
-      label: "Title",
-      properties: {
-        refresh: {
-          type: "string",
-          title: "!!!!!!!!!!!!!!",
-          refreshRequirementsOnChange: true,
-          required: true
+    alternatives = {
+      data: [{
+        type: "alternativeType",
+        label: "Title",
+        properties: {
+          refresh: {
+            type: "string",
+            title: "Example title",
+            refreshRequirementsOnChange: true,
+            required: true
+          }
         }
-      }
-    }];
+      }]
+    };
 
     spyOn(AccountDetailsService, 'getRequirements')
       .and.returnValue($q.resolve(alternatives));
 
-    $scope.onSaveSuccess = jasmine.createSpy();
+    $scope.onSaveSuccess = jasmine.createSpy('onSaveSuccess');
+    $scope.onSaveFailure = jasmine.createSpy('onSaveFailure');
   }));
 
   describe('when initialised', function() {
@@ -68,15 +71,14 @@ fdescribe('Given a component for creating accounts', function() {
 
       beforeEach(function() {
         submitButton = component.querySelector('input[type=submit]');
-        input = component.querySelector('input');
-        console.log('INPUT', input);
+        input = component.querySelector('input[type=text]');
       });
 
       describe('and it is valid', function() {
         beforeEach(function() {
           spyOn(AccountDetailsService, 'save').and.returnValue($q.resolve());
-          // TODO no fields shown, so input is undefined?
           input.value = 'example';
+          input.dispatchEvent(new Event('input'));
           submitButton.dispatchEvent(new Event('click'));
         });
 
@@ -103,11 +105,16 @@ fdescribe('Given a component for creating accounts', function() {
       describe('and the API response is successful', function() {
         beforeEach(function() {
           spyOn(AccountDetailsService, 'save').and.returnValue($q.resolve({}));
+          input.value = 'example';
+          input.dispatchEvent(new Event('input'));
           submitButton.dispatchEvent(new Event('click'));
         });
 
         it('should trigger the onSaveSuccess handler', function() {
-          expect(true).toBe(false);
+          expect($scope.onSaveSuccess).toHaveBeenCalled();
+        });
+        it('should not trigger the onSaveFailure handler', function() {
+          expect($scope.onSaveFailure).not.toHaveBeenCalled();
         });
       });
 
@@ -116,12 +123,26 @@ fdescribe('Given a component for creating accounts', function() {
           var errors = {
             refresh: "incorrect value"
           };
-          spyOn(AccountDetailsService, 'save').and.returnValue($q.reject(errors));
+
+          var deferred = $q.defer();
+
+          spyOn(AccountDetailsService, 'save').and.returnValue(deferred.promise);
+          input.value = 'example';
+          input.dispatchEvent(new Event('input'));
           submitButton.dispatchEvent(new Event('click'));
+
+          deferred.reject(errors);
+          $scope.$apply();
         });
 
         it('should pass any error messages to the dynamic form', function() {
-          expect(true).toBe(false);
+          expect(component.innerText).toContain("incorrect value");
+        });
+        it('should not trigger the onSaveSuccess handler', function() {
+          expect($scope.onSaveSuccess).not.toHaveBeenCalled();
+        });
+        it('should trigger the onSaveFailure handler', function() {
+          expect($scope.onSaveFailure).toHaveBeenCalled();
         });
       });
     });
@@ -132,7 +153,8 @@ fdescribe('Given a component for creating accounts', function() {
     var template = " \
       <account-details-create \
         currency='currency' \
-        on-save='onChange()'> \
+        on-save-success='onSaveSuccess()' \
+        on-save-failure='onSaveFailure()'> \
       </account-details-create>";
     var compiledElement = $compile(template)($scope);
 
