@@ -18,5 +18,8 @@
 </div>
 
 <account-details-create
-  currency="$ctrl.currency">
+  currency="$ctrl.currency"
+  on-change="$ctrl.onModelChange(model)"
+  on-success="$ctrl.onSaveSuccess()"
+  on-failure="$ctrl.onSaveFailure()">
 </account-details-create>

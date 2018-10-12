@@ -22,62 +22,8 @@
 </head>
 <body ng-app="my-app" class="bg-default">
   <div class="container" ng-controller="PageController as $ctrl">
-    <div class="well bg-focus m-t-panel">
-      <h2 class="page-header">Account details create</h2>
-      <div class="row">
-        <div class="col-md-6">
-
-          <p>This component allows you to create a standard recipient for a given
-            currency.</p>
-<pre>
-&lt;account-details-create
-  currency="'USD'"
-  profile="1234"
-  on-change="myChangeHandler(model)"
-  on-save-success="mySuccessHandler()"
-  on-save-failure="myFailureHandler()"
-&gt;&lt;/account-details-create&gt;
-</pre>
-
-<h4>Internal model</h4>
-<pre>{{ $ctrl.model | json }}</pre>
-        </div>
-        <div class="col-md-6">
-          <account-details-create
-            currency="'USD'"
-            profile="1234"
-            on-change="$ctrl.onModelChange(model)"
-            on-save-success="$ctrl.log('success')"
-            on-save-failure="$ctrl.log('failure')"
-          ></account-details-create>
-        </div>
-      </div>
-    </div>
-
-    <div class="well bg-focus m-t-panel">
-      <h2 class="page-header">Multi account create</h2>
-      <div class="row">
-        <div class="col-md-6">
-
-          <p>This component allows you to choose a currency and create an account
-            of that type.</p>
-<pre>
-&lt;multi-account-create&gt;&lt;/multi-account-create&gt;
-</pre>
-
-<h4>Internal model</h4>
-<pre>{{ $ctrl.model | json }}</pre>
-        </div>
-        <div class="col-md-6">
-          <multi-account-create
-            profile="1234"
-            on-change="$ctrl.onModelChange(model)"
-            on-save-success="$ctrl.log('success')"
-            on-save-failure="$ctrl.log('failure')"
-          ></multi-account-create>
-        </div>
-      </div>
-    </div>
+    <account-details-create-demo></account-details-create-demo>
+    <multi-account-create-demo></multi-account-create-demo>
   </div>
 </body>
 </html>

@@ -36,8 +36,8 @@ describe('Given a component for creating accounts', function() {
     spyOn(AccountDetailsService, 'getRequirements')
       .and.returnValue($q.resolve(alternatives));
 
-    $scope.onSaveSuccess = jasmine.createSpy('onSaveSuccess');
-    $scope.onSaveFailure = jasmine.createSpy('onSaveFailure');
+    $scope.onSuccess = jasmine.createSpy('onSuccess');
+    $scope.onFailure = jasmine.createSpy('onFailure');
   }));
 
   describe('when initialised', function() {
@@ -109,11 +109,11 @@ describe('Given a component for creating accounts', function() {
           submitButton.dispatchEvent(new Event('click'));
         });
 
-        it('should trigger the onSaveSuccess handler', function() {
-          expect($scope.onSaveSuccess).toHaveBeenCalled();
+        it('should trigger the onSuccess handler', function() {
+          expect($scope.onSuccess).toHaveBeenCalled();
         });
-        it('should not trigger the onSaveFailure handler', function() {
-          expect($scope.onSaveFailure).not.toHaveBeenCalled();
+        it('should not trigger the onFailure handler', function() {
+          expect($scope.onFailure).not.toHaveBeenCalled();
         });
       });
 
@@ -137,11 +137,11 @@ describe('Given a component for creating accounts', function() {
         it('should pass any error messages to the dynamic form', function() {
           expect(component.innerText).toContain("incorrect value");
         });
-        it('should not trigger the onSaveSuccess handler', function() {
-          expect($scope.onSaveSuccess).not.toHaveBeenCalled();
+        it('should not trigger the onSuccess handler', function() {
+          expect($scope.onSuccess).not.toHaveBeenCalled();
         });
-        it('should trigger the onSaveFailure handler', function() {
-          expect($scope.onSaveFailure).toHaveBeenCalled();
+        it('should trigger the onFailure handler', function() {
+          expect($scope.onFailure).toHaveBeenCalled();
         });
       });
     });
@@ -161,8 +161,8 @@ describe('Given a component for creating accounts', function() {
     var template = " \
       <account-details-create \
         currency='currency' \
-        on-save-success='onSaveSuccess()' \
-        on-save-failure='onSaveFailure()'> \
+        on-success='onSuccess()' \
+        on-failure='onFailure()'> \
       </account-details-create>";
     var compiledElement = $compile(template)($scope);
 

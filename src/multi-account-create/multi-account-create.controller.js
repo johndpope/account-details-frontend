@@ -29,6 +29,22 @@ class MultiAccountCreateController {
         console.log('no email found'); // eslint-disable-line
       });
   }
+
+  onSaveSuccess() {
+    if (this.onSuccess) {
+      this.onSuccess();
+    }
+  }
+  onSaveFailure() {
+    if (this.onFailure) {
+      this.onFailure();
+    }
+  }
+  onModelChange(model) {
+    if (this.onChange) {
+      this.onChange({ model });
+    }
+  }
 }
 
 MultiAccountCreateController.$inject = ['AccountDetailsService'];

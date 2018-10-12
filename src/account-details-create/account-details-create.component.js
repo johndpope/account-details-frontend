@@ -8,8 +8,8 @@ const AccountDetailsCreate = {
     currency: '<',
     profile: '<',
     onChange: '&',
-    onSaveSuccess: '&',
-    onSaveFailure: '&'
+    onSuccess: '&',
+    onFailure: '&'
   }
 };
 

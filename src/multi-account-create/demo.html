@@ -1,0 +1,24 @@
+<div class="well bg-focus m-t-panel">
+  <h2 class="page-header">Multi account create</h2>
+  <div class="row">
+    <div class="col-md-6">
+
+      <p>This component allows you to choose a currency and create an account
+        of that type.</p>
+<pre>
+&lt;multi-account-create&gt;&lt;/multi-account-create&gt;
+</pre>
+
+      <h4>Internal model</h4>
+      <pre>{{ $ctrl.model | json }}</pre>
+    </div>
+    <div class="col-md-6">
+      <multi-account-create
+        profile="1234"
+        on-change="$ctrl.onModelChange(model)"
+        on-save-success="$ctrl.log('success')"
+        on-save-failure="$ctrl.log('failure')"
+      ></multi-account-create>
+    </div>
+  </div>
+</div>
