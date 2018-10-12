@@ -20,7 +20,7 @@ class PageController {
     this.model = model;
   }
   log(message) { // eslint-disable-line
-    console.log(message);
+    console.log(message); // eslint-disable-line
   }
 }
 
