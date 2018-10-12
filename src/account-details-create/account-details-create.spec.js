@@ -50,9 +50,8 @@ describe('Given a component for creating accounts', function() {
       expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP');
     });
 
-    it('should pass the requirements to the dynamic form', function() {
-      // TODO this could be considerably better
-      expect(component.querySelector('input')).toBeTruthy();
+    it('should render the dynamic form', function() {
+      expect(component.querySelector('input[name=refresh]')).toBeTruthy();
     });
 
     describe('when refresh requirements is triggered', function() {
