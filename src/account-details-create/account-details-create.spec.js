@@ -146,8 +146,17 @@ describe('Given a component for creating accounts', function() {
         });
       });
     });
-  });
 
+    describe('when the currency changes', function() {
+      beforeEach(function() {
+        $scope.currency = "USD";
+        $scope.$apply();
+      });
+      it('should request the new requirements', function() {
+        expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('USD');
+      });
+    });
+  });
 
   function getComponent($scope) {
     var template = " \
