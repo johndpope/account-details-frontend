@@ -1,0 +1,13 @@
+
+<form ng-submit="$ctrl.saveAccount()" novalidate=""
+  ng-class="{'m-t-panel': $ctrl.alternatives.length > 1}">
+  <tw-requirements-form
+    ng-if="$ctrl.alternatives"
+    model="$ctrl.model"
+    requirements="$ctrl.alternatives"
+    error-messages="$ctrl.errors"
+    validation-messages="$ctrl.validationMessages"
+    on-refresh-requirements="$ctrl.refreshRequirements()">
+  </tw-requirements-form >
+  <input type="submit" value="Submit" class="btn btn-block btn-primary"/>
+</form>
