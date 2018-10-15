@@ -105,7 +105,7 @@ function extendProperty(key, property, extensions) {
 
   if (key === 'legalType') {
     // If using v2 enpoint, this needs to be mapped to legalEntityType
-    // The allowed values are alos different
+    // The allowed values are also different
     delete property.control;
   }
   if (key === 'address') {
@@ -136,7 +136,6 @@ const customNameFields = {
     }
   },
   RUB: {
-    // TODO make this better
     name: {
       type: 'object',
       properties: {
