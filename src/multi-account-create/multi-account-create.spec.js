@@ -22,7 +22,7 @@ describe('Given a component for creating accounts of any currency', function() {
     beforeEach(function() {
       spyOn(AccountDetailsService, 'getAccountCurrencies').and.returnValue($q.resolve([]));
 
-      // TODO remove, mock out child component
+      // TODO mock out child component and remove this
       spyOn(AccountDetailsService, 'getRequirements').and.returnValue($q.resolve([]));
 
       component = getComponent($scope);
