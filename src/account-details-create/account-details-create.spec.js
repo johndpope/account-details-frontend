@@ -8,6 +8,13 @@ describe('Given a component for creating accounts', function() {
       alternatives,
       AccountDetailsService;
 
+  var template = " \
+    <account-details-create \
+      currency='currency' \
+      on-success='onSuccess()' \
+      on-failure='onFailure()'> \
+    </account-details-create>";
+
   beforeEach(module('tw.styleguide-components'));
   beforeEach(module('tw.account-details'));
 
@@ -36,14 +43,14 @@ describe('Given a component for creating accounts', function() {
     spyOn(AccountDetailsService, 'getRequirements')
       .and.returnValue($q.resolve(alternatives));
 
-    $scope.onSaveSuccess = jasmine.createSpy('onSaveSuccess');
-    $scope.onSaveFailure = jasmine.createSpy('onSaveFailure');
+    $scope.onSuccess = jasmine.createSpy('onSuccess');
+    $scope.onFailure = jasmine.createSpy('onFailure');
   }));
 
   describe('when initialised', function() {
     beforeEach(function() {
       $scope.currency = 'GBP';
-      component = getComponent($scope);
+      component = getComponent($compile, $scope, template);
     });
 
     it('should load the requirements from the account details service with the given currency', function() {
@@ -109,11 +116,11 @@ describe('Given a component for creating accounts', function() {
           submitButton.dispatchEvent(new Event('click'));
         });
 
-        it('should trigger the onSaveSuccess handler', function() {
-          expect($scope.onSaveSuccess).toHaveBeenCalled();
+        it('should trigger the onSuccess handler', function() {
+          expect($scope.onSuccess).toHaveBeenCalled();
         });
-        it('should not trigger the onSaveFailure handler', function() {
-          expect($scope.onSaveFailure).not.toHaveBeenCalled();
+        it('should not trigger the onFailure handler', function() {
+          expect($scope.onFailure).not.toHaveBeenCalled();
         });
       });
 
@@ -137,11 +144,11 @@ describe('Given a component for creating accounts', function() {
         it('should pass any error messages to the dynamic form', function() {
           expect(component.innerText).toContain("incorrect value");
         });
-        it('should not trigger the onSaveSuccess handler', function() {
-          expect($scope.onSaveSuccess).not.toHaveBeenCalled();
+        it('should not trigger the onSuccess handler', function() {
+          expect($scope.onSuccess).not.toHaveBeenCalled();
         });
-        it('should trigger the onSaveFailure handler', function() {
-          expect($scope.onSaveFailure).toHaveBeenCalled();
+        it('should trigger the onFailure handler', function() {
+          expect($scope.onFailure).toHaveBeenCalled();
         });
       });
     });
@@ -156,17 +163,4 @@ describe('Given a component for creating accounts', function() {
       });
     });
   });
-
-  function getComponent($scope) {
-    var template = " \
-      <account-details-create \
-        currency='currency' \
-        on-save-success='onSaveSuccess()' \
-        on-save-failure='onSaveFailure()'> \
-      </account-details-create>";
-    var compiledElement = $compile(template)($scope);
-
-    $scope.$digest();
-    return compiledElement[0];
-  }
 });

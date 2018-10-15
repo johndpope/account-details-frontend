@@ -1,0 +1,25 @@
+
+<div class="form-group">
+  <label class="control-label">Choose currency</label>
+  <tw-select
+    ng-model="$ctrl.currency"
+    options="$ctrl.currencies"
+    placeholder="Choose currency..."
+  ></tw-select>
+</div>
+
+<div class="form-group">
+  <label class="control-label">Email address</label>
+  <input class="form-control"
+    ng-model="$ctrl.email"
+    ng-model-options="{ debounce: 500 }"
+    ng-change="$ctrl.onEmailChange()"
+    placeholder="Recipient email address" />
+</div>
+
+<account-details-create
+  currency="$ctrl.currency"
+  on-change="$ctrl.onModelChange(model)"
+  on-success="$ctrl.onSaveSuccess()"
+  on-failure="$ctrl.onSaveFailure()">
+</account-details-create>

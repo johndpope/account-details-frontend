@@ -8,6 +8,7 @@
     "demo/lib/styleguide-components.js",
 
     "dist/js/account-details.js",
+    "test/utils.js",
 
     "src/**/*.spec.js"
   ],

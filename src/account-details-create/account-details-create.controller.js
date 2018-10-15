@@ -4,7 +4,10 @@ class AccountDetailsCreateController {
     this.AccountDetailsService = AccountDetailsService;
 
     this.validationMessages = {
-      required: 'Field is required'
+      required: 'Field is required',
+      pattern: 'Invalid format',
+      minLength: 'Too short',
+      maxLength: 'Too Long'
     };
     this.model = {};
   }
@@ -59,14 +62,14 @@ class AccountDetailsCreateController {
   saveAccount() {
     this.AccountDetailsService.save(this.model)
       .then(() => {
-        if (this.onSaveSuccess) {
-          this.onSaveSuccess();
+        if (this.onSuccess) {
+          this.onSuccess();
         }
       })
       .catch((errors) => {
         this.errors = errors;
-        if (this.onSaveFailure) {
-          this.onSaveFailure();
+        if (this.onFailure) {
+          this.onFailure();
         }
       });
   }

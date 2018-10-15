@@ -104,6 +104,8 @@ function extendProperty(key, property, extensions) {
   }
 
   if (key === 'legalType') {
+    // If using v2 enpoint, this needs to be mapped to legalEntityType
+    // The allowed values are also different
     delete property.control;
   }
   if (key === 'address') {
@@ -134,13 +136,28 @@ const customNameFields = {
     }
   },
   RUB: {
-    // TODO this isn't the correct name config for RUB
-    firstName: {
-      type: 'string'
+    name: {
+      type: 'object',
+      properties: {
+        givenName: {
+          type: 'string',
+          title: 'Given name',
+          required: true
+        },
+        patronymicName: {
+          type: 'string',
+          title: 'Patronymic name',
+          pattern: '^[а-яА-ЯёЁ\' -]+$',
+          required: true,
+          helpText: 'Cyrillic characters only'
+        },
+        familyName: {
+          type: 'string',
+          title: 'Family name',
+          required: true
+        },
+      }
     },
-    lastName: {
-      type: 'string'
-    }
   }
 };
 
@@ -184,6 +201,16 @@ const currencyExtensions = {
         postCode: {
           width: 'md'
         }
+      }
+    }
+  },
+  GBP: {
+    sort_code: {
+      sortCode: {
+        width: 'md'
+      },
+      accountNumber: {
+        width: 'md'
       }
     }
   }
