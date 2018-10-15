@@ -6,6 +6,9 @@ import vndRequirements from '../demo/json/vnd-requirements.json';
 
 import jpyRefreshRequirements from '../demo/json/jpy-refresh-requirements.json';
 
+import emailLookup from '../demo/json/email-lookup.json';
+import emailLookupFailure from '../demo/json/email-lookup-failure.json';
+
 function mockBackend($httpBackend) {
   const requirementsPath = '/account-requirements';
 
@@ -21,7 +24,13 @@ function mockBackend($httpBackend) {
 
   $httpBackend.whenPOST('/accounts').respond(() => [401, accountCreateErrors]);
 
-  $httpBackend.whenPOST('/email-accounts').respond([404, '']);
+  $httpBackend.whenPOST('/api/v1/uniqueId/uniqueIdLookUp').respond((method, path, data) => {
+    const json = JSON.parse(data);
+    if (json.email && json.email.indexOf('@') > 0) {
+      return [200, emailLookup];
+    }
+    return [404, emailLookupFailure];
+  });
 }
 
 const accountCreateErrors = [{

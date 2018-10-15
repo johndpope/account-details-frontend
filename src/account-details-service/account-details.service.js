@@ -73,7 +73,11 @@ class AccountDetailsService {
     if (!email) {
       throw new Error('Email is required');
     }
-    return this.$http.post('/email-accounts', { email });
+    const type = 'email';
+    const currencyCode = 'GBP';
+    return this.$http.post('/api/v1/uniqueId/uniqueIdLookUp', {
+      email, type, currencyCode
+    });
   }
 }
 

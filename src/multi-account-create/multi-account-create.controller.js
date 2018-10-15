@@ -20,16 +20,6 @@ class MultiAccountCreateController {
       });
   }
 
-  onEmailChange() {
-    this.AccountDetailsService.lookupAccountByEmail(this.email)
-      .then(() => {
-        // TODO
-      })
-      .catch(() => {
-        console.log('no email found'); // eslint-disable-line
-      });
-  }
-
   onSaveSuccess() {
     if (this.onSuccess) {
       this.onSuccess();
@@ -44,6 +34,16 @@ class MultiAccountCreateController {
     if (this.onChange) {
       this.onChange({ model });
     }
+  }
+
+  onLookupSuccess(recipient) {
+    this.uniqueIdRecipient = recipient;
+  }
+  onLookupFailure() {
+    this.uniqueIdRecipient = false;
+  }
+  onLookupOverride(override) {
+    this.overrideUniqueId = override;
   }
 }
 

@@ -8,16 +8,15 @@
   ></tw-select>
 </div>
 
-<div class="form-group">
-  <label class="control-label">Email address</label>
-  <input class="form-control"
-    ng-model="$ctrl.email"
-    ng-model-options="{ debounce: 500 }"
-    ng-change="$ctrl.onEmailChange()"
-    placeholder="Recipient email address" />
-</div>
+<account-email-lookup
+  on-success="$ctrl.onLookupSuccess(recipient)"
+  on-failure="$ctrl.onLookupFailure()"
+  on-override="$ctrl.onLookupOverride(override)"
+></account-email-lookup>
+
 
 <account-details-create
+  ng-if="!$ctrl.uniqueIdRecipient || $ctrl.overrideUniqueId"
   currency="$ctrl.currency"
   on-change="$ctrl.onModelChange(model)"
   on-success="$ctrl.onSaveSuccess()"
