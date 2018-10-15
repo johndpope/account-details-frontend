@@ -8,6 +8,13 @@ describe('Given a component for creating accounts', function() {
       alternatives,
       AccountDetailsService;
 
+  var template = " \
+    <account-details-create \
+      currency='currency' \
+      on-success='onSuccess()' \
+      on-failure='onFailure()'> \
+    </account-details-create>";
+
   beforeEach(module('tw.styleguide-components'));
   beforeEach(module('tw.account-details'));
 
@@ -43,7 +50,7 @@ describe('Given a component for creating accounts', function() {
   describe('when initialised', function() {
     beforeEach(function() {
       $scope.currency = 'GBP';
-      component = getComponent($scope);
+      component = getComponent($compile, $scope, template);
     });
 
     it('should load the requirements from the account details service with the given currency', function() {
@@ -156,17 +163,4 @@ describe('Given a component for creating accounts', function() {
       });
     });
   });
-
-  function getComponent($scope) {
-    var template = " \
-      <account-details-create \
-        currency='currency' \
-        on-success='onSuccess()' \
-        on-failure='onFailure()'> \
-      </account-details-create>";
-    var compiledElement = $compile(template)($scope);
-
-    $scope.$digest();
-    return compiledElement[0];
-  }
 });

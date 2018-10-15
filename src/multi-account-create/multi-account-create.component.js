@@ -7,8 +7,8 @@ const MultiAccountCreate = {
   bindings: {
     profile: '<',
     onChange: '&',
-    onSuccess: '&onSaveSuccess',
-    onFailure: '&onSaveFailure'
+    onSuccess: '&',
+    onFailure: '&'
   }
 };
 

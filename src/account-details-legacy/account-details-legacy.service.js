@@ -148,7 +148,7 @@ const customNameFields = {
         patronymicName: {
           type: 'string',
           title: 'Patronymic name',
-          pattern: '^[а-яА-ЯёЁ\' \-]+$',
+          pattern: '^[а-яА-ЯёЁ\' -]+$',
           required: true,
           helpText: 'Cyrillic characters only'
         },

@@ -5,6 +5,7 @@ import component from './index';
 class controller {
   onModelChange(model) {
     this.model = model;
+    console.log('model changed', model); // eslint-disable-line
   }
   log(message) { // eslint-disable-line
     console.log(message); // eslint-disable-line
