@@ -88,11 +88,12 @@ describe('Given a component for looking up accounts by email', function() {
     beforeEach(function() {
       var deferred = $q.defer();
       spyOn(AccountDetailsService, 'lookupAccountByEmail').and.returnValue(deferred.promise);
+
       var input = component.querySelector('input[name=email]');
       input.value = 'test@test.com';
       input.dispatchEvent(new Event('input'));
       $timeout.flush();
-
+      
       deferred.reject({});
       $scope.$apply();
     });

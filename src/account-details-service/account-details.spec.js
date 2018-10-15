@@ -142,7 +142,9 @@ describe('Given a service for interacting with the acount details API', function
         email: 'test@test.com'
       };
 
-      $httpBackend.whenPOST('/email-accounts').respond(function() { return [200, ['accounts']]});
+      $httpBackend.whenPOST('/api/v1/uniqueId/uniqueIdLookUp').respond(function() {
+        return [200, ['accounts']]
+      });
 
       promise = service.lookupAccountByEmail('test@test.com');
       $httpBackend.flush();
