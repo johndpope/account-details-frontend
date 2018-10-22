@@ -5,9 +5,9 @@ const AccountEmailLookup = {
   controller,
   template,
   bindings: {
-    onSuccess: '&',
-    onFailure: '&',
-    onOverride: '&'
+    onChange: '&',
+    onUseUniqueId: '&',
+    onEnterManually: '&'
   }
 };
 

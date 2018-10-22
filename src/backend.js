@@ -17,7 +17,9 @@ function mockBackend($httpBackend) {
   $httpBackend.whenGET(`${requirementsPath}?currency=USD`).respond(usdRequirements);
   $httpBackend.whenGET(`${requirementsPath}?currency=VND`).respond(vndRequirements);
 
+  $httpBackend.whenPOST(`${requirementsPath}?currency=GBP`).respond(gbpRequirements);
   $httpBackend.whenPOST(`${requirementsPath}?currency=JPY`).respond(jpyRefreshRequirements);
+  $httpBackend.whenPOST(`${requirementsPath}?currency=USD`).respond(usdRequirements);
   $httpBackend.whenPOST(`${requirementsPath}?currency=VND`).respond(vndRequirements);
 
   $httpBackend.whenGET('/account-currencies').respond(accountCurrencies);

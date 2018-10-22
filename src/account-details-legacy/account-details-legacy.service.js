@@ -24,15 +24,33 @@ class AccountDetailsLegacyService {
   formatModelForAPI(model) { // eslint-disable-line
     const apiModel = {
       type: model.type,
+      legalEntityType: model.legalType,
       profile: model.profile,
       currency: model.currency,
       accountHolderName: model.accountHolderName,
       details: angular.extend({}, model)
     };
+
     delete apiModel.details.type;
+    delete apiModel.details.legalType;
     delete apiModel.details.profile;
     delete apiModel.details.accountHolderName;
     delete apiModel.details.currency;
+
+    if (apiModel.details.email) {
+      apiModel.email = apiModel.details.email;
+      delete apiModel.details.email;
+    }
+
+    if (apiModel.details.address) {
+      apiModel.address = apiModel.details.address;
+      delete apiModel.details.address;
+    }
+
+    if (apiModel.address.country) {
+      apiModel.country = apiModel.address.country;
+    }
+
     return apiModel;
   }
 

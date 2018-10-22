@@ -2,6 +2,8 @@
 class MultiAccountCreateController {
   constructor(AccountDetailsService) {
     this.AccountDetailsService = AccountDetailsService;
+    this.uniqueIdRecipient = false;
+    this.hasDetails = true;
   }
 
   $onInit() {
@@ -10,6 +12,7 @@ class MultiAccountCreateController {
     }
 
     this.currencies = [];
+    // this.email = '';
 
     this.AccountDetailsService.getAccountCurrencies()
       .then((currencies) => {
@@ -35,15 +38,15 @@ class MultiAccountCreateController {
       this.onChange({ model });
     }
   }
+  onEmailChange(email) {
+    this.email = email;
+  }
 
-  onLookupSuccess(recipient) {
+  onUseUniqueId(recipient) {
     this.uniqueIdRecipient = recipient;
   }
-  onLookupFailure() {
+  onEnterManually() {
     this.uniqueIdRecipient = false;
-  }
-  onLookupOverride(override) {
-    this.overrideUniqueId = override;
   }
 }
 

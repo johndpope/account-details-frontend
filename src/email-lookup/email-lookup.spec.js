@@ -12,9 +12,9 @@ describe('Given a component for looking up accounts by email', function() {
 
   var template = " \
     <account-email-lookup \
-      on-success='onSuccess()' \
-      on-failure='onFailure()' \
-      on-override='onOverride()'> \
+      on-change='onChange()' \
+      on-use-unique-id='onUseUniqueId()' \
+      on-enter-manually='onEnterManually()'> \
     </account-email-lookup>";
 
   beforeEach(module('tw.styleguide-components'));
@@ -28,9 +28,9 @@ describe('Given a component for looking up accounts by email', function() {
 
     AccountDetailsService = $injector.get('AccountDetailsService');
 
-    $scope.onSuccess = jasmine.createSpy('onSuccess');
-    $scope.onFailure = jasmine.createSpy('onFailure');
-    $scope.onOverride = jasmine.createSpy('onOverride');
+    $scope.onUseUniqueId = jasmine.createSpy('onUseUniqueId');
+    $scope.onEnterManually = jasmine.createSpy('onEnterManually');
+    $scope.onChange = jasmine.createSpy('onChange');
 
     component = getComponent($compile, $scope, template);
   }));
@@ -64,7 +64,7 @@ describe('Given a component for looking up accounts by email', function() {
         expect(useUniqueIdRadio.classList).toContain('checked');
       });
       it('should trigger the onSuccess handler', function() {
-        expect($scope.onSuccess).toHaveBeenCalled();
+        expect($scope.onUseUniqueId).toHaveBeenCalled();
       });
       it('should trigger the override callback', function() {
         expect($scope.onOverride).toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe('Given a component for looking up accounts by email', function() {
       input.value = 'test@test.com';
       input.dispatchEvent(new Event('input'));
       $timeout.flush();
-      
+
       deferred.reject({});
       $scope.$apply();
     });

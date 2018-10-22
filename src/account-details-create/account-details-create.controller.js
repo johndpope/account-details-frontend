@@ -60,6 +60,8 @@ class AccountDetailsCreateController {
   }
 
   saveAccount() {
+    this.model.email = this.email;
+
     this.AccountDetailsService.save(this.model)
       .then(() => {
         if (this.onSuccess) {

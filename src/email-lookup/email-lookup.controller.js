@@ -2,32 +2,56 @@
 class AccountEmailLookupController {
   constructor(AccountDetailsService) {
     this.AccountDetailsService = AccountDetailsService;
+    this.requestCount = 0;
+    this.lastResponse = 0;
   }
 
   onEmailChange() {
+    if (this.onChange) {
+      this.onChange({ email: this.email });
+    }
+
+    if (!this.email) {
+      this.recipient = false;
+      this.useUniqueId = false;
+      return;
+    }
+
+    this.requestCount++;
+    const requestCountAtCall = this.requestCount;
+
     this.AccountDetailsService.lookupAccountByEmail(this.email)
       .then((response) => {
-        this.uniqueIdRecipient = response.data.targetRecipient;
+        if (this.lastResponse > requestCountAtCall) {
+          // We already received a response from a subsequent call, so throw this away
+          return;
+        }
+        this.recipient = response.data.targetRecipient;
         this.useUniqueId = true;
-        if (this.onSuccess) {
-          this.onSuccess({ recipient: response.data });
-        }
-        if (this.onOverride) {
-          this.onOverride({ override: true });
-        }
+        this.selectUniqueId();
       })
       .catch(() => {
-        this.uniqueIdRecipient = false;
-        this.useUniqueId = false;
-        if (this.onFailure) {
-          this.onFailure();
+        if (this.lastResponse > requestCountAtCall) {
+          // We already received a response from a subsequent call, so throw this away
+          return;
         }
+        this.selectManual();
+        this.recipient = false;
+        this.useUniqueId = false;
+      })
+      .finally(() => {
+        this.lastResponse = Math.max(requestCountAtCall, this.lastResponse);
       });
   }
 
-  onOverrideUniqueId(bool) {
-    if (this.onOverride) {
-      this.onOverride({ override: bool });
+  selectUniqueId() {
+    if (this.onUseUniqueId) {
+      this.onUseUniqueId({ recipient: this.recipient });
+    }
+  }
+  selectManual() {
+    if (this.onEnterManually) {
+      this.onEnterManually();
     }
   }
 }
