@@ -12,7 +12,7 @@ describe('Given a component for looking up accounts by email', function() {
 
   var template = " \
     <account-email-lookup \
-      on-change='onChange()' \
+      on-change='onChange(email)' \
       on-use-unique-id='onUseUniqueId()' \
       on-enter-manually='onEnterManually()'> \
     </account-email-lookup>";
@@ -49,6 +49,9 @@ describe('Given a component for looking up accounts by email', function() {
       expect(AccountDetailsService.lookupAccountByEmail).toHaveBeenCalledWith('test@test.com');
       expect(AccountDetailsService.lookupAccountByEmail.calls.count()).toBe(1);
     });
+    it('should trigger the onChange handler with the email', function() {
+      expect($scope.onChange).toHaveBeenCalledWith('test@test.com');
+    });
 
     describe('and a receiving account is found', function() {
       beforeEach(function() {
@@ -63,22 +66,22 @@ describe('Given a component for looking up accounts by email', function() {
       it('should preselect the option to use the matching account', function() {
         expect(useUniqueIdRadio.classList).toContain('checked');
       });
-      it('should trigger the onSuccess handler', function() {
+      it('should trigger the onUseUniqueId handler', function() {
         expect($scope.onUseUniqueId).toHaveBeenCalled();
-      });
-      it('should trigger the override callback', function() {
-        expect($scope.onOverride).toHaveBeenCalled();
-        expect($scope.onOverride.calls.count()).toBe(1);
+        expect($scope.onUseUniqueId.calls.count()).toBe(1);
       });
 
-      describe('when choosing to enter details manually', function() {
+      describe('but they choose to enter details manually', function() {
         beforeEach(function() {
           useManualRadio.dispatchEvent(new Event('click'));
+          useManualRadio.click();
+          $scope.$apply();
+          console.log(useManualRadio);
         });
 
-        it('should trigger the override callback', function() {
-          expect($scope.onOverride).toHaveBeenCalled();
-          expect($scope.onOverride.calls.count()).toBe(2);
+        it('should trigger the onEnterManually callback', function() {
+          expect($scope.onEnterManually).toHaveBeenCalled();
+          //expect($scope.onEnterManually.calls.count()).toBe(1);
         });
       });
     });
@@ -101,8 +104,8 @@ describe('Given a component for looking up accounts by email', function() {
     it('should hide the option to choose the receiving account', function() {
       expect(component.querySelector('tw-radio')).toBeFalsy();
     });
-    it('should trigger the onFailure handler', function() {
-      expect($scope.onFailure).toHaveBeenCalled();
+    it('should trigger the onEnterManually handler', function() {
+      expect($scope.onEnterManually).toHaveBeenCalled();
     });
   });
 });

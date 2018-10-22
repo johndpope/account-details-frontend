@@ -49,20 +49,31 @@ describe('Given a service for handling legacy account details formats', function
     beforeEach(function() {
       apiModel = service.formatModelForAPI({
         type: 'example',
+        legalType: 'PERSONAL',
         profile: 123,
         currency: 'gbp',
         accountHolderName: 'Ronald McDonald',
-        prop: 'Something'
+        prop: 'Something',
+        address: {
+          city: 'London',
+          country: 'UK'
+        }
       });
     });
     it('should nest properties into a details object', function() {
       expect(apiModel).toEqual({
         type: 'example',
+        legalEntityType: 'PERSONAL', // TODO
         profile: 123,
         currency: 'gbp',
         accountHolderName: 'Ronald McDonald',
+        country: 'UK',
         details: {
           prop: 'Something'
+        },
+        address: {
+          city: 'London',
+          country: 'UK'
         }
       });
     });

@@ -47,7 +47,7 @@ class AccountDetailsLegacyService {
       delete apiModel.details.address;
     }
 
-    if (apiModel.address.country) {
+    if (apiModel.address && apiModel.address.country) {
       apiModel.country = apiModel.address.country;
     }
 
