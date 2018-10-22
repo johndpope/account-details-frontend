@@ -1,5 +1,31 @@
 
+<account-email-lookup
+  on-change="$ctrl.onEmailChange(email)"
+  on-use-unique-id="$ctrl.onUseUniqueId(recipient)"
+  on-enter-manually="$ctrl.onEnterManually()"
+></account-email-lookup>
+
+<div class="form-group"
+  ng-if="!$ctrl.uniqueIdRecipient">
+  <label class="control-label">Do you have their account details?</label>
+  <div class="checkbox" ng-class="{ 'has-info': !$ctrl.hasDetails }">
+    <label>
+      <tw-checkbox
+        ng-init="$ctrl.hasDetails = true;"
+        ng-model="$ctrl.hasDetails"
+        ng-true-value="true"
+        ng-false-value="false" checked></tw-checkbox>
+      Yes, I have their details
+    </label>
+    <div class="alert alert-info" ng-if="!$ctrl.hasDetails">
+      No problem, we'll send your recipient an email asking them where they want
+      to receive the money.
+    </div>
+  </div>
+</div>
+
 <form
+  ng-if="!$ctrl.uniqueIdRecipient && $ctrl.hasDetails"
   name="accountCreateForm"
   novalidate
   ng-submit="accountCreateForm.$valid && $ctrl.saveAccount()"

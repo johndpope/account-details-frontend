@@ -7,7 +7,6 @@ const AccountDetailsCreate = {
   bindings: {
     currency: '<',
     profileId: '<',
-    email: '<',
     onChange: '&',
     onSuccess: '&',
     onFailure: '&'

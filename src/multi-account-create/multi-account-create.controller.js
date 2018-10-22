@@ -2,8 +2,6 @@
 class MultiAccountCreateController {
   constructor(AccountDetailsService) {
     this.AccountDetailsService = AccountDetailsService;
-    this.uniqueIdRecipient = false;
-    this.hasDetails = true;
   }
 
   $onInit() {
@@ -37,16 +35,6 @@ class MultiAccountCreateController {
     if (this.onChange) {
       this.onChange({ model });
     }
-  }
-  onEmailChange(email) {
-    this.email = email;
-  }
-
-  onUseUniqueId(recipient) {
-    this.uniqueIdRecipient = recipient;
-  }
-  onEnterManually() {
-    this.uniqueIdRecipient = false;
   }
 }
 
