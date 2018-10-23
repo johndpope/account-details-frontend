@@ -58,6 +58,7 @@ class AccountDetailsService {
       throw new Error('Model is required');
     }
     const apiModel = this.AccountDetailsLegacyService.formatModelForAPI(model);
+
     return this.$http.post('/accounts', apiModel)
       .catch((response) => {
         const formattedErrors =

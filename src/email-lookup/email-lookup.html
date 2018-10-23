@@ -22,7 +22,7 @@
         name="uniqueId"
         ng-value="true"
         ng-model="$ctrl.useUniqueId"
-        ng-click="$ctrl.selectUniqueId()"></tw-radio>
+        ng-change="$ctrl.onChangeUniqueIdChoice({ useUniqueId: true })"></tw-radio>
       {{ $ctrl.recipient.name }}
       <small>
         {{ $ctrl.recipient.currency }} account ending
@@ -36,7 +36,7 @@
         name="uniqueId"
         ng-value="false"
         ng-model="$ctrl.useUniqueId"
-        ng-click="$ctrl.selectManual()"></tw-radio>
+        ng-change="$ctrl.onChangeUniqueIdChoice({ useUniqueId: false })"></tw-radio>
       Send to a different account
     </label>
   </div>

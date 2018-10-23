@@ -10,48 +10,21 @@ class AccountDetailsLegacyService {
       .filter(alternative => Object.keys(alternative.properties).length > 0);
 
     preppedAlternatives.forEach((alternative) => {
-      const extensions = currencyExtensions[currency]
+      const typeExtensions = currencyExtensions[currency]
         && currencyExtensions[currency][alternative.type];
 
       alternative.properties = addMissingFields(alternative.properties, currency);
-      alternative.properties = extendProperties(alternative.properties, extensions);
+      alternative.properties = extendProperties(alternative.properties, typeExtensions);
+      alternative.properties = extendProperties(alternative.properties, globalExtensions);
+      alternative.properties = nestProperties(alternative.properties);
     });
 
     return preppedAlternatives;
   }
 
-  // Take flat structure and nest details for the API
+  // We now adjust the requirements rather than post-processing
   formatModelForAPI(model) { // eslint-disable-line
-    const apiModel = {
-      type: model.type,
-      legalEntityType: model.legalType,
-      profile: model.profile,
-      currency: model.currency,
-      accountHolderName: model.accountHolderName,
-      details: angular.extend({}, model)
-    };
-
-    delete apiModel.details.type;
-    delete apiModel.details.legalType;
-    delete apiModel.details.profile;
-    delete apiModel.details.accountHolderName;
-    delete apiModel.details.currency;
-
-    if (apiModel.details.email) {
-      apiModel.email = apiModel.details.email;
-      delete apiModel.details.email;
-    }
-
-    if (apiModel.details.address) {
-      apiModel.address = apiModel.details.address;
-      delete apiModel.details.address;
-    }
-
-    if (apiModel.address && apiModel.address.country) {
-      apiModel.country = apiModel.address.country;
-    }
-
-    return apiModel;
+    return model;
   }
 
   // Take flat error structure and map to model structure.
@@ -79,6 +52,56 @@ class AccountDetailsLegacyService {
   }
 }
 
+/**
+ * These props sit at the top level of a v2 model, all others are nested in the
+ * details object.  This is a mapping from v1 keys to v2.
+ */
+const topLevelProps = {
+  type: 'type',
+  legalType: 'legalEntityType',
+  profile: 'profile',
+  accountHolderName: 'accountHolderName',
+  currency: 'currency',
+  email: 'email'
+};
+
+function nestProperties(properties) {
+  const newProps = {};
+  const detailsProps = {};
+
+  Object.keys(properties).forEach((oldKey) => {
+    const newKey = topLevelProps[oldKey];
+
+    // Hold back address until the end to preserve ordering
+    if (oldKey === 'address') {
+      return;
+    }
+    if (oldKey === 'name') {
+      return;
+    }
+
+    if (newKey) {
+      newProps[newKey] = properties[oldKey];
+    } else {
+      detailsProps[oldKey] = properties[oldKey];
+    }
+  });
+
+  if (properties.name) {
+    newProps.name = properties.name;
+  }
+
+  newProps.details = {
+    type: 'object',
+    properties: detailsProps
+  };
+
+  if (properties.address) {
+    newProps.address = properties.address;
+  }
+
+  return newProps;
+}
 
 function addMissingFields(fields, currency) {
   let newFields = angular.extend({}, fields);
@@ -92,11 +115,18 @@ function addNameFields(fields, currency) {
   }
 
   // If not already there, add them
+  // appeared under accountHolderName
+
   const basicNameField = {
-    accountHolderName: {
-      type: 'string',
-      title: 'Name',
-      placeholder: 'Enter name...'
+    name: {
+      type: 'object',
+      properties: {
+        fullName: {
+          type: 'string',
+          title: 'Name', // TODO translation
+          placeholder: 'Enter name...' // TODO translation
+        }
+      }
     }
   };
 
@@ -127,7 +157,7 @@ function extendProperty(key, property, extensions) {
     delete property.control;
   }
   if (key === 'address') {
-    property.title = 'Address details';
+    property.title = 'Address details'; // TODO translation
   }
 
   if (property.type === 'object') {
@@ -159,7 +189,7 @@ const customNameFields = {
       properties: {
         givenName: {
           type: 'string',
-          title: 'Given name',
+          title: 'Given name', // TODO translation
           required: true
         },
         patronymicName: {
@@ -167,11 +197,11 @@ const customNameFields = {
           title: 'Patronymic name',
           pattern: '^[а-яА-ЯёЁ\' -]+$',
           required: true,
-          helpText: 'Cyrillic characters only'
+          helpText: 'Cyrillic characters only' // TODO translation
         },
         familyName: {
           type: 'string',
-          title: 'Family name',
+          title: 'Family name', // TODO translation
           required: true
         },
       }
@@ -179,28 +209,53 @@ const customNameFields = {
   }
 };
 
-/* These extensions will over-rule, or add to the specififcations we get from
- * the API.  As the API improves these should disapper.
-*/
+/**
+ * These extensions will extend matching property values in any recipient type.
+ * As the API improves these should disapper.
+ */
+const globalExtensions = {
+  legalType: {
+    values: [{
+      value: 'PERSON',
+      label: 'Person'
+    }, {
+      value: 'INSTITUTION',
+      label: 'Business'
+    }]
+  },
+  address: {
+    city: {
+      width: 'md'
+    },
+    postCode: {
+      width: 'md'
+    }
+  }
+};
+
+/**
+ * These extensions will over-rule specififcations for specific currency & account
+ * types.  As the API improves these should disapper.
+ */
 const currencyExtensions = {
   VND: {
     vietname_earthport: {
       accountHolderName: {
-        helpText: 'Something about exactly as it appears...'
+        helpText: 'Something about exactly as it appears...' // TODO translation
       }
     }
   },
   JPY: {
     japanese: {
       accountHolderName: {
-        helpText: 'Exactly as it appears...'
+        helpText: 'Exactly as it appears...' // TODO translation
       }
     }
   },
   COP: {
     COLOMBIA: {
       accountHolderName: {
-        helpText: 'Something about middle names'
+        helpText: 'Something about middle names' // TODO translation
       }
     }
   },
@@ -211,14 +266,6 @@ const currencyExtensions = {
       },
       accountNumber: {
         width: 'md'
-      },
-      address: {
-        city: {
-          width: 'md'
-        },
-        postCode: {
-          width: 'md'
-        }
       }
     }
   },

@@ -74,14 +74,11 @@ describe('Given a component for looking up accounts by email', function() {
       describe('but they choose to enter details manually', function() {
         beforeEach(function() {
           useManualRadio.dispatchEvent(new Event('click'));
-          useManualRadio.click();
-          $scope.$apply();
-          console.log(useManualRadio);
         });
 
         it('should trigger the onEnterManually callback', function() {
           expect($scope.onEnterManually).toHaveBeenCalled();
-          //expect($scope.onEnterManually.calls.count()).toBe(1);
+          expect($scope.onEnterManually.calls.count()).toBe(1);
         });
       });
     });

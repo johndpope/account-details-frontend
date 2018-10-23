@@ -54,6 +54,13 @@ class AccountEmailLookupController {
       this.onEnterManually();
     }
   }
+  onChangeUniqueIdChoice(args) {
+    if (args.useUniqueId) {
+      this.selectUniqueId();
+    } else {
+      this.selectManual();
+    }
+  }
 }
 
 AccountEmailLookupController.$inject = ['AccountDetailsService'];
