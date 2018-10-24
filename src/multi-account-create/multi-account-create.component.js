@@ -5,7 +5,7 @@ const MultiAccountCreate = {
   controller,
   template,
   bindings: {
-    profile: '<',
+    profileId: '<',
     onChange: '&',
     onSuccess: '&',
     onFailure: '&'

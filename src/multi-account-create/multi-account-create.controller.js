@@ -10,6 +10,7 @@ class MultiAccountCreateController {
     }
 
     this.currencies = [];
+    // this.email = '';
 
     this.AccountDetailsService.getAccountCurrencies()
       .then((currencies) => {
@@ -17,16 +18,6 @@ class MultiAccountCreateController {
       })
       .catch(() => {
         // TODO
-      });
-  }
-
-  onEmailChange() {
-    this.AccountDetailsService.lookupAccountByEmail(this.email)
-      .then(() => {
-        // TODO
-      })
-      .catch(() => {
-        console.log('no email found'); // eslint-disable-line
       });
   }
 

@@ -1,0 +1,43 @@
+<div class="form-group"
+  ng-class="{ 'has-success': $ctrl.recipient }">
+  <label class="control-label">Email address</label>
+  <input
+    name="email"
+    class="form-control"
+    placeholder="Recipient email address"
+    ng-model="$ctrl.email"
+    ng-model-options="{ debounce: 500 }"
+    ng-change="$ctrl.onEmailChange()" />
+  <div class="alert alert-success" ng-if="$ctrl.recipient">
+    {{ $ctrl.recipient.name }} is already on TransferWise, and would
+    like to receive into the following account.
+  </div>
+</div>
+<div class="form-group"
+  ng-if="$ctrl.recipient">
+  <label class="control-label">How do you want to send?</label>
+  <div class="radio radio-lg">
+    <label>
+      <tw-radio
+        name="uniqueId"
+        ng-value="true"
+        ng-model="$ctrl.useUniqueId"
+        ng-change="$ctrl.onChangeUniqueIdChoice({ useUniqueId: true })"></tw-radio>
+      {{ $ctrl.recipient.name }}
+      <small>
+        {{ $ctrl.recipient.currency }} account ending
+        {{ $ctrl.recipient.shortAccountString.slice(-4) }}
+      </small>
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <tw-radio
+        name="uniqueId"
+        ng-value="false"
+        ng-model="$ctrl.useUniqueId"
+        ng-change="$ctrl.onChangeUniqueIdChoice({ useUniqueId: false })"></tw-radio>
+      Send to a different account
+    </label>
+  </div>
+</div>

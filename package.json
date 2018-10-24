@@ -1,6 +1,6 @@
 {
   "name": "@transferwise/account-details-frontend",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "TransferWise components for interacting with Account Details",
   "license": "MIT",
   "scripts": {
@@ -45,7 +45,7 @@
   "dependencies": {
     "angular": "^1.7.4",
     "jquery": "^3.3.1",
-    "@transferwise/styleguide-components": "^3.4.1"
+    "@transferwise/styleguide-components": "^3.4.2"
   },
   "devDependencies": {
     "@uirouter/angularjs": "^1.0.20",

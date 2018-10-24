@@ -1,0 +1,24 @@
+{
+  "type": "UNIQUEID",
+  "receiverType": "PRIVATE",
+  "email": "testy.mctest@gmail.com",
+  "currency": "GBP",
+  "uniqueId": {
+    "type": "email",
+    "value": "testy.mctest@gmail.com"
+  },
+  "targetRecipient":{
+    "id": 12345678,
+    "name": "Testy McTest",
+    "currency": "GBP",
+    "country": "gbr",
+    "countryISO2Code": "GB",
+    "email": "testy.mctest@gmail.com",
+    "type": "SORT_CODE",
+    "shortAccountString": "**************12345",
+    "receiverType": "PRIVATE",
+    "avatarUrl": null,
+    "bankName": null,
+    "accountNumber": "****2345"
+  }
+}

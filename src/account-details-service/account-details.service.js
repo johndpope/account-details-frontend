@@ -58,6 +58,7 @@ class AccountDetailsService {
       throw new Error('Model is required');
     }
     const apiModel = this.AccountDetailsLegacyService.formatModelForAPI(model);
+
     return this.$http.post('/accounts', apiModel)
       .catch((response) => {
         const formattedErrors =
@@ -73,7 +74,11 @@ class AccountDetailsService {
     if (!email) {
       throw new Error('Email is required');
     }
-    return this.$http.post('/email-accounts', { email });
+    const type = 'email';
+    const currencyCode = 'GBP';
+    return this.$http.post('/api/v1/uniqueId/uniqueIdLookUp', {
+      email, type, currencyCode
+    });
   }
 }
 

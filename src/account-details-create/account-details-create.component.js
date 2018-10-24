@@ -6,7 +6,7 @@ const AccountDetailsCreate = {
   template,
   bindings: {
     currency: '<',
-    profile: '<',
+    profileId: '<',
     onChange: '&',
     onSuccess: '&',
     onFailure: '&'

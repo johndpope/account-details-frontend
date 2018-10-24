@@ -8,17 +8,10 @@
   ></tw-select>
 </div>
 
-<div class="form-group">
-  <label class="control-label">Email address</label>
-  <input class="form-control"
-    ng-model="$ctrl.email"
-    ng-model-options="{ debounce: 500 }"
-    ng-change="$ctrl.onEmailChange()"
-    placeholder="Recipient email address" />
-</div>
-
 <account-details-create
+  profile-id="$ctrl.profileId"
   currency="$ctrl.currency"
+  email="$ctrl.email"
   on-change="$ctrl.onModelChange(model)"
   on-success="$ctrl.onSaveSuccess()"
   on-failure="$ctrl.onSaveFailure()">

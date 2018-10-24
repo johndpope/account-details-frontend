@@ -10,6 +10,9 @@ class AccountDetailsCreateController {
       maxLength: 'Too Long'
     };
     this.model = {};
+
+    this.uniqueIdRecipient = false;
+    this.hasDetails = true;
   }
 
   $onInit() {
@@ -72,6 +75,17 @@ class AccountDetailsCreateController {
           this.onFailure();
         }
       });
+  }
+
+  onEmailChange(email) {
+    this.model.email = email;
+  }
+
+  onUseUniqueId(recipient) {
+    this.uniqueIdRecipient = recipient;
+  }
+  onEnterManually() {
+    this.uniqueIdRecipient = false;
   }
 }
 
