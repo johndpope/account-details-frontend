@@ -20,8 +20,6 @@ class AccountDetailsCreateController {
       this.currency = 'GBP';
     }
 
-    this.loadRequirements();
-
     this.$scope.$watch('$ctrl.model', (model, oldModel) => {
       if (model !== oldModel && this.onChange) {
         this.onChange({ model });
@@ -46,14 +44,22 @@ class AccountDetailsCreateController {
   loadRequirements() {
     let promise;
     if (this.quoteId) {
-      promise = this.AccountDetailsService.getRequirementsForQuote(this.quoteId, this.model.currency);
+      promise = this.AccountDetailsService.getRequirementsForQuote(
+        this.quoteId,
+        this.model.currency
+      );
     } else {
       promise = this.AccountDetailsService.getRequirements(this.model.currency);
     }
 
     promise
-      .then(this.handleRequirementsResponse)
-      .catch(handleRequirementsFailure);
+      .then((response) => {
+        this.alternatives = response.data;
+        if (this.alternatives.length) {
+          this.model.type = this.alternatives[0].type;
+        }
+      })
+      .catch(this.handleRequirementsFailure);
   }
 
   refreshRequirements() {
@@ -61,17 +67,10 @@ class AccountDetailsCreateController {
       .then((response) => {
         this.alternatives = response.data;
       })
-      .catch(handleRequirementsFailure);
+      .catch(this.handleRequirementsFailure);
   }
 
-  handleRequirementsResponse(resposne) {
-    this.alternatives = response.data;
-    if (this.alternatives.length) {
-      this.model.type = this.alternatives[0].type;
-    }
-  }
-
-  handleRequirementsFailure(response) { //eslint-disable-line
+  handleRequirementsFailure(error) { //eslint-disable-line
     // TODO
   }
 

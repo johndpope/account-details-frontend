@@ -59,6 +59,7 @@ describe('Given a component for creating accounts', function() {
 
     it('should load the requirements from the account details service with the given currency', function() {
       expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP');
+      expect(AccountDetailsService.getRequirements.calls.count()).toBe(1);
     });
 
     it('should render the dynamic form', function() {
