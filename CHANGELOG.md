@@ -1,3 +1,8 @@
+# v0.6.0
+## Add support for creating accounts for a quote
+Sometimes the requirements may vary based on some property of the quote e.g.
+amount.  You can now pass in a quote id to take that into account.
+
 # v0.5.0
 ## Add a component for looking up uniqueId recipients by email
 Allow the user to choose whether to send to the unique id or to enter details manually.
