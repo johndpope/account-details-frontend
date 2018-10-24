@@ -1,12 +1,5 @@
 
-<account-email-lookup
-  on-change="$ctrl.onEmailChange(email)"
-  on-use-unique-id="$ctrl.onUseUniqueId(recipient)"
-  on-enter-manually="$ctrl.onEnterManually()"
-></account-email-lookup>
-
-<div class="form-group"
-  ng-if="!$ctrl.uniqueIdRecipient">
+<div class="form-group">
   <label class="control-label">Do you have their account details?</label>
   <div class="checkbox" ng-class="{ 'has-info': !$ctrl.hasDetails }">
     <label>
@@ -23,6 +16,13 @@
     </div>
   </div>
 </div>
+
+<account-email-lookup
+  on-change="$ctrl.onEmailChange(email)"
+  on-use-unique-id="$ctrl.onUseUniqueId(recipient)"
+  on-enter-manually="$ctrl.onEnterManually()"
+></account-email-lookup>
+
 
 <form
   ng-if="!$ctrl.uniqueIdRecipient && $ctrl.hasDetails"

@@ -6,11 +6,34 @@
       <p>This component allows you to choose a currency and create an account
         of that type.</p>
 <pre>
-&lt;multi-account-create&gt;&lt;/multi-account-create&gt;
+&lt;multi-account-create
+  profile-id="..."
+  on-change="myChangeHandler(model)"
+  on-success="mySuccessHandler()"
+  on-failure="myFailureHandler()"
+&gt;&lt;/multi-account-create&gt;
 </pre>
+
+      <dl class="dl-horizontal">
+        <dt>profileID</dt>
+        <dd>Which profile will own this account.</dd>
+
+        <dt>onChange(model)</dt>
+        <dd>Triggered every time the model changes.</dd>
+
+        <dt>onSuccess</dt>
+        <dd>Triggered when an account is saved successully.</dd>
+
+        <dt>onFailure</dt>
+        <dd>
+          Triggered when an account save fails.  Error messaging is handled
+          internally.
+        </dd>
+      <dl>
 
       <h4>Internal model</h4>
       <pre>{{ $ctrl.model | json }}</pre>
+
     </div>
     <div class="col-md-6">
       <multi-account-create

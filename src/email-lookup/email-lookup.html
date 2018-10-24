@@ -1,5 +1,5 @@
 <div class="form-group"
-  ng-class="{ 'has-info': $ctrl.recipient }">
+  ng-class="{ 'has-success': $ctrl.recipient }">
   <label class="control-label">Email address</label>
   <input
     name="email"
@@ -8,7 +8,7 @@
     ng-model="$ctrl.email"
     ng-model-options="{ debounce: 500 }"
     ng-change="$ctrl.onEmailChange()" />
-  <div class="alert alert-info" ng-if="$ctrl.recipient">
+  <div class="alert alert-success" ng-if="$ctrl.recipient">
     {{ $ctrl.recipient.name }} is already on TransferWise, and would
     like to receive into the following account.
   </div>
