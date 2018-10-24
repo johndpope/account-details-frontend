@@ -1,3 +1,7 @@
+# v0.5.0
+## Add a component for looking up uniqueId recipients by email
+Allow the user to choose whether to send to the unique id or to enter details manually.
+
 # v0.4.0
 ## Add a component for creating accounts of any currency
 Asks the user to choose the currency and then updates the form to ask for the
