@@ -23,6 +23,21 @@ class AccountDetailsService {
     return this.$http.get(`/account-requirements?currency=${currency}`, options);
   }
 
+  getRequirementsForQuote(quoteId, currency) {
+    if (!quoteId || !currency) {
+      throw new Error('Quote id and currency are required');
+    }
+
+    const options = getRequirementsHttpOptions(
+      currency,
+      this.AccountDetailsLegacyService,
+      this.$http
+    );
+
+    return this.$http.get(`/quotes/${quoteId}/account-requirements`, options);
+  }
+
+
   /**
    * Refresh account requirments for a currency using an existing model
    */

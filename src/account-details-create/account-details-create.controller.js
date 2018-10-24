@@ -32,24 +32,28 @@ class AccountDetailsCreateController {
   $onChanges(changes) {
     if (changes.currency) {
       this.model.currency = changes.currency.currentValue || 'GBP';
-      this.loadRequirements();
     }
+
     if (changes.profile && changes.profile.currentValue) {
       this.model.profile = changes.profile.currentValue;
+    }
+
+    if (changes.currency || changes.quoteId) {
+      this.loadRequirements();
     }
   }
 
   loadRequirements() {
-    this.AccountDetailsService.getRequirements(this.model.currency)
-      .then((response) => {
-        this.alternatives = response.data;
-        if (this.alternatives.length) {
-          this.model.type = this.alternatives[0].type;
-        }
-      })
-      .catch(() => {
-        // TODO
-      });
+    let promise;
+    if (this.quoteId) {
+      promise = this.AccountDetailsService.getRequirementsForQuote(this.quoteId, this.model.currency);
+    } else {
+      promise = this.AccountDetailsService.getRequirements(this.model.currency);
+    }
+
+    promise
+      .then(this.handleRequirementsResponse)
+      .catch(handleRequirementsFailure);
   }
 
   refreshRequirements() {
@@ -57,9 +61,18 @@ class AccountDetailsCreateController {
       .then((response) => {
         this.alternatives = response.data;
       })
-      .catch(() => {
-        // TODO
-      });
+      .catch(handleRequirementsFailure);
+  }
+
+  handleRequirementsResponse(resposne) {
+    this.alternatives = response.data;
+    if (this.alternatives.length) {
+      this.model.type = this.alternatives[0].type;
+    }
+  }
+
+  handleRequirementsFailure(response) { //eslint-disable-line
+    // TODO
   }
 
   saveAccount() {
