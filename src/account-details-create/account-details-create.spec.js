@@ -11,6 +11,7 @@ describe('Given a component for creating accounts', function() {
   var template = " \
     <account-details-create \
       currency='currency' \
+      quote-id='quoteId' \
       on-success='onSuccess()' \
       on-failure='onFailure()'> \
     </account-details-create>";
@@ -43,6 +44,9 @@ describe('Given a component for creating accounts', function() {
     spyOn(AccountDetailsService, 'getRequirements')
       .and.returnValue($q.resolve(alternatives));
 
+    spyOn(AccountDetailsService, 'getRequirementsForQuote')
+      .and.returnValue($q.resolve(alternatives));
+
     $scope.onSuccess = jasmine.createSpy('onSuccess');
     $scope.onFailure = jasmine.createSpy('onFailure');
   }));
@@ -55,6 +59,7 @@ describe('Given a component for creating accounts', function() {
 
     it('should load the requirements from the account details service with the given currency', function() {
       expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP');
+      expect(AccountDetailsService.getRequirements.calls.count()).toBe(1);
     });
 
     it('should render the dynamic form', function() {
@@ -160,6 +165,17 @@ describe('Given a component for creating accounts', function() {
       });
       it('should request the new requirements', function() {
         expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('USD');
+      });
+    });
+
+    describe('when a quoteId is supplied', function() {
+      beforeEach(function() {
+        $scope.currency = "USD";
+        $scope.quoteId = 123;
+        $scope.$apply();
+      });
+      it('should request the new requirements', function() {
+        expect(AccountDetailsService.getRequirementsForQuote).toHaveBeenCalledWith(123, 'USD');
       });
     });
   });

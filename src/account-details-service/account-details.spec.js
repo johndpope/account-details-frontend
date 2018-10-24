@@ -43,6 +43,29 @@ describe('Given a service for interacting with the acount details API', function
         expect(service.getRequirements).toThrow();
       });
     });
+
+    describe('with a quote', function() {
+      var promise;
+      beforeEach(function() {
+        $httpBackend.whenGET('/quotes/123/account-requirements').respond(['first']);
+        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
+
+        promise = service.getRequirementsForQuote(123, 'GBP');
+        $httpBackend.flush();
+      });
+
+      it('should make a GET call to the API', function() {
+        $httpBackend.expectGET('/quotes/123/account-requirements');
+      });
+      it('should use the legacy service to prepare the API response', function() {
+        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
+      });
+      it('should return a promise with the prepared response', function() {
+        promise.then(function(response) {
+          expect(response.data).toBe(['second']);
+        });
+      });
+    });
   });
 
   describe('when refreshing account requirements', function() {
