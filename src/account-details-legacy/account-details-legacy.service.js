@@ -194,20 +194,20 @@ const customNameFields = {
           title: 'First name', // TODO translation
           required: true,
           // TODO translation
-          warningText: 'Account holder name must match name registered with bank'
+          helpText: 'Name must match name registered with bank'
         },
         middleName: {
           type: 'string',
           title: 'Middle name (optional)', // TODO translation
           // TODO translation
-          warningText: 'Account holder name must match name registered with bank'
+          helpText: 'Name must match name registered with bank'
         },
         lastName: {
           type: 'string',
           title: 'Last name', // TODO translation
           required: true,
           // TODO translation
-          warningText: 'Account holder name must match name registered with bank'
+          helpText: 'Name must match name registered with bank'
         }
       }
     }
@@ -222,7 +222,7 @@ const customNameFields = {
           required: true,
           pattern: '^[а-яА-ЯёЁ\' -]+$',
           // TODO translation
-          warningText: 'Account holder name must be in Cyrillic'
+          helpText: 'Name must be in Cyrillic'
         },
         patronymicName: {
           type: 'string',
@@ -230,7 +230,7 @@ const customNameFields = {
           pattern: '^[а-яА-ЯёЁ\' -]+$',
           required: true,
           // TODO translation
-          warningText: 'Account holder name must be in Cyrillic'
+          helpText: 'Name must be in Cyrillic'
         },
         familyName: {
           type: 'string',
@@ -238,7 +238,7 @@ const customNameFields = {
           required: true,
           pattern: '^[а-яА-ЯёЁ\' -]+$',
           // TODO translation
-          warningText: 'Account holder name must be in Cyrillic'
+          helpText: 'Name must be in Cyrillic'
         },
       }
     },
