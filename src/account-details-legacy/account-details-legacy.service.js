@@ -114,6 +114,7 @@ function addNameFields(fields, currency) {
     return angular.extend(customNameFields[currency], fields);
   }
 
+
   // If not already there, add them
   // appeared under accountHolderName
 
@@ -130,7 +131,17 @@ function addNameFields(fields, currency) {
     }
   };
 
-  return angular.extend(basicNameField, fields);
+  const newNameFields = basicNameField;
+
+  // Some currencies have specific extensions for parts of the name form, add them.
+  if (nameExtensions[currency]) {
+    newNameFields.name.properties = extendProperties(
+      basicNameField.name.properties,
+      nameExtensions[currency]
+    );
+  }
+
+  return angular.extend(newNameFields, fields);
 }
 
 function extendProperties(properties, extensions) {
@@ -175,12 +186,30 @@ function extendProperty(key, property, extensions) {
  */
 const customNameFields = {
   ZAR: {
-    // TODO this isn't the correct name config for ZAR
-    firstName: {
-      type: 'string'
-    },
-    lastName: {
-      type: 'string'
+    name: {
+      type: 'object',
+      properties: {
+        firstName: {
+          type: 'string',
+          title: 'First name', // TODO translation
+          required: true,
+          // TODO translation
+          warningText: 'Account holder name must match name registered with bank'
+        },
+        middleName: {
+          type: 'string',
+          title: 'Middle name (optional)', // TODO translation
+          // TODO translation
+          warningText: 'Account holder name must match name registered with bank'
+        },
+        lastName: {
+          type: 'string',
+          title: 'Last name', // TODO translation
+          required: true,
+          // TODO translation
+          warningText: 'Account holder name must match name registered with bank'
+        }
+      }
     }
   },
   RUB: {
@@ -190,19 +219,26 @@ const customNameFields = {
         givenName: {
           type: 'string',
           title: 'Given name', // TODO translation
-          required: true
+          required: true,
+          pattern: '^[а-яА-ЯёЁ\' -]+$',
+          // TODO translation
+          warningText: 'Account holder name must be in Cyrillic'
         },
         patronymicName: {
           type: 'string',
           title: 'Patronymic name',
           pattern: '^[а-яА-ЯёЁ\' -]+$',
           required: true,
-          helpText: 'Cyrillic characters only' // TODO translation
+          // TODO translation
+          warningText: 'Account holder name must be in Cyrillic'
         },
         familyName: {
           type: 'string',
           title: 'Family name', // TODO translation
-          required: true
+          required: true,
+          pattern: '^[а-яА-ЯёЁ\' -]+$',
+          // TODO translation
+          warningText: 'Account holder name must be in Cyrillic'
         },
       }
     },
@@ -238,27 +274,6 @@ const globalExtensions = {
  * types.  As the API improves these should disapper.
  */
 const currencyExtensions = {
-  VND: {
-    vietname_earthport: {
-      accountHolderName: {
-        helpText: 'Something about exactly as it appears...' // TODO translation
-      }
-    }
-  },
-  JPY: {
-    japanese: {
-      accountHolderName: {
-        helpText: 'Exactly as it appears...' // TODO translation
-      }
-    }
-  },
-  COP: {
-    COLOMBIA: {
-      accountHolderName: {
-        helpText: 'Something about middle names' // TODO translation
-      }
-    }
-  },
   USD: {
     aba: {
       abartn: {
@@ -280,6 +295,36 @@ const currencyExtensions = {
     }
   }
 };
+
+// TODO Translations & Katakana characters
+const japanNameHelp = "Enter the name exactly as it appears on the recipient's " +
+  'Japanese bank account (it is usually writtin in XXXX Katakana).  A mismatch ' +
+  'may cause a delay or rejection of your transfer.';
+
+const colombiaNameHelp = "Please include all of the recipient's given and family names.";
+
+const vietnamNameHelp = "Enter the name exactly as it appears on the recipient's " +
+ 'Vietnamese bank account.  A mismatch may cause a delay on your transfer';
+
+
+const nameExtensions = {
+  VND: {
+    fullName: {
+      helpText: vietnamNameHelp
+    }
+  },
+  COP: {
+    fullName: {
+      helpText: colombiaNameHelp
+    }
+  },
+  JPY: {
+    fullName: {
+      helpText: japanNameHelp
+    }
+  }
+};
+
 
 AccountDetailsLegacyService.$inject = ['TwRequirementsService'];
 
