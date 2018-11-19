@@ -12,17 +12,17 @@ import emailLookupFailure from '../demo/json/email-lookup-failure.json';
 function mockBackend($httpBackend) {
   const requirementsPath = '/account-requirements';
 
-  $httpBackend.whenGET(`${requirementsPath}?currency=GBP`).respond(gbpRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?currency=JPY`).respond(jpyRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?currency=USD`).respond(usdRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?currency=VND`).respond(vndRequirements);
+  $httpBackend.whenGET(`${requirementsPath}?target=GBP`).respond(gbpRequirements);
+  $httpBackend.whenGET(`${requirementsPath}?target=JPY`).respond(jpyRequirements);
+  $httpBackend.whenGET(`${requirementsPath}?target=USD`).respond(usdRequirements);
+  $httpBackend.whenGET(`${requirementsPath}?target=VND`).respond(vndRequirements);
 
   $httpBackend.whenGET('/quotes/123/account-requirements').respond(usdRequirements);
 
-  $httpBackend.whenPOST(`${requirementsPath}?currency=GBP`).respond(gbpRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?currency=JPY`).respond(jpyRefreshRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?currency=USD`).respond(usdRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?currency=VND`).respond(vndRequirements);
+  $httpBackend.whenPOST(`${requirementsPath}?target=GBP`).respond(gbpRequirements);
+  $httpBackend.whenPOST(`${requirementsPath}?target=JPY`).respond(jpyRefreshRequirements);
+  $httpBackend.whenPOST(`${requirementsPath}?target=USD`).respond(usdRequirements);
+  $httpBackend.whenPOST(`${requirementsPath}?target=VND`).respond(vndRequirements);
 
   $httpBackend.whenGET('/account-currencies').respond(accountCurrencies);
 

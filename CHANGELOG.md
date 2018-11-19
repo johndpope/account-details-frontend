@@ -1,3 +1,7 @@
+# v0.6.1
+## Add better support for custom name formats
+Correct Russian and South African formats
+
 # v0.6.0
 ## Add support for creating accounts for a quote
 Sometimes the requirements may vary based on some property of the quote e.g.

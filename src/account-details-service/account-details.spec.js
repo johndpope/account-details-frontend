@@ -18,7 +18,7 @@ describe('Given a service for interacting with the acount details API', function
     describe('with a currency', function() {
       var promise;
       beforeEach(function() {
-        $httpBackend.whenGET('/account-requirements?currency=GBP').respond(['first']);
+        $httpBackend.whenGET('/account-requirements?target=GBP').respond(['first']);
         spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
 
         promise = service.getRequirements('GBP');
@@ -26,7 +26,7 @@ describe('Given a service for interacting with the acount details API', function
       });
 
       it('should make a GET call to the API', function() {
-        $httpBackend.expectGET('/account-requirements?currency=GBP');
+        $httpBackend.expectGET('/account-requirements?target=GBP');
       });
       it('should use the legacy service to prepare the API response', function() {
         expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
@@ -85,7 +85,7 @@ describe('Given a service for interacting with the acount details API', function
 
         spyOn(AccountDetailsLegacyService, 'formatModelForAPI').and.returnValue(formattedModel);
         spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
-        $httpBackend.whenPOST('/account-requirements?currency=GBP').respond(['first']);
+        $httpBackend.whenPOST('/account-requirements?target=GBP').respond(['first']);
 
         promise = service.refreshRequirements('GBP', model);
         $httpBackend.flush();
@@ -95,7 +95,7 @@ describe('Given a service for interacting with the acount details API', function
         expect(AccountDetailsLegacyService.formatModelForAPI).toHaveBeenCalledWith(model);
       });
       it('should POST the formatted model to the API', function() {
-        $httpBackend.expectPOST('/account-requirements?currency=GBP', formattedModel);
+        $httpBackend.expectPOST('/account-requirements?target=GBP', formattedModel);
       });
       it('should use the legacy service to prepare the response', function() {
         expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
