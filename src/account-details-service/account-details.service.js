@@ -8,6 +8,8 @@ class AccountDetailsService {
 
   /**
    * Get the account requirments for a currency
+   * Live calls, use source/sourceAmount for special cases
+   * {{host}}/v1/account-requirements?source=EUR&target=USD&sourceAmount=1000
    */
   getRequirements(currency) {
     if (!currency) {
@@ -19,8 +21,7 @@ class AccountDetailsService {
       this.AccountDetailsLegacyService,
       this.$http
     );
-
-    return this.$http.get(`/account-requirements?currency=${currency}`, options);
+    return this.$http.get(`/account-requirements?target=${currency}`, options);
   }
 
   getRequirementsForQuote(quoteId, currency) {
@@ -53,7 +54,7 @@ class AccountDetailsService {
       this.$http
     );
 
-    return this.$http.post(`/account-requirements?currency=${currency}`, apiModel, options);
+    return this.$http.post(`/account-requirements?target=${currency}`, apiModel, options);
   }
 
   /**
@@ -73,7 +74,6 @@ class AccountDetailsService {
       throw new Error('Model is required');
     }
     const apiModel = this.AccountDetailsLegacyService.formatModelForAPI(model);
-
     return this.$http.post('/accounts', apiModel)
       .catch((response) => {
         const formattedErrors =
