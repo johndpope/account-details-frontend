@@ -1,6 +1,6 @@
 {
   "name": "@transferwise/account-details-frontend",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "TransferWise components for interacting with Account Details",
   "license": "MIT",
   "scripts": {
