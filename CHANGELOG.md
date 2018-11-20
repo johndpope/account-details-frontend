@@ -1,3 +1,8 @@
+# v0.6.2
+## Improve internationalisation
+Allow the save button label to be passed in.  Use the legalType value labels
+from the API response.
+
 # v0.6.1
 ## Add better support for custom name formats
 Correct Russian and South African formats

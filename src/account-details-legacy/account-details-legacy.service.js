@@ -58,7 +58,7 @@ class AccountDetailsLegacyService {
  */
 const topLevelProps = {
   type: 'type',
-  legalType: 'legalEntityType',
+  legalEntityType: 'legalEntityType',
   profile: 'profile',
   accountHolderName: 'accountHolderName',
   currency: 'currency',
@@ -151,7 +151,12 @@ function extendProperties(properties, extensions) {
 
   const extendedProperties = {};
   Object.keys(properties).forEach((key) => {
-    extendedProperties[key] = extendProperty(key, properties[key], extensions[key]);
+    if (key === 'legalType') {
+      // In the v2 enpoint, this needs to be mapped to legalEntityType
+      extendedProperties.legalEntityType = mapLegalTypeToV2(properties[key]);
+    } else {
+      extendedProperties[key] = extendProperty(key, properties[key], extensions[key]);
+    }
   });
 
   return extendedProperties;
@@ -162,11 +167,6 @@ function extendProperty(key, property, extensions) {
     return property;
   }
 
-  if (key === 'legalType') {
-    // If using v2 enpoint, this needs to be mapped to legalEntityType
-    // The allowed values are also different
-    delete property.control;
-  }
   if (key === 'address') {
     property.title = 'Address details'; // TODO translation
   }
@@ -179,6 +179,27 @@ function extendProperty(key, property, extensions) {
 
   // Extend existing field
   return angular.extend(property, extensions);
+}
+
+/**
+ * Legal type has been changed in V2, the parameter name is different and the
+ * enums have changed.
+ */
+function mapLegalTypeToV2(property) {
+  delete property.control; // The control is incorrect in the API
+
+  if (property.values) {
+    property.values.forEach((valueObject) => {
+      if (valueObject.value === 'PRIVATE') {
+        valueObject.value = 'PERSON';
+      }
+      if (valueObject.value === 'BUSINESS') {
+        valueObject.value = 'INSTITUTION';
+      }
+    });
+  }
+
+  return property;
 }
 
 /**
@@ -250,15 +271,6 @@ const customNameFields = {
  * As the API improves these should disapper.
  */
 const globalExtensions = {
-  legalType: {
-    values: [{
-      value: 'PERSON',
-      label: 'Person'
-    }, {
-      value: 'INSTITUTION',
-      label: 'Business'
-    }]
-  },
   address: {
     city: {
       width: 'md'

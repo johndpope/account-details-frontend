@@ -13,7 +13,8 @@ describe('Given a component for creating accounts', function() {
       currency='currency' \
       quote-id='quoteId' \
       on-success='onSuccess()' \
-      on-failure='onFailure()'> \
+      on-failure='onFailure()' \
+      save-button-label='saveButtonLabel'> \
     </account-details-create>";
 
   beforeEach(module('tw.styleguide-components'));
@@ -54,6 +55,7 @@ describe('Given a component for creating accounts', function() {
   describe('when initialised', function() {
     beforeEach(function() {
       $scope.currency = 'GBP';
+      $scope.saveButtonLabel = 'Button Label';
       component = getComponent($compile, $scope, template);
     });
 
@@ -64,6 +66,10 @@ describe('Given a component for creating accounts', function() {
 
     it('should render the dynamic form', function() {
       expect(component.querySelector('input[name=refresh]')).toBeTruthy();
+    });
+
+    it('should use the supplied button label', function() {
+      expect(component.querySelector('input[type=submit]').value).toBe($scope.saveButtonLabel);
     });
 
     describe('when refresh requirements is triggered', function() {

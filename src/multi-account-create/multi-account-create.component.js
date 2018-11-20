@@ -8,7 +8,8 @@ const MultiAccountCreate = {
     profileId: '<',
     onChange: '&',
     onSuccess: '&',
-    onFailure: '&'
+    onFailure: '&',
+    saveButtonLabel: '<'
   }
 };
 
