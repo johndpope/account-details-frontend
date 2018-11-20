@@ -10,7 +10,8 @@ const AccountDetailsCreate = {
     profileId: '<',
     onChange: '&',
     onSuccess: '&',
-    onFailure: '&'
+    onFailure: '&',
+    saveButtonLabel: '<'
   }
 };
 

@@ -23,13 +23,13 @@
   on-enter-manually="$ctrl.onEnterManually()"
 ></account-email-lookup>
 
-
 <form
   ng-if="!$ctrl.uniqueIdRecipient && $ctrl.hasDetails"
   name="accountCreateForm"
   novalidate
   ng-submit="accountCreateForm.$valid && $ctrl.saveAccount()"
   ng-class="{'m-t-panel': $ctrl.alternatives.length > 1}">
+
   <tw-requirements-form
     ng-if="$ctrl.alternatives"
     model="$ctrl.model"
@@ -38,5 +38,7 @@
     validation-messages="$ctrl.validationMessages"
     on-refresh-requirements="$ctrl.refreshRequirements()">
   </tw-requirements-form >
-  <input type="submit" value="Submit" class="btn btn-block btn-primary"/>
+  <input type="submit"
+    value="{{ $ctrl.saveButtonLabel }}"
+    class="btn btn-block btn-primary" />
 </form>

@@ -217,10 +217,10 @@ const globalExtensions = {
   legalType: {
     values: [{
       value: 'PERSON',
-      label: 'Person'
+      label: 'Person' // TODO translation
     }, {
       value: 'INSTITUTION',
-      label: 'Business'
+      label: 'Business' // TODO translation
     }]
   },
   address: {

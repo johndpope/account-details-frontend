@@ -11,6 +11,7 @@
   on-change="myChangeHandler(model)"
   on-success="mySuccessHandler()"
   on-failure="myFailureHandler()"
+  save-button-label="'Save'"
 &gt;&lt;/multi-account-create&gt;
 </pre>
 
@@ -29,6 +30,11 @@
           (Optional) Triggered when an account save fails.  Error messaging is
           handled internally.
         </dd>
+
+        <dt>saveButtonLabel</dt>
+        <dd>
+          Localised label for the save button.
+        </dd>
       </dl>
 
       <h4>Internal model</h4>
@@ -41,6 +47,7 @@
         on-change="$ctrl.onModelChange(model)"
         on-success="$ctrl.log('demo success')"
         on-failure="$ctrl.log('demo failure')"
+        save-button-label="'Save'"
       ></multi-account-create>
     </div>
   </div>
