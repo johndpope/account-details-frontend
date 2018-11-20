@@ -144,8 +144,8 @@ describe('Given a service for handling legacy account details formats', function
               value: 'PRIVATE',
               label: 'Person'
             },{
-              value: 'PRIVATE',
-              label: 'Person'
+              value: 'BUSINESS',
+              label: 'Business'
             }]
           },
           unrecognised: {

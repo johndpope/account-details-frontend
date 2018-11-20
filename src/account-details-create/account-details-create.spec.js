@@ -13,7 +13,8 @@ describe('Given a component for creating accounts', function() {
       currency='currency' \
       quote-id='quoteId' \
       on-success='onSuccess()' \
-      on-failure='onFailure()'> \
+      on-failure='onFailure()' \
+      save-button-label='saveButtonLabel'> \
     </account-details-create>";
 
   beforeEach(module('tw.styleguide-components'));
