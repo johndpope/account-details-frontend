@@ -95,6 +95,13 @@ class AccountDetailsService {
       email, type, currencyCode
     });
   }
+
+  getTargetCountries(currency) {
+    if (currency === 'USD') {
+      return this.$http.get('/api/v1/country/listGlobalUsdCountries');
+    }
+    return this.$q.when({ data: [{ currency: 'GBP' }] });
+  }
 }
 
 /**

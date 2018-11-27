@@ -214,4 +214,46 @@ describe('Given a service for interacting with the acount details API', function
       });
     });
   });
+
+
+  describe('when requesting the list of available target countries', function() {
+    var promise;
+    beforeEach(function() {
+      $httpBackend.whenGET('/api/v1/country/listGlobalUsdCountries').respond(200, ['US', 'GB']);
+    });
+
+    describe('if currency is USD', function() {
+      beforeEach(function() {
+        promise = service.getTargetCountries('USD');
+      });
+
+      it('should request them from the usd endpoint', function() {
+        $httpBackend.expectGET('/api/v1/country/listGlobalUsdCountries');
+        $httpBackend.flush();
+      });
+      it('should return a promise with the data from the API', function() {
+        $httpBackend.flush();
+        promise.then(function(response) {
+          expect(response.data).toEqual(['US', 'GB']);
+        });
+      });
+    });
+
+    describe('if currency is not USD', function() {
+      var model, formattedModel, promise;
+      beforeEach(function() {
+        promise = service.getTargetCountries('GBP');
+      });
+
+      it('should not request them from the usd endpoint', function() {
+        // Should be nothing to flush, so will throw an error
+        expect($httpBackend.flush).toThrow();
+      });
+      it('should return a promise with just the requested country', function() {
+        promise.then(function(response) {
+          expect(response.data).toEqual([{currency: 'GBP'}]);
+        });
+      });
+    });
+  });
 });
