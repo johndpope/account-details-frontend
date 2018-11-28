@@ -18,6 +18,7 @@ class AccountDetailsService {
 
     const options = getRequirementsHttpOptions(
       currency,
+      country,
       this.AccountDetailsLegacyService,
       this.$http
     );
@@ -28,13 +29,14 @@ class AccountDetailsService {
     );
   }
 
-  getRequirementsForQuote(quoteId, currency) {
+  getRequirementsForQuote(quoteId, currency, country) {
     if (!quoteId || !currency) {
       throw new Error('Quote id and currency are required');
     }
 
     const options = getRequirementsHttpOptions(
       currency,
+      country,
       this.AccountDetailsLegacyService,
       this.$http
     );
@@ -53,12 +55,13 @@ class AccountDetailsService {
 
     const options = getRequirementsHttpOptions(
       currency,
+      model.country,
       this.AccountDetailsLegacyService,
       this.$http
     );
 
     return this.$http.post(
-      getRequirementsPath(currency, false),
+      getRequirementsPath(currency, model.country),
       apiModel,
       options
     );
@@ -131,11 +134,12 @@ function getRequirementsPath(currency, country) {
  * We use transformers rather than a 'then', as in Angular >1.5, using a 'then'
  * without a catch throws a warning, and we do not want to catch at this point.
  */
-function getRequirementsHttpOptions(currency, AccountDetailsLegacyService, $http) {
+function getRequirementsHttpOptions(currency, country, AccountDetailsLegacyService, $http) {
   return {
     transformResponse: getResponseTransformers(
       (data, headers, status) => handleRequirementsResponse(
         currency,
+        country,
         data,
         status,
         AccountDetailsLegacyService
@@ -148,9 +152,15 @@ function getRequirementsHttpOptions(currency, AccountDetailsLegacyService, $http
 /**
  * Update successful responses to remove any legacy
  */
-function handleRequirementsResponse(currency, data, status, AccountDetailsLegacyService) {
+function handleRequirementsResponse(
+  currency,
+  country,
+  data,
+  status,
+  AccountDetailsLegacyService
+) {
   if (status === 200) {
-    return AccountDetailsLegacyService.prepareResponse(currency, data);
+    return AccountDetailsLegacyService.prepareResponse(currency, country, data);
   }
   return data;
 }

@@ -4,7 +4,7 @@ class AccountDetailsLegacyService {
     this.RequirementsService = RequirementsService;
   }
 
-  prepareResponse(currency, alternatives) {
+  prepareResponse(currency, country, alternatives) {
     const preppedAlternatives = this.RequirementsService
       .prepRequirements(alternatives)
       .filter(alternative => Object.keys(alternative.properties).length > 0);
@@ -18,6 +18,15 @@ class AccountDetailsLegacyService {
       alternative.properties = extendProperties(alternative.properties, globalExtensions);
       alternative.properties = nestProperties(alternative.properties);
     });
+
+    // Deal with global USD
+    if (currency === 'USD') {
+      if (country !== 'US') {
+        return [preppedAlternatives[1]];
+      }
+      // TODO some countries use IBAN, need to change response in that case
+      return [preppedAlternatives[0]];
+    }
 
     return preppedAlternatives;
   }
