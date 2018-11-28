@@ -30,7 +30,7 @@ class AccountDetailsCreateController {
   $onChanges(changes) {
     if (changes.currency) {
       this.model.currency = changes.currency.currentValue || 'GBP';
-      delete this.model.country;
+
       this.AccountDetailsService.getTargetCountries(this.model.currency).then((response) => {
         this.targetCountries = response.data;
 
@@ -38,6 +38,10 @@ class AccountDetailsCreateController {
         // TODO find a way to do this more generically
         if (this.model.currency === 'USD') {
           this.model.country = 'US';
+        }
+
+        if (this.targetCountries && this.targetCountries.length <= 1) {
+          delete this.model.country;
         }
       });
     }
