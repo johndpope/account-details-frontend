@@ -24,6 +24,7 @@ describe('Given a service for interacting with the acount details API', function
       var promise;
       beforeEach(function() {
         $httpBackend.whenGET('/account-requirements?target=GBP').respond(200, ['first']);
+        $httpBackend.whenGET('/account-requirements?target=GBP&country=GB').respond(200, ['first']);
         spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
 
         promise = service.getRequirements('GBP');
@@ -38,7 +39,6 @@ describe('Given a service for interacting with the acount details API', function
         expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
       });
       it('should return a promise with the prepared response', function() {
-
         $httpBackend.flush();
         promise.then(function(response) {
           expect(response.data).toEqual(['second']);
@@ -49,6 +49,19 @@ describe('Given a service for interacting with the acount details API', function
     describe('without a currency', function() {
       it('should throw an error', function() {
         expect(service.getRequirements).toThrow();
+      });
+    });
+
+    describe('with a currency and a country', function() {
+      beforeEach(function() {
+        $httpBackend.whenGET('/account-requirements?target=USD&country=HK').respond(200, ['first']);
+        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
+
+        service.getRequirements('USD', 'HK');
+      });
+      it('should pass the country to the API', function() {
+        $httpBackend.expectGET('/account-requirements?target=USD&country=HK');
+        $httpBackend.flush();
       });
     });
 
@@ -79,20 +92,24 @@ describe('Given a service for interacting with the acount details API', function
   });
 
   describe('when refreshing account requirements', function() {
-    describe('with a currency', function() {
-      var model, formattedModel, promise;
-      beforeEach(function() {
-        model = {
-          type: 'test',
-          a: 'b'
-        };
-        formattedModel = {
-          type: 'test',
-          details: {
-            a: 'b'
-          }
-        };
+    var model, formattedModel;
 
+    beforeEach(function() {
+      model = {
+        type: 'test',
+        a: 'b'
+      };
+      formattedModel = {
+        type: 'test',
+        details: {
+          a: 'b'
+        }
+      };
+    });
+
+    describe('with a currency', function() {
+      var promise;
+      beforeEach(function() {
         spyOn(AccountDetailsLegacyService, 'formatModelForAPI').and.returnValue(formattedModel);
         spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
         $httpBackend.whenPOST('/account-requirements?target=GBP').respond(200, ['first']);
@@ -101,7 +118,6 @@ describe('Given a service for interacting with the acount details API', function
       });
 
       it('should use the legacy service to format the model', function() {
-
         $httpBackend.flush();
         expect(AccountDetailsLegacyService.formatModelForAPI).toHaveBeenCalledWith(model);
       });
@@ -114,7 +130,6 @@ describe('Given a service for interacting with the acount details API', function
         expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
       });
       it('should return a promise with the prepared response', function() {
-
         $httpBackend.flush();
         promise.then(function(response) {
           expect(response.data).toEqual(['second']);

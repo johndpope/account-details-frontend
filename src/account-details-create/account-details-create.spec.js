@@ -60,7 +60,7 @@ describe('Given a component for creating accounts', function() {
     });
 
     it('should load the requirements from the account details service with the given currency', function() {
-      expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP');
+      expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP', undefined);
       expect(AccountDetailsService.getRequirements.calls.count()).toBe(1);
     });
 
@@ -79,7 +79,7 @@ describe('Given a component for creating accounts', function() {
       });
 
       it('should refresh the requirements via account details service', function() {
-        expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP');
+        expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP', undefined);
       });
     });
 
@@ -184,6 +184,23 @@ describe('Given a component for creating accounts', function() {
         });
         it('should render a country selector', function() {
           expect(component.querySelector('tw-select[name=targetCountry]')).toBeTruthy();
+        });
+
+        describe('when the target country is changed', function() {
+          beforeEach(function() {
+            spyOn(AccountDetailsService, 'refreshRequirements')
+              .and.returnValue($q.resolve(alternatives));
+
+            var targetCountrySelect = component.querySelector('tw-select[name=targetCountry]');
+            angular.element(targetCountrySelect).controller('ngModel').$setViewValue('CA');
+          });
+          it('should refresh the requirements with the country', function() {
+            expect(AccountDetailsService.refreshRequirements).toHaveBeenCalledWith('USD', {
+              currency: 'USD',
+              country: 'CA',
+              type: alternatives.data[0].type
+            });
+          });
         });
       });
 

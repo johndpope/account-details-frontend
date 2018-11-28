@@ -29,6 +29,7 @@
   <tw-select
     ng-model="$ctrl.model.country"
     options="$ctrl.targetCountries"
+    ng-change="$ctrl.refreshRequirements()"
     name="targetCountry"
   ></tw-select>
 </div>

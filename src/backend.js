@@ -11,20 +11,30 @@ import emailLookupFailure from '../demo/json/email-lookup-failure.json';
 
 import globalUsdCountries from '../demo/json/global-usd-countries.json';
 
+const usdAchRequirements = usdRequirements[0];
+const usdSwiftRequirements = usdRequirements[1];
+
 function mockBackend($httpBackend) {
   const requirementsPath = '/account-requirements';
 
   $httpBackend.whenGET(`${requirementsPath}?target=GBP`).respond(gbpRequirements);
   $httpBackend.whenGET(`${requirementsPath}?target=JPY`).respond(jpyRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?target=USD`).respond(usdRequirements);
+  $httpBackend.whenGET(`${requirementsPath}?target=USD`).respond([usdAchRequirements]);
   $httpBackend.whenGET(`${requirementsPath}?target=VND`).respond(vndRequirements);
 
-  $httpBackend.whenGET('/quotes/123/account-requirements').respond(usdRequirements);
+  $httpBackend.whenGET('/quotes/123/account-requirements').respond([usdAchRequirements]);
 
   $httpBackend.whenPOST(`${requirementsPath}?target=GBP`).respond(gbpRequirements);
   $httpBackend.whenPOST(`${requirementsPath}?target=JPY`).respond(jpyRefreshRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?target=USD`).respond(usdRequirements);
   $httpBackend.whenPOST(`${requirementsPath}?target=VND`).respond(vndRequirements);
+
+  $httpBackend.whenPOST(`${requirementsPath}?target=USD`).respond((method, path, data) => {
+    const json = JSON.parse(data);
+    if (json.country === 'US') {
+      return [200, [usdAchRequirements]];
+    }
+    return [200, [usdSwiftRequirements]];
+  });
 
   $httpBackend.whenGET('/account-currencies').respond(accountCurrencies);
 

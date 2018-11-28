@@ -30,6 +30,7 @@ class AccountDetailsCreateController {
   $onChanges(changes) {
     if (changes.currency) {
       this.model.currency = changes.currency.currentValue || 'GBP';
+      delete this.model.country;
       this.AccountDetailsService.getTargetCountries(this.model.currency).then((response) => {
         this.targetCountries = response.data;
 
@@ -58,7 +59,10 @@ class AccountDetailsCreateController {
         this.model.currency
       );
     } else {
-      promise = this.AccountDetailsService.getRequirements(this.model.currency);
+      promise = this.AccountDetailsService.getRequirements(
+        this.model.currency,
+        this.model.country
+      );
     }
 
     promise
@@ -72,11 +76,12 @@ class AccountDetailsCreateController {
   }
 
   refreshRequirements() {
-    this.AccountDetailsService.refreshRequirements(this.model.currency, this.model)
-      .then((response) => {
-        this.alternatives = response.data;
-      })
-      .catch(this.handleRequirementsFailure);
+    this.AccountDetailsService.refreshRequirements(
+      this.model.currency,
+      this.model
+    ).then((response) => {
+      this.alternatives = response.data;
+    }).catch(this.handleRequirementsFailure);
   }
 
   handleRequirementsFailure(error) { //eslint-disable-line

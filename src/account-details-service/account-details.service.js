@@ -11,7 +11,7 @@ class AccountDetailsService {
    * Live calls, use source/sourceAmount for special cases
    * {{host}}/v1/account-requirements?source=EUR&target=USD&sourceAmount=1000
    */
-  getRequirements(currency) {
+  getRequirements(currency, country) {
     if (!currency) {
       throw new Error('Currency is required');
     }
@@ -21,7 +21,11 @@ class AccountDetailsService {
       this.AccountDetailsLegacyService,
       this.$http
     );
-    return this.$http.get(`/account-requirements?target=${currency}`, options);
+
+    return this.$http.get(
+      getRequirementsPath(currency, country),
+      options
+    );
   }
 
   getRequirementsForQuote(quoteId, currency) {
@@ -38,7 +42,6 @@ class AccountDetailsService {
     return this.$http.get(`/quotes/${quoteId}/account-requirements`, options);
   }
 
-
   /**
    * Refresh account requirments for a currency using an existing model
    */
@@ -54,7 +57,11 @@ class AccountDetailsService {
       this.$http
     );
 
-    return this.$http.post(`/account-requirements?target=${currency}`, apiModel, options);
+    return this.$http.post(
+      getRequirementsPath(currency, false),
+      apiModel,
+      options
+    );
   }
 
   /**
@@ -110,6 +117,14 @@ class AccountDetailsService {
     }
     return this.$q.when({ data: [{ currency: 'GBP' }] });
   }
+}
+
+function getRequirementsPath(currency, country) {
+  let path = `/account-requirements?target=${currency}`;
+  if (country) {
+    path += `&country=${country}`;
+  }
+  return path;
 }
 
 /**
