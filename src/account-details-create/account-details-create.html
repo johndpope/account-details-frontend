@@ -23,6 +23,16 @@
   on-enter-manually="$ctrl.onEnterManually()"
 ></account-email-lookup>
 
+<div class="form-group"
+  ng-if="$ctrl.targetCountries && $ctrl.targetCountries.length > 1">
+  <label class="control-label">Which country is their account in?</label>
+  <tw-select
+    ng-model="$ctrl.model.country"
+    options="$ctrl.targetCountries"
+    name="targetCountry"
+  ></tw-select>
+</div>
+
 <form
   ng-if="!$ctrl.uniqueIdRecipient && $ctrl.hasDetails"
   name="accountCreateForm"

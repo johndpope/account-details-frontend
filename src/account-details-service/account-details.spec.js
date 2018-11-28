@@ -194,8 +194,8 @@ describe('Given a service for interacting with the acount details API', function
     it('should POST the formatted model to the API', function() {
       $httpBackend.expectPOST('/api/v1/uniqueId/uniqueIdLookUp', {
         email: 'test@test.com',
-        type: "email",
-        currencyCode: "GBP"
+        type: 'email',
+        currencyCode: 'GBP'
       });
       $httpBackend.flush();
     });
@@ -219,7 +219,25 @@ describe('Given a service for interacting with the acount details API', function
   describe('when requesting the list of available target countries', function() {
     var promise;
     beforeEach(function() {
-      $httpBackend.whenGET('/api/v1/country/listGlobalUsdCountries').respond(200, ['US', 'GB']);
+      var globalUsdCountries = {
+        total: 2,
+        countries: [{
+          name: 'Albania',
+          iso2Code: 'AL',
+          iso3Code: 'alb',
+          callingCode: 355
+        }, {
+          name: 'Algeria',
+          iso2Code: 'DZ',
+          iso3Code: 'dza',
+          callingCode: 213
+        }]
+      };
+
+      $httpBackend.whenGET('/api/v1/country/listGlobalUsdCountries').respond(
+        200,
+        globalUsdCountries
+      );
     });
 
     describe('if currency is USD', function() {
@@ -231,10 +249,16 @@ describe('Given a service for interacting with the acount details API', function
         $httpBackend.expectGET('/api/v1/country/listGlobalUsdCountries');
         $httpBackend.flush();
       });
-      it('should return a promise with the data from the API', function() {
+      it('should return a promise with the data from the API formatted', function() {
         $httpBackend.flush();
         promise.then(function(response) {
-          expect(response.data).toEqual(['US', 'GB']);
+          expect(response.data).toEqual([{
+            value: 'AL',
+            label: 'Albania'
+          },{
+            value: 'DZ',
+            label: 'Algeria'
+          }]);
         });
       });
     });

@@ -98,7 +98,15 @@ class AccountDetailsService {
 
   getTargetCountries(currency) {
     if (currency === 'USD') {
-      return this.$http.get('/api/v1/country/listGlobalUsdCountries');
+      return this.$http.get('/api/v1/country/listGlobalUsdCountries')
+        .then((response) => {
+          response.data = response.data.countries.map(country => ({
+            value: country.iso2Code,
+            label: country.name
+          }));
+          return response;
+        })
+        .catch(() => ({ data: [{ currency: 'USD' }] }));
     }
     return this.$q.when({ data: [{ currency: 'GBP' }] });
   }

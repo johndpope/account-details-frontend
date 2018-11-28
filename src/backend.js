@@ -9,6 +9,8 @@ import jpyRefreshRequirements from '../demo/json/jpy-refresh-requirements.json';
 import emailLookup from '../demo/json/email-lookup.json';
 import emailLookupFailure from '../demo/json/email-lookup-failure.json';
 
+import globalUsdCountries from '../demo/json/global-usd-countries.json';
+
 function mockBackend($httpBackend) {
   const requirementsPath = '/account-requirements';
 
@@ -35,6 +37,8 @@ function mockBackend($httpBackend) {
     }
     return [404, emailLookupFailure];
   });
+
+  $httpBackend.whenGET('/api/v1/country/listGlobalUsdCountries').respond(globalUsdCountries);
 }
 
 const accountCreateErrors = [{

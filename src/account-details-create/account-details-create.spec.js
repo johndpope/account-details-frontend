@@ -48,14 +48,14 @@ describe('Given a component for creating accounts', function() {
     spyOn(AccountDetailsService, 'getRequirementsForQuote')
       .and.returnValue($q.resolve(alternatives));
 
+    $scope.currency = 'GBP';
+    $scope.saveButtonLabel = 'Button Label';
     $scope.onSuccess = jasmine.createSpy('onSuccess');
     $scope.onFailure = jasmine.createSpy('onFailure');
   }));
 
   describe('when initialised', function() {
     beforeEach(function() {
-      $scope.currency = 'GBP';
-      $scope.saveButtonLabel = 'Button Label';
       component = getComponent($compile, $scope, template);
     });
 
@@ -157,23 +157,58 @@ describe('Given a component for creating accounts', function() {
     });
 
     describe('when the currency changes', function() {
+      var deferred;
       beforeEach(function() {
-        $scope.currency = "USD";
+        deferred = $q.defer();
+        spyOn(AccountDetailsService, 'getTargetCountries').and.returnValue(deferred.promise);
+        $scope.currency = 'USD';
         $scope.$apply();
       });
-      it('should request the new requirements', function() {
-        expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('USD');
+
+      it('should load the available target countries', function() {
+        expect(AccountDetailsService.getTargetCountries).toHaveBeenCalledWith('USD');
+      });
+
+      describe('and more than one target country is returned', function() {
+        beforeEach(function() {
+          deferred.resolve({
+            data: [{
+              value: 'US',
+              label: 'United States'
+            },{
+              value: 'CA',
+              label: 'Canada'
+            }]
+          });
+          $scope.$apply();
+        });
+        it('should render a country selector', function() {
+          expect(component.querySelector('tw-select[name=targetCountry]')).toBeTruthy();
+        });
+      });
+
+      describe('and only one target country is returned', function() {
+        beforeEach(function() {
+          $scope.currency = 'GBP';
+          $scope.$apply();
+          deferred.resolve({
+            data: [{ currency: 'GBP' }]
+          });
+          $scope.$apply();
+        });
+        it('should not render a country selector', function() {
+          expect(component.querySelector('twSelect[name=targetCountry]')).not.toBeTruthy();
+        });
       });
     });
 
     describe('when a quoteId is supplied', function() {
       beforeEach(function() {
-        $scope.currency = "USD";
         $scope.quoteId = 123;
         $scope.$apply();
       });
       it('should request the new requirements', function() {
-        expect(AccountDetailsService.getRequirementsForQuote).toHaveBeenCalledWith(123, 'USD');
+        expect(AccountDetailsService.getRequirementsForQuote).toHaveBeenCalledWith(123, 'GBP');
       });
     });
   });

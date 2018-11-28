@@ -30,6 +30,15 @@ class AccountDetailsCreateController {
   $onChanges(changes) {
     if (changes.currency) {
       this.model.currency = changes.currency.currentValue || 'GBP';
+      this.AccountDetailsService.getTargetCountries(this.model.currency).then((response) => {
+        this.targetCountries = response.data;
+
+        // Default to US for global USD
+        // TODO find a way to do this more generically
+        if (this.model.currency === 'USD') {
+          this.model.country = 'US';
+        }
+      });
     }
 
     if (changes.profile && changes.profile.currentValue) {
