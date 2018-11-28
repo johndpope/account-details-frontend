@@ -1,3 +1,7 @@
+# v0.7.0
+## Add support for global USD
+Introduce a target country selector and pass country to requirements.
+
 # v0.6.2
 ## Improve internationalisation
 Allow the save button label to be passed in.  Use the legalType value labels
