@@ -2,7 +2,10 @@ describe('Given a service for handling legacy account details formats', function
   'use strict';
 
   var service,
-   RequirementsService;
+   RequirementsService,
+   $http,
+   $httpBackend,
+   $q;
 
   beforeEach(module('tw.styleguide-components'));
   beforeEach(module('tw.account-details'));
@@ -10,6 +13,9 @@ describe('Given a service for handling legacy account details formats', function
   beforeEach(inject(function($injector) {
     service = $injector.get('AccountDetailsLegacyService');
     RequirementsService = $injector.get('TwRequirementsService');
+    $http = $injector.get('$http');
+    $httpBackend = $injector.get('$httpBackend');
+    $q = $injector.get('$q');
   }));
 
   describe('when formatting an error model', function() {
@@ -207,6 +213,146 @@ describe('Given a service for handling legacy account details formats', function
     });
   });
 
+  describe('when modifying a USD promise', function() {
+    var modified, usdRequirements, promise;
+
+    beforeEach(function() {
+      usdRequirements = getUsdRequirements();
+      promise = $q.when({data: usdRequirements });
+    });
+
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    describe('if the country is US', function() {
+      beforeEach(function() {
+        modified = service.modifyUSD('US', promise, $http);
+      });
+
+      it('should return a promise with the US details', function() {
+        modified.then(function(response) {
+          var requirements = response.data;
+
+          expect(requirements.length).toBe(1);
+          expect(requirements[0].type).toBe("aba");
+
+          var detailsProperties = requirements[0].properties.details.properties;
+
+          expect(detailsProperties.abartn).toBeTruthy();
+          expect(detailsProperties.iban).toBeFalsy();
+          expect(detailsProperties.accountNumber).toBeFalsy();
+        });
+      });
+    });
+
+    describe('if no country is supplied ', function() {
+      beforeEach(function() {
+        modified = service.modifyUSD(null, promise, $http);
+      });
+
+      it('should return a promise with the US details', function() {
+        modified.then(function(response) {
+          var requirements = response.data;
+
+          expect(requirements.length).toBe(1);
+          expect(requirements[0].type).toBe("aba");
+
+          var detailsProperties = requirements[0].properties.details.properties;
+
+          expect(detailsProperties.abartn).toBeTruthy();
+          expect(detailsProperties.iban).toBeFalsy();
+          expect(detailsProperties.accountNumber).toBeFalsy();
+        });
+      });
+    });
+
+    describe('if a non US country is supplied ', function() {
+      beforeEach(function() {
+        var path = '/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=';
+        $httpBackend.whenGET(path + 'GB').respond({ accountNumberFormat: "ACCOUNT_NUMBER" });
+        $httpBackend.whenGET(path + 'HK').respond({ accountNumberFormat: "IBAN" });
+      });
+
+      describe('when that country uses account numbers', function() {
+        beforeEach(function() {
+          modified = service.modifyUSD('GB', promise, $http);
+        });
+
+        it('should request the accout format for that country', function() {
+          $httpBackend.expectGET('/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=GB');
+          $httpBackend.flush();
+        });
+
+        it('should return a promise with the Swift account number details', function() {
+          $httpBackend.flush();
+
+          modified.then(function(response) {
+            var requirements = response.data;
+
+            expect(requirements.length).toBe(1);
+            expect(requirements[0].type).toBe("swift_code");
+
+            var detailsProperties = requirements[0].properties.details.properties;
+
+            expect(detailsProperties.iban).toBeFalsy();
+            expect(detailsProperties.accountNumber).toBeTruthy();
+          });
+        });
+      });
+
+      describe('when that country uses IBANs', function() {
+        beforeEach(function() {
+          modified = service.modifyUSD('HK', promise, $http);
+        });
+
+        it('should request the accout format for that country', function() {
+          $httpBackend.expectGET('/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=HK');
+          $httpBackend.flush();
+        });
+
+        it('should return a promise with the Swift IBAN details', function() {
+          $httpBackend.flush();
+
+          modified.then(function(response) {
+            var requirements = response.data;
+
+            expect(requirements.length).toBe(1);
+            expect(requirements[0].type).toBe("swift_code");
+
+            var detailsProperties = requirements[0].properties.details.properties;
+
+            expect(detailsProperties.IBAN).toBeTruthy();
+            expect(detailsProperties.accountNumber).toBeFalsy();
+          });
+        });
+      });
+    });
+  });
+
   // TODO global extensions
   // TODO name structure
 });
+
+function getUsdRequirements() {
+  return [{
+    type: "aba",
+    properties: {
+      details: {
+        properties: {
+          abartn: {}
+        }
+      }
+    }
+  },{
+    type: "swift_code",
+    properties: {
+      details: {
+        properties: {
+          accountNumber: {}
+        }
+      }
+    }
+  }]
+}

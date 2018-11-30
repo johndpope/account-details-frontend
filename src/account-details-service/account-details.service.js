@@ -3,7 +3,7 @@ class AccountDetailsService {
   constructor($http, $q, AccountDetailsLegacyService) {
     this.$http = $http;
     this.$q = $q;
-    this.AccountDetailsLegacyService = AccountDetailsLegacyService;
+    this.LegacyService = AccountDetailsLegacyService;
   }
 
   /**
@@ -18,15 +18,20 @@ class AccountDetailsService {
 
     const options = getRequirementsHttpOptions(
       currency,
-      country,
-      this.AccountDetailsLegacyService,
+      this.LegacyService,
       this.$http
     );
 
-    return this.$http.get(
-      getRequirementsPath(currency, country),
-      options
-    );
+    const path = getRequirementsPath(currency, country);
+
+    let promise = this.$http.get(path, options);
+
+    // TODO this shit is here because global USD APIs are a mess, this should be removed
+    if (currency === 'USD') {
+      promise = this.LegacyService.modifyUSD(country, promise, this.$http);
+    }
+
+    return promise;
   }
 
   getRequirementsForQuote(quoteId, currency, country) {
@@ -36,12 +41,20 @@ class AccountDetailsService {
 
     const options = getRequirementsHttpOptions(
       currency,
-      country,
-      this.AccountDetailsLegacyService,
+      this.LegacyService,
       this.$http
     );
 
-    return this.$http.get(`/quotes/${quoteId}/account-requirements`, options);
+    const path = `/quotes/${quoteId}/account-requirements`;
+
+    let promise = this.$http.get(path, options);
+
+    // TODO this shit is here because global USD APIs are a mess, this should be removed
+    if (currency === 'USD') {
+      promise = this.LegacyService.modifyUSD(country, promise, this.$http);
+    }
+
+    return promise;
   }
 
   /**
@@ -51,20 +64,24 @@ class AccountDetailsService {
     if (!currency) {
       throw new Error('Currency is required');
     }
-    const apiModel = this.AccountDetailsLegacyService.formatModelForAPI(model);
+    const apiModel = this.LegacyService.formatModelForAPI(model);
 
     const options = getRequirementsHttpOptions(
       currency,
-      model.country,
-      this.AccountDetailsLegacyService,
+      this.LegacyService,
       this.$http
     );
 
-    return this.$http.post(
-      getRequirementsPath(currency, model.country),
-      apiModel,
-      options
-    );
+    const path = getRequirementsPath(currency, model.country);
+
+    let promise = this.$http.post(path, apiModel, options);
+
+    // TODO this shit is here because global USD APIs are a mess, this should be removed
+    if (currency === 'USD') {
+      promise = this.LegacyService.modifyUSD(model.country, promise, this.$http);
+    }
+
+    return promise;
   }
 
   /**
@@ -83,11 +100,11 @@ class AccountDetailsService {
     if (!model) {
       throw new Error('Model is required');
     }
-    const apiModel = this.AccountDetailsLegacyService.formatModelForAPI(model);
+    const apiModel = this.LegacyService.formatModelForAPI(model);
     return this.$http.post('/accounts', apiModel)
       .catch((response) => {
         const formattedErrors =
-          this.AccountDetailsLegacyService.formatErrorsForDisplay(response.data);
+          this.LegacyService.formatErrorsForDisplay(response.data);
         return this.$q.reject(formattedErrors).catch(angular.noop);
       });
   }
@@ -134,15 +151,14 @@ function getRequirementsPath(currency, country) {
  * We use transformers rather than a 'then', as in Angular >1.5, using a 'then'
  * without a catch throws a warning, and we do not want to catch at this point.
  */
-function getRequirementsHttpOptions(currency, country, AccountDetailsLegacyService, $http) {
+function getRequirementsHttpOptions(currency, LegacyService, $http) {
   return {
     transformResponse: getResponseTransformers(
       (data, headers, status) => handleRequirementsResponse(
         currency,
-        country,
         data,
         status,
-        AccountDetailsLegacyService
+        LegacyService
       ),
       $http
     )
@@ -154,13 +170,12 @@ function getRequirementsHttpOptions(currency, country, AccountDetailsLegacyServi
  */
 function handleRequirementsResponse(
   currency,
-  country,
   data,
   status,
-  AccountDetailsLegacyService
+  LegacyService
 ) {
   if (status === 200) {
-    return AccountDetailsLegacyService.prepareResponse(currency, country, data);
+    return LegacyService.prepareResponse(currency, data);
   }
   return data;
 }
@@ -173,6 +188,7 @@ function getResponseTransformers(responseTransformer, $http) {
     $http.defaults.transformResponse.concat &&
     $http.defaults.transformResponse.concat(responseTransformer);
 }
+
 
 AccountDetailsService.$inject = ['$http', '$q', 'AccountDetailsLegacyService'];
 
