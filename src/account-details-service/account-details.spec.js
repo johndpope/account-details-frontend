@@ -58,7 +58,6 @@ describe('Given a service for interacting with the acount details API', function
       var promise;
       beforeEach(function() {
         $httpBackend.whenGET('/account-requirements?target=USD').respond(200, ['original']);
-        //$httpBackend.whenGET('/account-requirements?target=USD&country=GB').respond(200, ['original']);
 
         spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
         spyOn(AccountDetailsLegacyService, 'modifyUSD').and.returnValue($q.resolve(['modified']));

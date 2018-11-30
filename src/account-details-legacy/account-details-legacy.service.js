@@ -1,7 +1,8 @@
 
 class AccountDetailsLegacyService {
-  constructor(RequirementsService) {
+  constructor(RequirementsService, $http) {
     this.RequirementsService = RequirementsService;
+    this.$http = $http;
   }
 
   prepareResponse(currency, alternatives) {
@@ -58,11 +59,11 @@ class AccountDetailsLegacyService {
    *
    * Don't you dare add another one of these! Fix your requirements API!!!
    */
-  modifyUSD(country, requirementsPromise, $http) { // eslint-disable-line
+  modifyUSD(country, requirementsPromise) {
     if (country && country !== 'US') {
       return requirementsPromise.then(response => checkSwiftTypeAndModifyResponse(
         response,
-        $http,
+        this.$http,
         country
       ));
     }
@@ -422,6 +423,6 @@ const nameExtensions = {
 };
 
 
-AccountDetailsLegacyService.$inject = ['TwRequirementsService'];
+AccountDetailsLegacyService.$inject = ['TwRequirementsService', '$http'];
 
 export default AccountDetailsLegacyService;

@@ -28,7 +28,7 @@ class AccountDetailsService {
 
     // TODO this shit is here because global USD APIs are a mess, this should be removed
     if (currency === 'USD') {
-      promise = this.LegacyService.modifyUSD(country, promise, this.$http);
+      promise = this.LegacyService.modifyUSD(country, promise);
     }
 
     return promise;
@@ -51,7 +51,7 @@ class AccountDetailsService {
 
     // TODO this shit is here because global USD APIs are a mess, this should be removed
     if (currency === 'USD') {
-      promise = this.LegacyService.modifyUSD(country, promise, this.$http);
+      promise = this.LegacyService.modifyUSD(country, promise);
     }
 
     return promise;
@@ -78,7 +78,7 @@ class AccountDetailsService {
 
     // TODO this shit is here because global USD APIs are a mess, this should be removed
     if (currency === 'USD') {
-      promise = this.LegacyService.modifyUSD(model.country, promise, this.$http);
+      promise = this.LegacyService.modifyUSD(model.country, promise);
     }
 
     return promise;
@@ -133,6 +133,7 @@ class AccountDetailsService {
           }));
           return response;
         })
+        // If the call fails return a single currency to disable global USD
         .catch(() => ({ data: [{ currency: 'USD' }] }));
     }
     return this.$q.when({ data: [{ currency: 'GBP' }] });

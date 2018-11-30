@@ -117,6 +117,17 @@ class AccountDetailsCreateController {
   onEnterManually() {
     this.uniqueIdRecipient = false;
   }
+
+  isCountrySelectorVisible() {
+    return !this.uniqueIdRecipient &&
+      this.hasDetails &&
+      this.targetCountries &&
+      this.targetCountries.length > 1;
+  }
+
+  isAccountFormVisible() {
+    return !this.uniqueIdRecipient && this.hasDetails;
+  }
 }
 
 AccountDetailsCreateController.$inject = ['$scope', 'AccountDetailsService'];

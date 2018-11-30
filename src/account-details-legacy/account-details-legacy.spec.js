@@ -3,7 +3,6 @@ describe('Given a service for handling legacy account details formats', function
 
   var service,
    RequirementsService,
-   $http,
    $httpBackend,
    $q;
 
@@ -13,7 +12,6 @@ describe('Given a service for handling legacy account details formats', function
   beforeEach(inject(function($injector) {
     service = $injector.get('AccountDetailsLegacyService');
     RequirementsService = $injector.get('TwRequirementsService');
-    $http = $injector.get('$http');
     $httpBackend = $injector.get('$httpBackend');
     $q = $injector.get('$q');
   }));
@@ -228,7 +226,7 @@ describe('Given a service for handling legacy account details formats', function
 
     describe('if the country is US', function() {
       beforeEach(function() {
-        modified = service.modifyUSD('US', promise, $http);
+        modified = service.modifyUSD('US', promise);
       });
 
       it('should return a promise with the US details', function() {
@@ -249,7 +247,7 @@ describe('Given a service for handling legacy account details formats', function
 
     describe('if no country is supplied ', function() {
       beforeEach(function() {
-        modified = service.modifyUSD(null, promise, $http);
+        modified = service.modifyUSD(null, promise);
       });
 
       it('should return a promise with the US details', function() {
@@ -277,7 +275,7 @@ describe('Given a service for handling legacy account details formats', function
 
       describe('when that country uses account numbers', function() {
         beforeEach(function() {
-          modified = service.modifyUSD('GB', promise, $http);
+          modified = service.modifyUSD('GB', promise);
         });
 
         it('should request the accout format for that country', function() {
@@ -304,7 +302,7 @@ describe('Given a service for handling legacy account details formats', function
 
       describe('when that country uses IBANs', function() {
         beforeEach(function() {
-          modified = service.modifyUSD('HK', promise, $http);
+          modified = service.modifyUSD('HK', promise);
         });
 
         it('should request the accout format for that country', function() {

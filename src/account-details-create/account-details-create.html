@@ -24,7 +24,7 @@
 ></account-email-lookup>
 
 <div class="form-group"
-  ng-if="!$ctrl.uniqueIdRecipient && $ctrl.hasDetails && $ctrl.targetCountries && $ctrl.targetCountries.length > 1">
+  ng-if="$ctrl.isCountrySelectorVisible()">
   <label class="control-label">Which country is their account in?</label>
   <tw-select
     ng-model="$ctrl.model.country"
@@ -35,7 +35,7 @@
 </div>
 
 <form
-  ng-if="!$ctrl.uniqueIdRecipient && $ctrl.hasDetails"
+  ng-if="$ctrl.isAccountFormVisible()"
   name="accountCreateForm"
   novalidate
   ng-submit="accountCreateForm.$valid && $ctrl.saveAccount()"
