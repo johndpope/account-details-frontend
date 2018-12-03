@@ -4,6 +4,21 @@ class AccountEmailLookupController {
     this.AccountDetailsService = AccountDetailsService;
     this.requestCount = 0;
     this.lastResponse = 0;
+
+    // TODO translations
+    this.translations = {
+      email: {
+        label: 'Email address',
+        placeholder: 'Recipient email address',
+        success: `is already on TransferWise, and would like to receive into the
+          following account.`
+      },
+      uniqueId: {
+        label: 'How do you want to send?',
+        toUniqueId: 'account ending',
+        toBankDetails: 'Send to a different account'
+      }
+    };
   }
 
   onEmailChange() {
