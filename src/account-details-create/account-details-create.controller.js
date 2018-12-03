@@ -60,7 +60,7 @@ class AccountDetailsCreateController {
             delete this.model.country;
           }
         })
-        .catch((response) => {
+        .catch(() => {
           // getTargetCountries catches errors and returns a single country
         });
     }

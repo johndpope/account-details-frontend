@@ -236,8 +236,7 @@ function getSwiftFormat($http, country) {
   const url = `/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=${country}`;
 
   return $http.get(url)
-    .then(response => response.data.accountNumberFormat)
-    .catch(() => 'ACCOUNT_NUMBER');
+    .then(response => response.data.accountNumberFormat);
 }
 
 /**
