@@ -37,7 +37,9 @@ describe('Given a component for creating accounts of any currency', function() {
 
   describe('when initialised', function() {
     beforeEach(function() {
-      spyOn(AccountDetailsService, 'getAccountCurrencies').and.returnValue($q.resolve([]));
+      spyOn(AccountDetailsService, 'getAccountCurrencies').and.returnValue(
+        $q.resolve({data:[]})
+      );
       component = getComponent($compile, $scope, template);
     });
 

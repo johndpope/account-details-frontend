@@ -1,6 +1,8 @@
 
 <div class="form-group">
-  <label class="control-label">Do you have their account details?</label>
+  <label class="control-label">
+    {{ $ctrl.translations.accountDetails.label }}
+  </label>
   <div class="checkbox" ng-class="{ 'has-info': !$ctrl.hasDetails }">
     <label>
       <tw-checkbox
@@ -8,11 +10,10 @@
         ng-model="$ctrl.hasDetails"
         ng-true-value="true"
         ng-false-value="false" checked></tw-checkbox>
-      Yes, I have their details
+      {{ $ctrl.translations.accountDetails.value }}
     </label>
     <div class="alert alert-info" ng-if="!$ctrl.hasDetails">
-      No problem, we'll send your recipient an email asking them where they want
-      to receive the money.
+      {{ $ctrl.translations.accountDetails.info }}
     </div>
   </div>
 </div>
@@ -25,7 +26,9 @@
 
 <div class="form-group"
   ng-if="$ctrl.isCountrySelectorVisible()">
-  <label class="control-label">Which country is their account in?</label>
+  <label class="control-label">
+    {{ $ctrl.translations.country.label }}
+  </label>
   <tw-select
     ng-model="$ctrl.model.country"
     options="$ctrl.targetCountries"
@@ -46,7 +49,7 @@
     model="$ctrl.model"
     requirements="$ctrl.alternatives"
     error-messages="$ctrl.errors"
-    validation-messages="$ctrl.validationMessages"
+    validation-messages="$ctrl.translations.validation"
     on-refresh-requirements="$ctrl.refreshRequirements()">
   </tw-requirements-form >
   <input type="submit"

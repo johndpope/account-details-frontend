@@ -3,12 +3,27 @@ class AccountDetailsCreateController {
     this.$scope = $scope;
     this.AccountDetailsService = AccountDetailsService;
 
-    this.validationMessages = {
-      required: 'Field is required',
-      pattern: 'Invalid format',
-      minLength: 'Too short',
-      maxLength: 'Too Long'
+    // TODO translations
+    this.translations = {
+      validation: {
+        required: 'Field is required',
+        pattern: 'Invalid format',
+        minLength: 'The value is too short',
+        maxLength: 'Too value is too long',
+        min: 'The value is too low',
+        max: 'Too value is too high'
+      },
+      country: {
+        label: 'Which country is their account in?',
+      },
+      accountDetails: {
+        label: 'Do you have their account details?',
+        value: 'Yes, I have their details',
+        info: `No problem, we'll send your recipient an email asking them where
+          they want to receive the money.`
+      }
     };
+
     this.model = {};
 
     this.uniqueIdRecipient = false;
@@ -31,19 +46,23 @@ class AccountDetailsCreateController {
     if (changes.currency) {
       this.model.currency = changes.currency.currentValue || 'GBP';
 
-      this.AccountDetailsService.getTargetCountries(this.model.currency).then((response) => {
-        this.targetCountries = response.data;
+      this.AccountDetailsService.getTargetCountries(this.model.currency)
+        .then((response) => {
+          this.targetCountries = response.data;
 
-        // Default to US for global USD
-        // TODO find a way to do this more generically
-        if (this.model.currency === 'USD') {
-          this.model.country = 'US';
-        }
+          // Default to US for global USD
+          // TODO find a way to do this more generically
+          if (this.model.currency === 'USD') {
+            this.model.country = 'US';
+          }
 
-        if (this.targetCountries && this.targetCountries.length <= 1) {
-          delete this.model.country;
-        }
-      });
+          if (this.targetCountries && this.targetCountries.length <= 1) {
+            delete this.model.country;
+          }
+        })
+        .catch((response) => {
+          // getTargetCountries catches errors and returns a single country
+        });
     }
 
     if (changes.profile && changes.profile.currentValue) {

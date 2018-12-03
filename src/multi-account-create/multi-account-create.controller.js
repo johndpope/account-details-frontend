@@ -2,6 +2,14 @@
 class MultiAccountCreateController {
   constructor(AccountDetailsService) {
     this.AccountDetailsService = AccountDetailsService;
+
+    // TODO translations
+    this.translations = {
+      currency: {
+        label: 'Currency',
+        placeholder: 'Choose currency'
+      }
+    };
   }
 
   $onInit() {
@@ -13,8 +21,8 @@ class MultiAccountCreateController {
     // this.email = '';
 
     this.AccountDetailsService.getAccountCurrencies()
-      .then((currencies) => {
-        this.currencies = currencies;
+      .then((response) => {
+        this.currencies = response.data;
       })
       .catch(() => {
         // TODO

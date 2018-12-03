@@ -188,32 +188,41 @@ describe('Given a service for interacting with the acount details API', function
 
       spyOn(AccountDetailsLegacyService, 'formatModelForAPI').and.returnValue(formattedModel);
       spyOn(AccountDetailsLegacyService, 'formatErrorsForDisplay').and.returnValue(['formatted']);
-      $httpBackend.whenPOST('/accounts').respond(function() { return [401, ['errors']]});
+      $httpBackend.whenPOST('/accounts').respond(401, ['errors']);
 
       promise = service.save(model);
     });
 
     it('should use the legacy service to format the model', function() {
+      promise.catch(function() {});
       $httpBackend.flush();
       expect(AccountDetailsLegacyService.formatModelForAPI).toHaveBeenCalledWith(model);
     });
     it('should POST the formatted model to the API', function() {
+      promise.catch(function() {});
       $httpBackend.expectPOST('/accounts', formattedModel);
       $httpBackend.flush();
     });
     it('should use the legacy service to format error responses', function() {
+      promise.catch(function() {});
       $httpBackend.flush();
       expect(AccountDetailsLegacyService.formatErrorsForDisplay).toHaveBeenCalledWith(['errors']);
     });
     it('should return a rejected promise with the formatted errors', function() {
+
+      promise
+        .then(function() {
+          expect(true).toBe(false);
+        })
+        .catch(function(errors) {
+          expect(errors.data).toEqual(['formatted']);
+        });
       $httpBackend.flush();
-      promise.catch(function(errors) {
-        expect(errors).toBe(['formatted']);
-      });
     });
 
     describe('without a model', function() {
       it('should throw an error', function() {
+        promise.catch(function() {});
         $httpBackend.flush();
         expect(service.save).toThrow();
       });
