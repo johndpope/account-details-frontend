@@ -1,0 +1,92 @@
+[
+    {
+        "type": "indian",
+        "title": "Local bank account",
+        "fields": [
+            {
+                "name": "Recipient type",
+                "group": [
+                    {
+                        "key": "legalType",
+                        "name": "Recipient type",
+                        "type": "select",
+                        "refreshRequirementsOnChange": false,
+                        "required": true,
+                        "displayFormat": null,
+                        "example": "",
+                        "minLength": null,
+                        "maxLength": null,
+                        "validationRegexp": null,
+                        "validationAsync": null,
+                        "valuesAllowed": [
+                            {
+                                "key": "PRIVATE",
+                                "name": "Person"
+                            },
+                            {
+                                "key": "BUSINESS",
+                                "name": "Business"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "IFSC Code",
+                "group": [
+                    {
+                        "key": "ifscCode",
+                        "name": "IFSC Code",
+                        "type": "text",
+                        "refreshRequirementsOnChange": false,
+                        "required": true,
+                        "displayFormat": null,
+                        "example": "YESB0236041",
+                        "minLength": 11,
+                        "maxLength": 11,
+                        "validationRegexp": "[A-Za-z]{4}0[A-Za-z0-9]{6}",
+                        "validationAsync": {
+                            "url": "https://api.transferwise.com/v1/validators/ifsc-code",
+                            "params": [
+                                {
+                                    "key": "ifscCode",
+                                    "parameterName": "ifscCode",
+                                    "required": true
+                                }
+                            ]
+                        },
+                        "valuesAllowed": null
+                    }
+                ]
+            },
+            {
+                "name": "Account number",
+                "group": [
+                    {
+                        "key": "accountNumber",
+                        "name": "Account number",
+                        "type": "text",
+                        "refreshRequirementsOnChange": false,
+                        "required": true,
+                        "displayFormat": null,
+                        "example": "678911234567891",
+                        "minLength": 5,
+                        "maxLength": 20,
+                        "validationRegexp": "[a-zA-Z0-9]{5,20}",
+                        "validationAsync": {
+                            "url": "https://api.transferwise.com/v1/validators/indian-account-number",
+                            "params": [
+                                {
+                                    "key": "accountNumber",
+                                    "parameterName": "accountNumber",
+                                    "required": true
+                                }
+                            ]
+                        },
+                        "valuesAllowed": null
+                    }
+                ]
+            }
+        ]
+    }
+]

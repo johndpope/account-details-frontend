@@ -3,6 +3,7 @@ import gbpRequirements from '../demo/json/gbp-requirements.json';
 import jpyRequirements from '../demo/json/jpy-requirements.json';
 import usdRequirements from '../demo/json/usd-requirements.json';
 import vndRequirements from '../demo/json/vnd-requirements.json';
+import inrRequirements from '../demo/json/inr-requirements.json';
 
 import jpyRefreshRequirements from '../demo/json/jpy-refresh-requirements.json';
 
@@ -16,6 +17,7 @@ function mockBackend($httpBackend) {
   $httpBackend.whenGET(`${requirementsPath}?target=JPY`).respond(jpyRequirements);
   $httpBackend.whenGET(`${requirementsPath}?target=USD`).respond(usdRequirements);
   $httpBackend.whenGET(`${requirementsPath}?target=VND`).respond(vndRequirements);
+  $httpBackend.whenGET(`${requirementsPath}?target=INR`).respond(inrRequirements);
 
   $httpBackend.whenGET('/quotes/123/account-requirements').respond(usdRequirements);
 
@@ -23,6 +25,7 @@ function mockBackend($httpBackend) {
   $httpBackend.whenPOST(`${requirementsPath}?target=JPY`).respond(jpyRefreshRequirements);
   $httpBackend.whenPOST(`${requirementsPath}?target=USD`).respond(usdRequirements);
   $httpBackend.whenPOST(`${requirementsPath}?target=VND`).respond(vndRequirements);
+  $httpBackend.whenPOST(`${requirementsPath}?target=INR`).respond(inrRequirements);
 
   $httpBackend.whenGET('/account-currencies').respond(accountCurrencies);
 
@@ -59,6 +62,9 @@ const accountCurrencies = [{
 }, {
   value: 'VND',
   label: 'Vietnamese Dong'
+}, {
+  value: 'INR',
+  label: 'Indian'
 }];
 
 export default mockBackend;
