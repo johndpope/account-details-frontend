@@ -1,3 +1,6 @@
+# v0.6.3
+## Add INR to demo
+
 # v0.6.2
 ## Improve internationalisation
 Allow the save button label to be passed in.  Use the legalType value labels
