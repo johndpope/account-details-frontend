@@ -1,5 +1,9 @@
-# v0.6.3
+# v0.7.1
 ## Add INR to demo
+
+# v0.7.0
+## Add support for global USD
+Introduce a target country selector and pass country to requirements.
 
 # v0.6.2
 ## Improve internationalisation

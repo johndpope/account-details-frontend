@@ -3,7 +3,8 @@ describe('Given a service for interacting with the acount details API', function
 
   var service,
    AccountDetailsLegacyService,
-   $httpBackend;
+   $httpBackend,
+   $q;
 
   beforeEach(module('tw.styleguide-components'));
   beforeEach(module('tw.account-details'));
@@ -12,28 +13,37 @@ describe('Given a service for interacting with the acount details API', function
     service = $injector.get('AccountDetailsService');
     AccountDetailsLegacyService = $injector.get('AccountDetailsLegacyService');
     $httpBackend = $injector.get('$httpBackend');
+    $q = $injector.get('$q');;
   }));
+
+  afterEach(function() {
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
 
   describe('when requesting account requirements', function() {
     describe('with a currency', function() {
       var promise;
       beforeEach(function() {
-        $httpBackend.whenGET('/account-requirements?target=GBP').respond(['first']);
-        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
+        $httpBackend.whenGET('/account-requirements?target=GBP').respond(200, ['original']);
+        $httpBackend.whenGET('/account-requirements?target=GBP&country=GB').respond(200, ['original']);
+        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
 
         promise = service.getRequirements('GBP');
-        $httpBackend.flush();
       });
 
       it('should make a GET call to the API', function() {
         $httpBackend.expectGET('/account-requirements?target=GBP');
+        $httpBackend.flush();
       });
       it('should use the legacy service to prepare the API response', function() {
-        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
+        $httpBackend.flush();
+        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['original']);
       });
       it('should return a promise with the prepared response', function() {
+        $httpBackend.flush();
         promise.then(function(response) {
-          expect(response.data).toBe(['second']);
+          expect(response.data).toEqual(['prepared']);
         });
       });
     });
@@ -44,65 +54,113 @@ describe('Given a service for interacting with the acount details API', function
       });
     });
 
+    describe('for USD', function() {
+      var promise;
+      beforeEach(function() {
+        $httpBackend.whenGET('/account-requirements?target=USD').respond(200, ['original']);
+
+        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
+        spyOn(AccountDetailsLegacyService, 'modifyUSD').and.returnValue($q.resolve(['modified']));
+        promise = service.getRequirements('USD');
+      })
+      it('should use the legacy service to prepare the original response', function() {
+        $httpBackend.flush();
+        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('USD', ['original']);
+      });
+      it('should use the legacy service to modify the prepared response', function() {
+        $httpBackend.flush();
+        expect(AccountDetailsLegacyService.modifyUSD).toHaveBeenCalled();
+      });
+      it('should return a promise with the prepared & modified response', function() {
+        $httpBackend.flush();
+        promise.then(function(response) {
+          expect(response).toEqual(['modified']);
+        });
+      });
+    });
+
+    describe('with a currency and a country', function() {
+      beforeEach(function() {
+        $httpBackend.whenGET('/account-requirements?target=USD&country=HK').respond(200, ['original']);
+        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
+        spyOn(AccountDetailsLegacyService, 'modifyUSD').and.returnValue($q.resolve(['modified']));
+
+        service.getRequirements('USD', 'HK');
+      });
+      it('should pass the country to the API', function() {
+        $httpBackend.expectGET('/account-requirements?target=USD&country=HK');
+        $httpBackend.flush();
+      });
+    });
+
     describe('with a quote', function() {
       var promise;
       beforeEach(function() {
-        $httpBackend.whenGET('/quotes/123/account-requirements').respond(['first']);
-        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
+        $httpBackend.whenGET('/quotes/123/account-requirements').respond(200, ['original']);
+        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
 
         promise = service.getRequirementsForQuote(123, 'GBP');
-        $httpBackend.flush();
       });
 
       it('should make a GET call to the API', function() {
         $httpBackend.expectGET('/quotes/123/account-requirements');
+        $httpBackend.flush();
       });
       it('should use the legacy service to prepare the API response', function() {
-        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
+        $httpBackend.flush();
+        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['original']);
       });
       it('should return a promise with the prepared response', function() {
+        $httpBackend.flush();
         promise.then(function(response) {
-          expect(response.data).toBe(['second']);
+          expect(response.data).toEqual(['prepared']);
         });
       });
     });
   });
 
   describe('when refreshing account requirements', function() {
-    describe('with a currency', function() {
-      var model, formattedModel, promise;
-      beforeEach(function() {
-        model = {
-          type: 'test',
-          a: 'b'
-        };
-        formattedModel = {
-          type: 'test',
-          details: {
-            a: 'b'
-          }
-        };
+    var model, formattedModel;
 
+    beforeEach(function() {
+      model = {
+        type: 'test',
+        a: 'b'
+      };
+      formattedModel = {
+        type: 'test',
+        details: {
+          a: 'b'
+        }
+      };
+    });
+
+    describe('with a currency', function() {
+      var promise;
+      beforeEach(function() {
         spyOn(AccountDetailsLegacyService, 'formatModelForAPI').and.returnValue(formattedModel);
-        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['second']);
-        $httpBackend.whenPOST('/account-requirements?target=GBP').respond(['first']);
+        spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
+        $httpBackend.whenPOST('/account-requirements?target=GBP').respond(200, ['original']);
 
         promise = service.refreshRequirements('GBP', model);
-        $httpBackend.flush();
       });
 
       it('should use the legacy service to format the model', function() {
+        $httpBackend.flush();
         expect(AccountDetailsLegacyService.formatModelForAPI).toHaveBeenCalledWith(model);
       });
       it('should POST the formatted model to the API', function() {
         $httpBackend.expectPOST('/account-requirements?target=GBP', formattedModel);
+        $httpBackend.flush();
       });
       it('should use the legacy service to prepare the response', function() {
-        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['first']);
+        $httpBackend.flush();
+        expect(AccountDetailsLegacyService.prepareResponse).toHaveBeenCalledWith('GBP', ['original']);
       });
       it('should return a promise with the prepared response', function() {
+        $httpBackend.flush();
         promise.then(function(response) {
-          expect(response.data).toBe(['second']);
+          expect(response.data).toEqual(['prepared']);
         });
       });
     });
@@ -130,29 +188,42 @@ describe('Given a service for interacting with the acount details API', function
 
       spyOn(AccountDetailsLegacyService, 'formatModelForAPI').and.returnValue(formattedModel);
       spyOn(AccountDetailsLegacyService, 'formatErrorsForDisplay').and.returnValue(['formatted']);
-      $httpBackend.whenPOST('/accounts').respond(function() { return [401, ['errors']]});
+      $httpBackend.whenPOST('/accounts').respond(401, ['errors']);
 
       promise = service.save(model);
-      $httpBackend.flush();
     });
 
     it('should use the legacy service to format the model', function() {
+      promise.catch(function() {});
+      $httpBackend.flush();
       expect(AccountDetailsLegacyService.formatModelForAPI).toHaveBeenCalledWith(model);
     });
     it('should POST the formatted model to the API', function() {
+      promise.catch(function() {});
       $httpBackend.expectPOST('/accounts', formattedModel);
+      $httpBackend.flush();
     });
     it('should use the legacy service to format error responses', function() {
+      promise.catch(function() {});
+      $httpBackend.flush();
       expect(AccountDetailsLegacyService.formatErrorsForDisplay).toHaveBeenCalledWith(['errors']);
     });
     it('should return a rejected promise with the formatted errors', function() {
-      promise.catch(function(errors) {
-        expect(errors).toBe(['formatted']);
-      });
+
+      promise
+        .then(function() {
+          expect(true).toBe(false);
+        })
+        .catch(function(errors) {
+          expect(errors.data).toEqual(['formatted']);
+        });
+      $httpBackend.flush();
     });
 
     describe('without a model', function() {
       it('should throw an error', function() {
+        promise.catch(function() {});
+        $httpBackend.flush();
         expect(service.save).toThrow();
       });
     });
@@ -170,22 +241,94 @@ describe('Given a service for interacting with the acount details API', function
       });
 
       promise = service.lookupAccountByEmail('test@test.com');
-      $httpBackend.flush();
     });
 
     it('should POST the formatted model to the API', function() {
-      $httpBackend.expectPOST('/accounts', model);
+      $httpBackend.expectPOST('/api/v1/uniqueId/uniqueIdLookUp', {
+        email: 'test@test.com',
+        type: 'email',
+        currencyCode: 'GBP'
+      });
+      $httpBackend.flush();
     });
 
     it('should return a promise with the list of matching accounts', function() {
+      $httpBackend.flush();
       promise.then(function(response) {
-        expect(response.data).toBe(['accounts']);
+        expect(response.data).toEqual(['accounts']);
       });
     });
 
     describe('without supplying an email', function() {
       it('should throw an error', function() {
+        $httpBackend.flush();
         expect(service.lookupAccountByEmail).toThrow();
+      });
+    });
+  });
+
+
+  describe('when requesting the list of available target countries', function() {
+    var promise;
+    beforeEach(function() {
+      var globalUsdCountries = {
+        total: 2,
+        countries: [{
+          name: 'Albania',
+          iso2Code: 'AL',
+          iso3Code: 'alb',
+          callingCode: 355
+        }, {
+          name: 'Algeria',
+          iso2Code: 'DZ',
+          iso3Code: 'dza',
+          callingCode: 213
+        }]
+      };
+
+      $httpBackend.whenGET('/api/v1/country/listGlobalUsdCountries').respond(
+        200,
+        globalUsdCountries
+      );
+    });
+
+    describe('if currency is USD', function() {
+      beforeEach(function() {
+        promise = service.getTargetCountries('USD');
+      });
+
+      it('should request them from the usd endpoint', function() {
+        $httpBackend.expectGET('/api/v1/country/listGlobalUsdCountries');
+        $httpBackend.flush();
+      });
+      it('should return a promise with the data from the API formatted', function() {
+        $httpBackend.flush();
+        promise.then(function(response) {
+          expect(response.data).toEqual([{
+            value: 'AL',
+            label: 'Albania'
+          },{
+            value: 'DZ',
+            label: 'Algeria'
+          }]);
+        });
+      });
+    });
+
+    describe('if currency is not USD', function() {
+      var model, formattedModel, promise;
+      beforeEach(function() {
+        promise = service.getTargetCountries('GBP');
+      });
+
+      it('should not request them from the usd endpoint', function() {
+        // Should be nothing to flush, so will throw an error
+        expect($httpBackend.flush).toThrow();
+      });
+      it('should return a promise with just the requested country', function() {
+        promise.then(function(response) {
+          expect(response.data).toEqual([{currency: 'GBP'}]);
+        });
       });
     });
   });

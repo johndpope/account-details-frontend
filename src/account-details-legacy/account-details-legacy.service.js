@@ -1,7 +1,8 @@
 
 class AccountDetailsLegacyService {
-  constructor(RequirementsService) {
+  constructor(RequirementsService, $http) {
     this.RequirementsService = RequirementsService;
+    this.$http = $http;
   }
 
   prepareResponse(currency, alternatives) {
@@ -49,6 +50,28 @@ class AccountDetailsLegacyService {
       });
     }
     return errorMessagesObject;
+  }
+
+  /**
+   * Apologies about this mess!  If we're sending USD outside of US we need to
+   * check if we should use IBAN format or swift account number.  If IBAN we
+   * modify the response.
+   *
+   * Don't you dare add another one of these! Fix your requirements API!!!
+   */
+  modifyUSD(country, requirementsPromise) {
+    if (country && country !== 'US') {
+      return requirementsPromise.then(response => checkSwiftTypeAndModifyResponse(
+        response,
+        this.$http,
+        country
+      ));
+    }
+
+    return requirementsPromise.then((response) => {
+      response.data = getRequirementsByType(response.data, 'aba');
+      return response;
+    });
   }
 }
 
@@ -203,6 +226,67 @@ function mapLegalTypeToV2(property) {
 }
 
 /**
+ * Get the format for the global USD details
+ * The API returns one of:
+ * { accountNumberFormat: "ACCOUNT_NUMBER" }
+ * { accountNumberFormat: "IBAN" }
+ * This method returns a promise with the string value
+ */
+function getSwiftFormat($http, country) {
+  const url = `/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=${country}`;
+
+  return $http.get(url)
+    .then(response => response.data.accountNumberFormat);
+}
+
+/**
+ * Load the type of swift accountfrom the API, then modify the original swift
+ * requirement response accordingly
+ */
+function checkSwiftTypeAndModifyResponse(response, $http, country) {
+  const swiftRequirements = getRequirementsByType(response.data, 'swift_code');
+
+  return getSwiftFormat($http, country)
+    .then((format) => {
+      if (format === 'IBAN') {
+        response.data = getIbanRequirements(swiftRequirements);
+      } else {
+        response.data = swiftRequirements;
+      }
+      return response;
+    });
+}
+
+/**
+ * Adapt the swift account number requirements to IBAN requirements
+ */
+function getIbanRequirements(swiftRequirements) {
+  const properties = {};
+  const details = swiftRequirements[0].properties.details.properties;
+
+  Object.keys(details).forEach((key) => {
+    if (key === 'accountNumber') {
+      properties.IBAN = {
+        name: 'IBAN',
+        type: 'text',
+        required: true,
+        minLength: 2,
+        placeholder: 'IBAN'
+      };
+    } else {
+      properties[key] = details[key];
+    }
+  });
+
+  swiftRequirements[0].properties.details.properties = properties;
+  return swiftRequirements;
+}
+
+function getRequirementsByType(requirements, type) {
+  return requirements.filter(requirement => requirement.type === type);
+}
+
+/**
  * Some countries use custom name fields, specififcations are listed below.
  */
 const customNameFields = {
@@ -338,6 +422,6 @@ const nameExtensions = {
 };
 
 
-AccountDetailsLegacyService.$inject = ['TwRequirementsService'];
+AccountDetailsLegacyService.$inject = ['TwRequirementsService', '$http'];
 
 export default AccountDetailsLegacyService;

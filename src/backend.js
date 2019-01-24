@@ -10,22 +10,28 @@ import jpyRefreshRequirements from '../demo/json/jpy-refresh-requirements.json';
 import emailLookup from '../demo/json/email-lookup.json';
 import emailLookupFailure from '../demo/json/email-lookup-failure.json';
 
-function mockBackend($httpBackend) {
-  const requirementsPath = '/account-requirements';
+import globalUsdCountries from '../demo/json/global-usd-countries.json';
 
-  $httpBackend.whenGET(`${requirementsPath}?target=GBP`).respond(gbpRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?target=JPY`).respond(jpyRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?target=USD`).respond(usdRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?target=VND`).respond(vndRequirements);
-  $httpBackend.whenGET(`${requirementsPath}?target=INR`).respond(inrRequirements);
+function mockBackend($httpBackend) {
+  const gbpPath = /^\/account-requirements\?target=GBP/;
+  const jpyPath = /^\/account-requirements\?target=JPY/;
+  const vndPath = /^\/account-requirements\?target=VND/;
+  const usdPath = /^\/account-requirements\?target=USD/;
+  const inrPath = /^\/account-requirements\?target=INR/;
+
+  $httpBackend.whenGET(gbpPath).respond(gbpRequirements);
+  $httpBackend.whenGET(jpyPath).respond(jpyRequirements);
+  $httpBackend.whenGET(vndPath).respond(vndRequirements);
+  $httpBackend.whenGET(usdPath).respond(usdRequirements);
+  $httpBackend.whenGET(inrPath).respond(inrRequirements);
 
   $httpBackend.whenGET('/quotes/123/account-requirements').respond(usdRequirements);
 
-  $httpBackend.whenPOST(`${requirementsPath}?target=GBP`).respond(gbpRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?target=JPY`).respond(jpyRefreshRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?target=USD`).respond(usdRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?target=VND`).respond(vndRequirements);
-  $httpBackend.whenPOST(`${requirementsPath}?target=INR`).respond(inrRequirements);
+  $httpBackend.whenPOST(gbpPath).respond(gbpRequirements);
+  $httpBackend.whenPOST(jpyPath).respond(jpyRefreshRequirements);
+  $httpBackend.whenPOST(vndPath).respond(vndRequirements);
+  $httpBackend.whenPOST(usdPath).respond(usdRequirements);
+  $httpBackend.whenPOST(inrPath).respond(inrRequirements);
 
   $httpBackend.whenGET('/account-currencies').respond(accountCurrencies);
 
@@ -38,6 +44,16 @@ function mockBackend($httpBackend) {
     }
     return [404, emailLookupFailure];
   });
+
+  $httpBackend.whenGET('/api/v1/country/listGlobalUsdCountries').respond(globalUsdCountries);
+
+  const swiftFormatRegex =
+    /^\/api\/v1\/recipient\/swiftAccountNumberFormat\?recipientCountry=[A-Z]{2}/;
+
+  $httpBackend.whenGET('/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=GB')
+    .respond({ accountNumberFormat: 'ACCOUNT_NUMBER' });
+  $httpBackend.whenGET(swiftFormatRegex)
+    .respond({ accountNumberFormat: 'IBAN' });
 }
 
 const accountCreateErrors = [{
