@@ -6,6 +6,11 @@ class AccountDetailsLegacyService {
   }
 
   prepareResponse(currency, alternatives) {
+    // In v2 alternatives are nested inside an object
+    if (alternatives.alternatives) {
+      alternatives = alternatives.alternatives;
+    }
+
     const preppedAlternatives = this.RequirementsService
       .prepRequirements(alternatives)
       .filter(alternative => Object.keys(alternative.properties).length > 0);
@@ -114,10 +119,16 @@ function nestProperties(properties) {
     newProps.name = properties.name;
   }
 
-  newProps.details = {
-    type: 'object',
-    properties: detailsProps
-  };
+  if (detailsProps.details && detailsProps.details.properties) {
+    // In newer v2 specs it already contains the nesting for details
+    newProps.details = detailsProps.details;
+  } else {
+    // In older v1 specs we need to add nesting for details
+    newProps.details = {
+      type: 'object',
+      properties: detailsProps
+    };
+  }
 
   if (properties.address) {
     newProps.address = properties.address;
