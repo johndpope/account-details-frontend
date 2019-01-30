@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/account-details-frontend
   docker:
-    - image: circleci/node:10.6-browsers
+    - image: circleci/node:lts
 
 jobs:
   test:
