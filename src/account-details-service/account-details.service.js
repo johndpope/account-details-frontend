@@ -4,6 +4,8 @@ class AccountDetailsService {
     this.$http = $http;
     this.$q = $q;
     this.LegacyService = AccountDetailsLegacyService;
+
+    this.domain = 'https://api.transferwise.com';
   }
 
   /**
@@ -24,7 +26,7 @@ class AccountDetailsService {
 
     const path = getRequirementsPath(currency, country);
 
-    let promise = this.$http.get(path, options);
+    let promise = this.$http.get(this.domain + path, options);
 
     // TODO this shit is here because global USD APIs are a mess, this should be removed
     if (currency === 'USD') {
@@ -45,9 +47,9 @@ class AccountDetailsService {
       this.$http
     );
 
-    const path = `/quotes/${quoteId}/account-requirements`;
+    const path = `/v2/quotes/${quoteId}/account-requirements`;
 
-    let promise = this.$http.get(path, options);
+    let promise = this.$http.get(this.domain + path, options);
 
     // TODO this shit is here because global USD APIs are a mess, this should be removed
     if (currency === 'USD') {
@@ -74,7 +76,7 @@ class AccountDetailsService {
 
     const path = getRequirementsPath(currency, model.country);
 
-    let promise = this.$http.post(path, apiModel, options);
+    let promise = this.$http.post(this.domain + path, apiModel, options);
 
     // TODO this shit is here because global USD APIs are a mess, this should be removed
     if (currency === 'USD') {
@@ -88,7 +90,9 @@ class AccountDetailsService {
    * Get the list of currencies for which we can create accounts
    */
   getAccountCurrencies() {
-    return this.$http.get('/account-currencies');
+    const path = '/api/v1/currency/list';
+    const options = getCurrencyListHttpOptions(this.$http);
+    return this.$http.get(path, options);
   }
 
   /**
@@ -102,7 +106,9 @@ class AccountDetailsService {
 
     const options = getSaveHttpOptions(this.$http, this.LegacyService);
 
-    return this.$http.post('/accounts', apiModel, options);
+    const path = '/v2/accounts';
+
+    return this.$http.post(this.domain + path, apiModel, options);
   }
 
   /**
@@ -121,7 +127,11 @@ class AccountDetailsService {
 
   getTargetCountries(currency) {
     if (currency === 'USD') {
-      return this.$http.get('/api/v1/country/listGlobalUsdCountries')
+      const options = {};
+      const path = '/api/v1/country/listGlobalUsdCountries';
+      const domain = ''; // '//transferwise.com';
+
+      return this.$http.get(domain + path, options)
         .then((response) => {
           response.data = response.data.countries.map(country => ({
             value: country.iso2Code,
@@ -137,7 +147,8 @@ class AccountDetailsService {
 }
 
 function getRequirementsPath(currency, country) {
-  let path = `/account-requirements?target=${currency}`;
+  let path = `/v2/account-requirements?targetCurrency=${currency}`;
+
   if (country) {
     path += `&country=${country}`;
   }
@@ -175,6 +186,35 @@ function handleRequirementsResponse(
     return LegacyService.prepareResponse(currency, data);
   }
   return data;
+}
+
+function getCurrencyListHttpOptions($http) {
+  return {
+    transformResponse: getResponseTransformers(
+      (data, headers, status) => handleCurrencyListResponse(
+        data,
+        status
+      ),
+      $http
+    )
+  };
+}
+
+function handleCurrencyListResponse(data, status) {
+  if (status === 200) {
+    return data.currencies.map(mapCurrencyToOption);
+  }
+  return data;
+}
+
+function mapCurrencyToOption(currency) {
+  return {
+    value: currency.code,
+    label: currency.name,
+    currency: currency.code,
+    searchable: currency.countryKeywords ?
+      currency.countryKeywords.reduce((acc, cur) => `${acc}, ${cur}`) : ''
+  };
 }
 
 /**

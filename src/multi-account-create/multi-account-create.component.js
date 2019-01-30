@@ -6,6 +6,7 @@ const MultiAccountCreate = {
   template,
   bindings: {
     profileId: '<',
+    currency: '<',
     onChange: '&',
     onSuccess: '&',
     onFailure: '&',

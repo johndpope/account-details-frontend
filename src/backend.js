@@ -1,11 +1,12 @@
+import currencyList from '../docs/json/currency-list.json';
 
-import gbpRequirements from '../docs/json/gbp-requirements.json';
-import jpyRequirements from '../docs/json/jpy-requirements.json';
+// import gbpRequirements from '../docs/json/gbp-requirements.json';
+// import jpyRequirements from '../docs/json/jpy-requirements.json';
 import usdRequirements from '../docs/json/usd-requirements.json';
-import vndRequirements from '../docs/json/vnd-requirements.json';
-import inrRequirements from '../docs/json/inr-requirements.json';
-
-import audRequirements from '../docs/json/v2-aud-requirements.json';
+// import vndRequirements from '../docs/json/vnd-requirements.json';
+// import inrRequirements from '../docs/json/inr-requirements.json';
+//
+// import audRequirements from '../docs/json/v2-aud-requirements.json';
 
 import jpyRefreshRequirements from '../docs/json/jpy-refresh-requirements.json';
 
@@ -15,32 +16,33 @@ import emailLookupFailure from '../docs/json/email-lookup-failure.json';
 import globalUsdCountries from '../docs/json/global-usd-countries.json';
 
 function mockBackend($httpBackend) {
-  const gbpPath = /^\/account-requirements\?target=GBP/;
+  // Mocks, we don't use these while connecting to V2, but it currently doesn't work as well
+  // const gbpPath = /^\/account-requirements\?target=GBP/;
   const jpyPath = /^\/account-requirements\?target=JPY/;
-  const vndPath = /^\/account-requirements\?target=VND/;
-  const usdPath = /^\/account-requirements\?target=USD/;
-  const inrPath = /^\/account-requirements\?target=INR/;
-  const audPath = /^\/account-requirements\?target=AUD/;
+  // const vndPath = /^\/account-requirements\?target=VND/;
+  // const usdPath = /^\/account-requirements\?target=USD/;
+  // const inrPath = /^\/account-requirements\?target=INR/;
+  // const audPath = /^\/account-requirements\?target=AUD/;
+  //
+  // $httpBackend.whenGET(gbpPath).respond(gbpRequirements);
+  // $httpBackend.whenGET(jpyPath).respond(jpyRequirements);
+  // $httpBackend.whenGET(vndPath).respond(vndRequirements);
+  // $httpBackend.whenGET(usdPath).respond(usdRequirements);
+  // $httpBackend.whenGET(inrPath).respond(inrRequirements);
+  // $httpBackend.whenGET(audPath).respond(audRequirements);
 
-  $httpBackend.whenGET(gbpPath).respond(gbpRequirements);
-  $httpBackend.whenGET(jpyPath).respond(jpyRequirements);
-  $httpBackend.whenGET(vndPath).respond(vndRequirements);
-  $httpBackend.whenGET(usdPath).respond(usdRequirements);
-  $httpBackend.whenGET(inrPath).respond(inrRequirements);
-  $httpBackend.whenGET(audPath).respond(audRequirements);
+  $httpBackend.whenGET('/v2/quotes/123/account-requirements').respond(usdRequirements);
 
-  $httpBackend.whenGET('/quotes/123/account-requirements').respond(usdRequirements);
-
-  $httpBackend.whenPOST(gbpPath).respond(gbpRequirements);
+  // $httpBackend.whenPOST(gbpPath).respond(gbpRequirements);
   $httpBackend.whenPOST(jpyPath).respond(jpyRefreshRequirements);
-  $httpBackend.whenPOST(vndPath).respond(vndRequirements);
-  $httpBackend.whenPOST(usdPath).respond(usdRequirements);
-  $httpBackend.whenPOST(inrPath).respond(inrRequirements);
-  $httpBackend.whenPOST(audPath).respond(audRequirements);
+  // $httpBackend.whenPOST(vndPath).respond(vndRequirements);
+  // $httpBackend.whenPOST(usdPath).respond(usdRequirements);
+  // $httpBackend.whenPOST(inrPath).respond(inrRequirements);
+  // $httpBackend.whenPOST(audPath).respond(audRequirements);
 
-  $httpBackend.whenGET('/account-currencies').respond(accountCurrencies);
+  $httpBackend.whenGET('/api/v1/currency/list').respond(currencyList);
 
-  $httpBackend.whenPOST('/accounts').respond(() => [401, accountCreateErrors]);
+  $httpBackend.whenPOST('/v2/accounts').respond(() => [401, accountCreateErrors]);
 
   $httpBackend.whenPOST('/api/v1/uniqueId/uniqueIdLookUp').respond((method, path, data) => {
     const json = JSON.parse(data);
@@ -59,6 +61,8 @@ function mockBackend($httpBackend) {
     .respond({ accountNumberFormat: 'ACCOUNT_NUMBER' });
   $httpBackend.whenGET(swiftFormatRegex)
     .respond({ accountNumberFormat: 'IBAN' });
+
+  $httpBackend.whenGET(/.*/).passThrough();
 }
 
 const accountCreateErrors = [{
@@ -71,24 +75,5 @@ const accountCreateErrors = [{
   path: 'name'
 }];
 
-const accountCurrencies = [{
-  value: 'USD',
-  label: 'United States Dollar'
-}, {
-  value: 'GBP',
-  label: 'Great British Pound'
-}, {
-  value: 'JPY',
-  label: 'Japanese Yen'
-}, {
-  value: 'VND',
-  label: 'Vietnamese Dong'
-}, {
-  value: 'INR',
-  label: 'Indian'
-}, {
-  value: 'AUD',
-  label: 'Australian Dollar'
-}];
 
 export default mockBackend;

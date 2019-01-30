@@ -1,3 +1,6 @@
+# v0.7.2
+## Use the real V2 requirements API in the demo page
+
 # v0.7.1
 ## Add INR to demo
 
