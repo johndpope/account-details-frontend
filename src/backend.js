@@ -1,18 +1,18 @@
 
-import gbpRequirements from '../demo/json/gbp-requirements.json';
-import jpyRequirements from '../demo/json/jpy-requirements.json';
-import usdRequirements from '../demo/json/usd-requirements.json';
-import vndRequirements from '../demo/json/vnd-requirements.json';
-import inrRequirements from '../demo/json/inr-requirements.json';
+import gbpRequirements from '../docs/json/gbp-requirements.json';
+import jpyRequirements from '../docs/json/jpy-requirements.json';
+import usdRequirements from '../docs/json/usd-requirements.json';
+import vndRequirements from '../docs/json/vnd-requirements.json';
+import inrRequirements from '../docs/json/inr-requirements.json';
 
-import audRequirements from '../demo/json/v2-aud-requirements.json';
+import audRequirements from '../docs/json/v2-aud-requirements.json';
 
-import jpyRefreshRequirements from '../demo/json/jpy-refresh-requirements.json';
+import jpyRefreshRequirements from '../docs/json/jpy-refresh-requirements.json';
 
-import emailLookup from '../demo/json/email-lookup.json';
-import emailLookupFailure from '../demo/json/email-lookup-failure.json';
+import emailLookup from '../docs/json/email-lookup.json';
+import emailLookupFailure from '../docs/json/email-lookup-failure.json';
 
-import globalUsdCountries from '../demo/json/global-usd-countries.json';
+import globalUsdCountries from '../docs/json/global-usd-countries.json';
 
 function mockBackend($httpBackend) {
   const gbpPath = /^\/account-requirements\?target=GBP/;
