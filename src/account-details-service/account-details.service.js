@@ -199,7 +199,7 @@ function getCurrencyListHttpOptions($http) {
     transformResponse: getResponseTransformers(
       (data, headers, status) => handleCurrencyListResponse(
         data,
-        status,
+        status
       ),
       $http
     )
