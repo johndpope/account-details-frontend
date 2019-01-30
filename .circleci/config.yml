@@ -1,7 +1,7 @@
 version: 2
 
 defaults: &defaults
-  working_directory: ~/recipient-creation
+  working_directory: ~/account-details-frontend
   docker:
     - image: circleci/node:10.6-browsers
 
@@ -30,7 +30,7 @@ jobs:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/recipient-creation
+          at: ~/account-details-frontend
       - run:
           name: Setup npm token
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN_PUBLISH" >> ~/.npmrc
@@ -46,10 +46,10 @@ jobs:
           command: |
             npm run copy-files-to-dist
             npm run build
+            npm run deploy:docs
             npm run deploy
             npm run release-to-github
             npm publish dist/ --access=public
-            npm run deploy:docs
 
 workflows:
   version: 2
