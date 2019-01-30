@@ -70,8 +70,8 @@ module.exports = [{
   entry: {
     'dist/js/account-details': './src/index.js',
     'dist/js/account-details.min': './src/index.js',
-    'demo/lib/account-details': './src/index.js',
-    'demo/lib/demo': './src/demo.js'
+    'docs/lib/account-details': './src/index.js',
+    'docs/lib/demo': './src/demo.js'
   },
   output: {
     path: path.join(__dirname, ''),
