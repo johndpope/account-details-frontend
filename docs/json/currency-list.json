@@ -1,0 +1,1402 @@
+{
+    "total": 49,
+    "currencies": [
+        {
+            "code": "EUR",
+            "symbol": "€",
+            "name": "Euro",
+            "countryKeywords": [
+                "British Virgin Islands",
+                "Mauritius",
+                "Poland",
+                "Kazakhstan",
+                "Saudi Arabia",
+                "Liechtenstein",
+                "Moldova",
+                "Montenegro",
+                "Ukraine",
+                "Monaco",
+                "Timor-Leste",
+                "Spain",
+                "Finland",
+                "Portugal",
+                "Kuwait",
+                "Latvia",
+                "Dominican Republic",
+                "Slovenia",
+                "Azerbaijan",
+                "Romania",
+                "Lithuania",
+                "Mauritania",
+                "Andorra",
+                "France",
+                "Greenland",
+                "Qatar",
+                "Seychelles",
+                "Gibraltar",
+                "Turkey",
+                "Malta",
+                "Georgia",
+                "Austria",
+                "Estonia",
+                "Costa Rica",
+                "Slovakia",
+                "Hungary",
+                "Cyprus",
+                "United Arab Emirates",
+                "Belgium",
+                "Sweden",
+                "Saint Lucia",
+                "Croatia",
+                "Macedonia, Former Yugoslav Republic of",
+                "Lebanon",
+                "Bosnia and Herzegovina",
+                "Luxembourg",
+                "Netherlands",
+                "Bulgaria",
+                "Czech Republic",
+                "Germany",
+                "Switzerland",
+                "Israel",
+                "Ireland",
+                "Iceland",
+                "Norway",
+                "Tunisia",
+                "Guatemala",
+                "United Kingdom",
+                "Greece",
+                "Sao Tome and Principe",
+                "Albania",
+                "Denmark",
+                "Faroe Islands",
+                "Bahrain",
+                "San Marino",
+                "Serbia",
+                "Italy"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 1200000,
+            "maxTargetAmount": 1200000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "GBP",
+            "symbol": "£",
+            "name": "British pound",
+            "countryKeywords": [
+                "United Kingdom",
+                "Isle of Man"
+            ],
+            "defaultRecipientType": "SORT_CODE",
+            "recipientTypes": [
+                "IBAN",
+                "SORT_CODE",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 18,
+            "maxSourceAmount": 1000000,
+            "maxTargetAmount": 1000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "INR",
+            "symbol": "₹",
+            "name": "Indian rupee",
+            "countryKeywords": [
+                "India"
+            ],
+            "defaultRecipientType": "INDIAN",
+            "recipientTypes": [
+                "INDIAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 16,
+            "maxSourceAmount": 350000,
+            "maxTargetAmount": 100000000,
+            "minSourceAmount": 500,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "USD",
+            "symbol": "$",
+            "name": "United States dollar",
+            "countryKeywords": [
+                "Cape Verde",
+                "Malaysia",
+                "Cocos (Keeling) Islands",
+                "Ethiopia",
+                "Poland",
+                "Bangladesh",
+                "Liechtenstein",
+                "Venezuela",
+                "Martinique",
+                "Nauru",
+                "Dominica",
+                "Timor-Leste",
+                "Finland",
+                "Slovenia",
+                "Kenya",
+                "Cook Islands",
+                "Lithuania",
+                "Mauritania",
+                "Bolivia",
+                "France",
+                "Seychelles",
+                "Macao",
+                "Samoa",
+                "Papua New Guinea",
+                "Réunion",
+                "Tuvalu",
+                "Indonesia",
+                "Norfolk Island",
+                "Austria",
+                "Estonia",
+                "Uruguay",
+                "Canada",
+                "Botswana",
+                "Liberia",
+                "Namibia",
+                "Paraguay",
+                "El Salvador",
+                "Montserrat",
+                "Malawi",
+                "Mongolia",
+                "Isle of Man",
+                "Nepal",
+                "Sweden",
+                "Argentina",
+                "Ghana",
+                "Croatia",
+                "Hong Kong",
+                "Lebanon",
+                "Netherlands",
+                "Antigua and Barbuda",
+                "Marshall Islands",
+                "Singapore",
+                "Iceland",
+                "Côte d'Ivoire",
+                "Cayman Islands",
+                "Tunisia",
+                "American Samoa",
+                "Christmas Island",
+                "Guatemala",
+                "Lesotho",
+                "Anguilla",
+                "Suriname",
+                "Vatican City",
+                "Denmark",
+                "Saint Vincent and the Grenadines",
+                "Bhutan",
+                "Solomon Islands",
+                "Italy",
+                "Mauritius",
+                "Philippines",
+                "Colombia",
+                "Egypt",
+                "Saudi Arabia",
+                "Moldova",
+                "Monaco",
+                "Kyrgyzstan",
+                "Myanmar",
+                "Romania",
+                "Maldives",
+                "Tajikistan",
+                "Bahamas",
+                "Vietnam",
+                "Greenland",
+                "Mozambique",
+                "Panama",
+                "Jamaica",
+                "Georgia",
+                "Uzbekistan",
+                "Jersey",
+                "Costa Rica",
+                "Bermuda",
+                "Falkland Islands",
+                "Nicaragua",
+                "Wallis and Futuna",
+                "Sierra Leone",
+                "Sri Lanka",
+                "Cambodia",
+                "Guernsey",
+                "Czech Republic",
+                "Grenada",
+                "Germany",
+                "Switzerland",
+                "Ireland",
+                "Armenia",
+                "Haiti",
+                "Saint Pierre and Miquelon",
+                "Faroe Islands",
+                "Bahrain",
+                "Serbia",
+                "Thailand",
+                "Vanuatu",
+                "Mali",
+                "Montenegro",
+                "Gabon",
+                "Ukraine",
+                "Tanzania",
+                "French Polynesia",
+                "Kuwait",
+                "Latvia",
+                "Guinea",
+                "Brunei Darussalam",
+                "Taiwan",
+                "New Zealand",
+                "Azerbaijan",
+                "Oman",
+                "Senegal",
+                "Saint Helena",
+                "China",
+                "Kiribati",
+                "Hungary",
+                "Guyana",
+                "South Korea",
+                "Gambia",
+                "United Arab Emirates",
+                "Palau",
+                "Saint Lucia",
+                "Puerto Rico",
+                "Macedonia, Former Yugoslav Republic of",
+                "Niger",
+                "Luxembourg",
+                "Turks and Caicos Islands",
+                "Bulgaria",
+                "Israel",
+                "Norway",
+                "United Kingdom",
+                "Greece",
+                "Sao Tome and Principe",
+                "Albania",
+                "United States",
+                "Japan",
+                "British Virgin Islands",
+                "Åland Islands",
+                "Kazakhstan",
+                "Chile",
+                "Uganda",
+                "Mexico",
+                "Rwanda",
+                "Spain",
+                "Portugal",
+                "Dominican Republic",
+                "Barbados",
+                "Burkina Faso",
+                "Laos",
+                "Andorra",
+                "Australia",
+                "Qatar",
+                "Gibraltar",
+                "Saint Kitts and Nevis",
+                "Turkey",
+                "Angola",
+                "Guinea-Bissau",
+                "Malta",
+                "Peru",
+                "Tonga",
+                "Algeria",
+                "Slovakia",
+                "Trinidad and Tobago",
+                "South Africa",
+                "French Guiana",
+                "Cyprus",
+                "Honduras",
+                "Belgium",
+                "Fiji",
+                "Bosnia and Herzegovina",
+                "Micronesia, Federated States of",
+                "Benin",
+                "Mayotte",
+                "Morocco",
+                "Ecuador",
+                "New Caledonia",
+                "Aruba",
+                "Niue",
+                "Guadeloupe",
+                "San Marino",
+                "Zambia"
+            ],
+            "defaultRecipientType": "ABA",
+            "recipientTypes": [
+                "ABA",
+                "SWIFT_CODE",
+                "EMAIL",
+                "UNIQUEID",
+                "ZELLE"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 10,
+            "maxSourceAmount": 1000000,
+            "maxTargetAmount": 1600000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "AED",
+            "symbol": "د.إ",
+            "name": "United Arab Emirates dirham",
+            "countryKeywords": [
+                "United Arab Emirates"
+            ],
+            "defaultRecipientType": "EMIRATES",
+            "recipientTypes": [
+                "EMIRATES",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 570000,
+            "maxTargetAmount": 10000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "ARS",
+            "symbol": "$",
+            "name": "Argentine peso",
+            "countryKeywords": [
+                "Argentina"
+            ],
+            "defaultRecipientType": "ARGENTINA",
+            "recipientTypes": [
+                "EMAIL",
+                "UNIQUEID",
+                "ARGENTINA"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 12,
+            "maxSourceAmount": 20000000,
+            "maxTargetAmount": 338220,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "AUD",
+            "symbol": "A$",
+            "name": "Australian dollar",
+            "countryKeywords": [
+                "Australia"
+            ],
+            "defaultRecipientType": "AUSTRALIAN",
+            "recipientTypes": [
+                "AUSTRALIAN",
+                "AUSTRALIAN_BUSINESS",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": true,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 18,
+            "maxSourceAmount": 1800000,
+            "maxTargetAmount": 1500000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "BDT",
+            "symbol": "Tk",
+            "name": "Bangladeshi taka",
+            "countryKeywords": [
+                "Bangladesh"
+            ],
+            "defaultRecipientType": "BANGLADESH",
+            "recipientTypes": [
+                "BANGLADESH",
+                "BKASH"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 1000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "BGN",
+            "symbol": "лв",
+            "name": "Bulgarian lev",
+            "countryKeywords": [
+                "Bulgaria"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 2000000,
+            "maxTargetAmount": 2000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "BRL",
+            "symbol": "R$",
+            "name": "Brazilian real",
+            "countryKeywords": [
+                "Brazil"
+            ],
+            "defaultRecipientType": "BRAZIL",
+            "recipientTypes": [
+                "BRAZIL",
+                "BRAZIL_BUSINESS",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 30000,
+            "maxTargetAmount": 250000,
+            "minSourceAmount": 10,
+            "minTargetAmount": 10
+        },
+        {
+            "code": "CAD",
+            "symbol": "C$",
+            "name": "Canadian dollar",
+            "countryKeywords": [
+                "Canada"
+            ],
+            "defaultRecipientType": "CANADIAN",
+            "recipientTypes": [
+                "CANADIAN",
+                "EMAIL",
+                "UNIQUEID",
+                "INTERAC"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 1500000,
+            "maxTargetAmount": 1000000000,
+            "minSourceAmount": 15,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "CHF",
+            "symbol": "SFr.",
+            "name": "Swiss franc",
+            "countryKeywords": [
+                "Switzerland"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 5000000000,
+            "maxTargetAmount": 250000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "CLP",
+            "symbol": "$",
+            "name": "Chilean peso",
+            "countryKeywords": [
+                "Chile"
+            ],
+            "defaultRecipientType": "CHILE",
+            "recipientTypes": [
+                "CHILE",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": false,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 955000000,
+            "maxTargetAmount": 4804380,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1000
+        },
+        {
+            "code": "CNY",
+            "symbol": "¥",
+            "name": "Chinese yuan",
+            "countryKeywords": [
+                "China"
+            ],
+            "defaultRecipientType": "CHINESE_CARD",
+            "recipientTypes": [
+                "CHINESE_CARD"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 31000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "COP",
+            "symbol": "$",
+            "name": "Colombian peso",
+            "countryKeywords": [
+                "Colombia"
+            ],
+            "defaultRecipientType": "COLOMBIA",
+            "recipientTypes": [
+                "COLOMBIA",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": true,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 3630000000,
+            "maxTargetAmount": 3630000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 62000
+        },
+        {
+            "code": "CZK",
+            "symbol": "Kč",
+            "name": "Czech koruna",
+            "countryKeywords": [
+                "Czech Republic"
+            ],
+            "defaultRecipientType": "CZECH",
+            "recipientTypes": [
+                "IBAN",
+                "CZECH",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 25000000,
+            "maxTargetAmount": 25000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "DKK",
+            "symbol": "kr",
+            "name": "Danish krone",
+            "countryKeywords": [
+                "Denmark"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 1000000000,
+            "maxTargetAmount": 1000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "EGP",
+            "symbol": "E£",
+            "name": "Egyptian pound",
+            "countryKeywords": [
+                "Egypt"
+            ],
+            "defaultRecipientType": "EGYPT_LOCAL",
+            "recipientTypes": [
+                "EMAIL",
+                "UNIQUEID",
+                "EGYPT_LOCAL"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 4999999,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "GEL",
+            "symbol": "GEL",
+            "name": "Georgian lari",
+            "countryKeywords": [
+                "Georgia"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 2600000,
+            "maxTargetAmount": 2600000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "GHS",
+            "symbol": "GH¢",
+            "name": "Ghanaian cedi",
+            "countryKeywords": [
+                "Ghana"
+            ],
+            "defaultRecipientType": "GHANA_LOCAL",
+            "recipientTypes": [
+                "GHANA_LOCAL",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 899999,
+            "minSourceAmount": 1,
+            "minTargetAmount": 5
+        },
+        {
+            "code": "HKD",
+            "symbol": "$",
+            "name": "Hong Kong dollar",
+            "countryKeywords": [
+                "Hong Kong"
+            ],
+            "defaultRecipientType": "HONGKONG",
+            "recipientTypes": [
+                "HONGKONG",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": true,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 1000000000,
+            "maxTargetAmount": 20000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "HRK",
+            "symbol": "kn",
+            "name": "Croatian kuna",
+            "countryKeywords": [
+                "Croatia"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 1000000,
+            "maxTargetAmount": 100000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "HUF",
+            "symbol": "Ft",
+            "name": "Hungarian forint",
+            "countryKeywords": [
+                "Hungary"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "HUNGARIAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": false,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 300000000,
+            "maxTargetAmount": 300000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "IDR",
+            "symbol": "Rp",
+            "name": "Indonesian rupiah",
+            "countryKeywords": [
+                "Indonesia"
+            ],
+            "defaultRecipientType": "INDONESIAN",
+            "recipientTypes": [
+                "INDONESIAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": false,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 500000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 50000
+        },
+        {
+            "code": "ILS",
+            "symbol": "₪",
+            "name": "Israeli shekel",
+            "countryKeywords": [
+                "Israel",
+                "NIS",
+                "New Isreali Shekel"
+            ],
+            "defaultRecipientType": "ISRAELI_LOCAL",
+            "recipientTypes": [
+                "EMAIL",
+                "UNIQUEID",
+                "ISRAELI_LOCAL",
+                "ISRAELI_BANK_CODE"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 4000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "JPY",
+            "symbol": "¥",
+            "name": "Japanese yen",
+            "countryKeywords": [
+                "Japan"
+            ],
+            "defaultRecipientType": "JAPANESE",
+            "recipientTypes": [
+                "SWIFT_CODE",
+                "JAPANESE",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": false,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 20,
+            "maxSourceAmount": 1000000,
+            "maxTargetAmount": 140000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "KES",
+            "symbol": "Ksh",
+            "name": "Kenyan shilling",
+            "countryKeywords": [
+                "Kenya"
+            ],
+            "defaultRecipientType": "KENYA_LOCAL",
+            "recipientTypes": [
+                "EMAIL",
+                "UNIQUEID",
+                "KENYA_LOCAL",
+                "KENYA_MOBILE"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 50000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 10
+        },
+        {
+            "code": "KRW",
+            "symbol": "₩",
+            "name": "South Korean won",
+            "countryKeywords": [
+                "South Korea"
+            ],
+            "defaultRecipientType": "SOUTH_KOREAN_PAYGATE",
+            "recipientTypes": [
+                "EMAIL",
+                "SOUTH_KOREAN_PAYGATE",
+                "SOUTH_KOREAN_PAYGATE_BUSINESS",
+                "UNIQUEID"
+            ],
+            "hasDecimals": false,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": true,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 10000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "LKR",
+            "symbol": "Sr",
+            "name": "Sri Lankan rupee",
+            "countryKeywords": [
+                "Sri Lanka"
+            ],
+            "defaultRecipientType": "SRILANKA",
+            "recipientTypes": [
+                "SRILANKA"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 4999999,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "MAD",
+            "symbol": "د.م.",
+            "name": "Moroccan dirham",
+            "countryKeywords": [
+                "Morocco"
+            ],
+            "defaultRecipientType": "MOROCCO",
+            "recipientTypes": [
+                "MOROCCO",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 14000000,
+            "maxTargetAmount": 275000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "MXN",
+            "symbol": "Mex$",
+            "name": "Mexican peso",
+            "countryKeywords": [
+                "Mexico"
+            ],
+            "defaultRecipientType": "MEXICAN",
+            "recipientTypes": [
+                "MEXICAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 40,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 100000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "MYR",
+            "symbol": "RM",
+            "name": "Malaysian ringgit",
+            "countryKeywords": [
+                "Malaysia"
+            ],
+            "defaultRecipientType": "MALAYSIAN",
+            "recipientTypes": [
+                "MALAYSIAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 50000,
+            "maxTargetAmount": 195000,
+            "minSourceAmount": 10,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "NGN",
+            "symbol": "₦",
+            "name": "Nigerian naira",
+            "countryKeywords": [
+                "Nigeria"
+            ],
+            "defaultRecipientType": "NIGERIA",
+            "recipientTypes": [
+                "NIGERIA",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 4000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "NOK",
+            "symbol": "kr",
+            "name": "Norwegian krone",
+            "countryKeywords": [
+                "Norway"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 1000000000,
+            "maxTargetAmount": 1000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "NPR",
+            "symbol": "₨",
+            "name": "Nepalese rupee",
+            "countryKeywords": [
+                "Nepal"
+            ],
+            "defaultRecipientType": "NEPAL",
+            "recipientTypes": [
+                "EMAIL",
+                "UNIQUEID",
+                "NEPAL"
+            ],
+            "hasDecimals": false,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 1000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "NZD",
+            "symbol": "$",
+            "name": "New Zealand dollar",
+            "countryKeywords": [
+                "New Zealand"
+            ],
+            "defaultRecipientType": "NEWZEALAND",
+            "recipientTypes": [
+                "NEWZEALAND",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": true,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 12,
+            "maxSourceAmount": 2200000,
+            "maxTargetAmount": 2000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "PEN",
+            "symbol": "S/.",
+            "name": "Peruvian nuevo sol",
+            "countryKeywords": [
+                "Peru"
+            ],
+            "defaultRecipientType": "PERU",
+            "recipientTypes": [
+                "PERU",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 955000000,
+            "maxTargetAmount": 6372,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "PHP",
+            "symbol": "₱",
+            "name": "Philippine peso",
+            "countryKeywords": [
+                "Philippines"
+            ],
+            "defaultRecipientType": "PHILIPPINES",
+            "recipientTypes": [
+                "PHILIPPINES",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 50000,
+            "maxTargetAmount": 480000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "PKR",
+            "symbol": "₨",
+            "name": "Pakistani rupee",
+            "countryKeywords": [
+                "Pakistan"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 500000,
+            "maxTargetAmount": 980000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "PLN",
+            "symbol": "zł",
+            "name": "Polish złoty",
+            "countryKeywords": [
+                "Poland"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "POLISH",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 5000000,
+            "maxTargetAmount": 5000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "RON",
+            "symbol": "L",
+            "name": "Romanian leu",
+            "countryKeywords": [
+                "Romania"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 30,
+            "maxSourceAmount": 5300000,
+            "maxTargetAmount": 5300000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "RUB",
+            "symbol": "руб",
+            "name": "Russian rouble",
+            "countryKeywords": [
+                "Russian Federation"
+            ],
+            "defaultRecipientType": "RUSSIARAPIDA",
+            "recipientTypes": [
+                "EMAIL",
+                "RUSSIARAPIDA",
+                "RUSSIARAPIDA_CARD",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 50,
+            "maxSourceAmount": 70,
+            "maxTargetAmount": 50000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "SEK",
+            "symbol": "kr",
+            "name": "Swedish krona",
+            "countryKeywords": [
+                "Sweden"
+            ],
+            "defaultRecipientType": "IBAN",
+            "recipientTypes": [
+                "SWEDEN_LOCAL",
+                "IBAN",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 12,
+            "maxSourceAmount": 1000000000,
+            "maxTargetAmount": 1000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "SGD",
+            "symbol": "S$",
+            "name": "Singapore dollar",
+            "countryKeywords": [
+                "Singapore"
+            ],
+            "defaultRecipientType": "SINGAPORE",
+            "recipientTypes": [
+                "SINGAPORE",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 25,
+            "maxSourceAmount": 1000000,
+            "maxTargetAmount": 2000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "THB",
+            "symbol": "฿",
+            "name": "Thai baht",
+            "countryKeywords": [
+                "Thailand"
+            ],
+            "defaultRecipientType": "THAILAND",
+            "recipientTypes": [
+                "THAILAND",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 2000000,
+            "maxTargetAmount": 2000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "TRY",
+            "symbol": "TL",
+            "name": "Turkish lira",
+            "countryKeywords": [
+                "Turkey"
+            ],
+            "defaultRecipientType": "TURKISH_EARTHPORT",
+            "recipientTypes": [
+                "TURKISH_EARTHPORT",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 1000000,
+            "maxTargetAmount": 1000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "UAH",
+            "symbol": "₴",
+            "name": "Ukrainian hryvnia",
+            "countryKeywords": [
+                "Ukraine"
+            ],
+            "defaultRecipientType": "PRIVATBANK",
+            "recipientTypes": [
+                "PRIVATBANK"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 30,
+            "maxSourceAmount": 1200000,
+            "maxTargetAmount": 1200000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "VND",
+            "symbol": "VND",
+            "name": "Vietnamese dong",
+            "countryKeywords": [
+                "Vietnam"
+            ],
+            "defaultRecipientType": "VIETNAME_EARTHPORT",
+            "recipientTypes": [
+                "EMAIL",
+                "UNIQUEID",
+                "VIETNAME_EARTHPORT"
+            ],
+            "hasDecimals": false,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": false,
+            "paymentReferenceMaxLength": 35,
+            "maxSourceAmount": 0,
+            "maxTargetAmount": 30000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        },
+        {
+            "code": "ZAR",
+            "symbol": "R",
+            "name": "South African rand",
+            "countryKeywords": [
+                "South Africa"
+            ],
+            "defaultRecipientType": "SOUTHAFRICA",
+            "recipientTypes": [
+                "SOUTHAFRICA",
+                "EMAIL",
+                "UNIQUEID"
+            ],
+            "hasDecimals": true,
+            "recipientBicRequired": false,
+            "recipientEmailRequired": false,
+            "paymentReferenceAllowed": true,
+            "paymentReferenceMaxLength": 18,
+            "maxSourceAmount": 150000,
+            "maxTargetAmount": 1000000000,
+            "minSourceAmount": 1,
+            "minTargetAmount": 1
+        }
+    ]
+}
