@@ -18,7 +18,7 @@ import globalUsdCountries from '../docs/json/global-usd-countries.json';
 function mockBackend($httpBackend) {
   // Mocks, we don't use these while connecting to V2, but it currently doesn't work as well
   // const gbpPath = /^\/account-requirements\?target=GBP/;
-  // const jpyPath = /^\/account-requirements\?target=JPY/;
+  const jpyPath = /^\/account-requirements\?target=JPY/;
   // const vndPath = /^\/account-requirements\?target=VND/;
   // const usdPath = /^\/account-requirements\?target=USD/;
   // const inrPath = /^\/account-requirements\?target=INR/;
@@ -34,7 +34,7 @@ function mockBackend($httpBackend) {
   $httpBackend.whenGET('/v2/quotes/123/account-requirements').respond(usdRequirements);
 
   // $httpBackend.whenPOST(gbpPath).respond(gbpRequirements);
-  // $httpBackend.whenPOST(jpyPath).respond(jpyRefreshRequirements);
+  $httpBackend.whenPOST(jpyPath).respond(jpyRefreshRequirements);
   // $httpBackend.whenPOST(vndPath).respond(vndRequirements);
   // $httpBackend.whenPOST(usdPath).respond(usdRequirements);
   // $httpBackend.whenPOST(inrPath).respond(inrRequirements);

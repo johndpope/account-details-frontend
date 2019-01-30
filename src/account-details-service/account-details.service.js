@@ -90,7 +90,6 @@ class AccountDetailsService {
    * Get the list of currencies for which we can create accounts
    */
   getAccountCurrencies() {
-    const domain = '//transferwise.com';
     const path = '/api/v1/currency/list';
     const options = getCurrencyListHttpOptions(this.$http);
     return this.$http.get(path, options);
