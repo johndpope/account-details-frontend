@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "code":"RECIPIENT_MISSING",
+      "message":"No unique id found for user with given email",
+      "field":null,
+      "arguments":null
+    }
+  ]
+}
