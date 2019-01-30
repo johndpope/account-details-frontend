@@ -66,10 +66,22 @@ const webpackPlugins = [
   })
 ];
 
-module.exports = [{
+const distBuild = {
   entry: {
     'dist/js/account-details': './src/index.js',
-    'dist/js/account-details.min': './src/index.js',
+    'dist/js/account-details.min': './src/index.js'
+  },
+  output: {
+    path: path.join(__dirname, ''),
+    filename: '[name].js'
+  },
+  externals: webpackExternals,
+  module: webpackModule,
+  plugins: webpackPlugins
+};
+
+const docsBuild = {
+  entry: {
     'docs/lib/account-details': './src/index.js',
     'docs/lib/demo': './src/demo.js'
   },
@@ -79,5 +91,7 @@ module.exports = [{
   },
   externals: webpackExternals,
   module: webpackModule,
-  plugins: webpackPlugins
-}];
+  plugins: []
+};
+
+module.exports = [distBuild, docsBuild];
