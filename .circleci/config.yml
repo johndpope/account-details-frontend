@@ -49,7 +49,7 @@ jobs:
             npm run deploy
             npm run release-to-github
             npm publish dist/ --access=public
-            npm run deploy:demo
+            npm run deploy:docs
 
 workflows:
   version: 2
