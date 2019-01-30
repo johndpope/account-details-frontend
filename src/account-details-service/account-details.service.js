@@ -127,13 +127,7 @@ class AccountDetailsService {
 
   getTargetCountries(currency) {
     if (currency === 'USD') {
-      const options = {
-        headers: {
-          'x-authorization-key': 'dad99d7d8e52c2c8aaf9fda788d8acdc',
-          'x-authorization-token': '84b46a3a69d6443c94e0b55882ab271d',
-          'x-language': 'en'
-        },
-      };
+      const options = {};
       const path = '/api/v1/country/listGlobalUsdCountries';
       const domain = ''; // '//transferwise.com';
 
