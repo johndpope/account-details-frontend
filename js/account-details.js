@@ -1,1 +1,1425 @@
-!function(e){function t(r){if(n[r])return n[r].exports;var i=n[r]={i:r,l:!1,exports:{}};return e[r].call(i.exports,i,i.exports,t),i.l=!0,i.exports}var n={};t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=12)}([function(e,t){e.exports=angular},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(0),a=r(i),u=n(2),o=r(u),c=n(8),l=r(c);t.default=a.default.module("tw.account-details.service",[o.default]).service("AccountDetailsService",l.default).name},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(0),a=r(i),u=n(7),o=r(u);t.default=a.default.module("tw.account-details.legacy",[]).service("AccountDetailsLegacyService",o.default).name},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(0),a=r(i),u=n(5),o=r(u),c=n(1),l=r(c);t.default=a.default.module("tw.account-details.create",[l.default,"tw.styleguide-components"]).component("accountDetailsCreate",o.default).name},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(0),a=r(i),u=n(13),o=r(u),c=n(1),l=r(c),s=n(11),d=r(s);t.default=a.default.module("tw.account-details.multi-create",[l.default,d.default]).component("multiAccountCreate",o.default).name},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(6),a=r(i),u=n(15),o=r(u),c={controller:a.default,template:o.default,bindings:{currency:"<",quoteId:"<",profileId:"<",onChange:"&",onSuccess:"&",onFailure:"&",saveButtonLabel:"<"}};t.default=c},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),a=function(){function e(t,n){r(this,e),this.$scope=t,this.AccountDetailsService=n,this.translations={validation:{required:"Field is required",pattern:"Invalid format",minLength:"The value is too short",maxLength:"Too value is too long",min:"The value is too low",max:"Too value is too high"},country:{label:"Which country is their account in?"},accountDetails:{label:"Do you have their account details?",value:"Yes, I have their details",info:"No problem, we'll send your recipient an email asking them where\n          they want to receive the money."}},this.model={},this.uniqueIdRecipient=!1,this.hasDetails=!0}return i(e,[{key:"$onInit",value:function(){var e=this;this.currency||(this.currency="GBP"),this.$scope.$watch("$ctrl.model",function(t,n){t!==n&&e.onChange&&e.onChange({model:t})},!0)}},{key:"$onChanges",value:function(e){var t=this;e.currency&&(this.model.currency=e.currency.currentValue||"GBP",this.AccountDetailsService.getTargetCountries(this.model.currency).then(function(e){t.targetCountries=e.data,"USD"===t.model.currency&&(t.model.country="US"),t.targetCountries&&t.targetCountries.length<=1&&delete t.model.country}).catch(function(){})),e.profile&&e.profile.currentValue&&(this.model.profile=e.profile.currentValue),(e.currency||e.quoteId)&&this.loadRequirements()}},{key:"loadRequirements",value:function(){var e=this,t=void 0;t=this.quoteId?this.AccountDetailsService.getRequirementsForQuote(this.quoteId,this.model.currency):this.AccountDetailsService.getRequirements(this.model.currency,this.model.country),t.then(function(t){e.alternatives=t.data,e.alternatives.length&&(e.model.type=e.alternatives[0].type)}).catch(this.handleRequirementsFailure)}},{key:"refreshRequirements",value:function(){var e=this;this.AccountDetailsService.refreshRequirements(this.model.currency,this.model).then(function(t){e.alternatives=t.data}).catch(this.handleRequirementsFailure)}},{key:"handleRequirementsFailure",value:function(e){}},{key:"saveAccount",value:function(){var e=this;this.AccountDetailsService.save(this.model).then(function(){e.onSuccess&&e.onSuccess()}).catch(function(t){e.errors=t,e.onFailure&&e.onFailure()})}},{key:"onEmailChange",value:function(e){this.model.email=e}},{key:"onUseUniqueId",value:function(e){this.uniqueIdRecipient=e}},{key:"onEnterManually",value:function(){this.uniqueIdRecipient=!1}},{key:"isCountrySelectorVisible",value:function(){return!this.uniqueIdRecipient&&this.hasDetails&&this.targetCountries&&this.targetCountries.length>1}},{key:"isAccountFormVisible",value:function(){return!this.uniqueIdRecipient&&this.hasDetails}}]),e}();a.$inject=["$scope","AccountDetailsService"],t.default=a},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e){var t={},n={};return Object.keys(e).forEach(function(r){var i=v[r];"address"!==r&&"name"!==r&&(i?t[i]=e[r]:n[r]=e[r])}),e.name&&(t.name=e.name),n.details&&n.details.properties?t.details=n.details:t.details={type:"object",properties:n},e.address&&(t.address=e.address),t}function a(e,t){var n=angular.extend({},e);return n=u(n,t)}function u(e,t){if(y[t])return angular.extend(y[t],e);var n={name:{type:"object",properties:{fullName:{type:"string",title:"Name",placeholder:"Enter name..."}}}},r=n;return $[t]&&(r.name.properties=o(n.name.properties,$[t])),angular.extend(r,e)}function o(e,t){if(!t)return e;var n={};return Object.keys(e).forEach(function(r){"legalType"===r?n.legalEntityType=l(e[r]):n[r]=c(r,e[r],t[r])}),n}function c(e,t,n){return n?("address"===e&&(t.title="Address details"),"object"===t.type?(t.properties=o(t.properties,n),t):angular.extend(t,n)):t}function l(e){return delete e.control,e.values&&e.values.forEach(function(e){"PRIVATE"===e.value&&(e.value="PERSON"),"BUSINESS"===e.value&&(e.value="INSTITUTION")}),e}function s(e,t){var n="/api/v1/recipient/swiftAccountNumberFormat?recipientCountry="+t;return e.get(n).then(function(e){return e.data.accountNumberFormat})}function d(e,t,n){var r=h(e.data,"swift_code");return s(t,n).then(function(t){return e.data="IBAN"===t?f(r):r,e})}function f(e){var t={},n=e[0].properties.details.properties;return Object.keys(n).forEach(function(e){"accountNumber"===e?t.IBAN={name:"IBAN",type:"text",required:!0,minLength:2,placeholder:"IBAN"}:t[e]=n[e]}),e[0].properties.details.properties=t,e}function h(e,t){return e.filter(function(e){return e.type===t})}Object.defineProperty(t,"__esModule",{value:!0});var p=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),m=function(){function e(t,n){r(this,e),this.RequirementsService=t,this.$http=n}return p(e,[{key:"prepareResponse",value:function(e,t){t.alternatives&&(t=t.alternatives);var n=this.RequirementsService.prepRequirements(t).filter(function(e){return Object.keys(e.properties).length>0});return n.forEach(function(t){var n=b[e]&&b[e][t.type];t.properties=a(t.properties,e),t.properties=o(t.properties,n),t.properties=o(t.properties,g),t.properties=i(t.properties)}),n}},{key:"formatModelForAPI",value:function(e){return e}},{key:"formatErrorsForDisplay",value:function(e){var t={};return Array.isArray(e)&&e.forEach(function(e){if(e.path&&e.path.indexOf(".")>0){var n=e.path.split("."),r=n[0];t[r]||(t[r]={}),t[r][n[1]]=e.message}else t[e.path]=e.message}),t}},{key:"modifyUSD",value:function(e,t){var n=this;return e&&"US"!==e?t.then(function(t){return d(t,n.$http,e)}):t.then(function(e){return e.data=h(e.data,"aba"),e})}}]),e}(),v={type:"type",legalEntityType:"legalEntityType",profile:"profile",accountHolderName:"accountHolderName",currency:"currency",email:"email"},y={ZAR:{name:{type:"object",properties:{firstName:{type:"string",title:"First name",required:!0,helpText:"Name must match name registered with bank"},middleName:{type:"string",title:"Middle name (optional)",helpText:"Name must match name registered with bank"},lastName:{type:"string",title:"Last name",required:!0,helpText:"Name must match name registered with bank"}}}},RUB:{name:{type:"object",properties:{givenName:{type:"string",title:"Given name",required:!0,pattern:"^[а-яА-ЯёЁ' -]+$",helpText:"Name must be in Cyrillic"},patronymicName:{type:"string",title:"Patronymic name",pattern:"^[а-яА-ЯёЁ' -]+$",required:!0,helpText:"Name must be in Cyrillic"},familyName:{type:"string",title:"Family name",required:!0,pattern:"^[а-яА-ЯёЁ' -]+$",helpText:"Name must be in Cyrillic"}}}}},g={address:{city:{width:"md"},postCode:{width:"md"}}},b={USD:{aba:{abartn:{width:"md"},accountNumber:{width:"md"}}},GBP:{sort_code:{sortCode:{width:"md"},accountNumber:{width:"md"}}}},$={VND:{fullName:{helpText:"Enter the name exactly as it appears on the recipient's Vietnamese bank account.  A mismatch may cause a delay on your transfer"}},COP:{fullName:{helpText:"Please include all of the recipient's given and family names."}},JPY:{fullName:{helpText:"Enter the name exactly as it appears on the recipient's Japanese bank account (it is usually writtin in XXXX Katakana).  A mismatch may cause a delay or rejection of your transfer."}}};m.$inject=["TwRequirementsService","$http"],t.default=m},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){var n="/account-requirements?target="+e;return t&&(n+="&country="+t),n}function a(e,t,n){return{transformResponse:l(function(n,r,i){return u(e,n,i,t)},n)}}function u(e,t,n,r){return 200===n?r.prepareResponse(e,t):t}function o(e,t){return{transformResponse:l(function(e,n,r){return c(e,r,t)},e)}}function c(e,t,n){return 200===t?e:n.formatErrorsForDisplay(e)}function l(e,t){return t.defaults.transformResponse&&t.defaults.transformResponse.concat&&t.defaults.transformResponse.concat(e)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),d=function(){function e(t,n,i){r(this,e),this.$http=t,this.$q=n,this.LegacyService=i}return s(e,[{key:"getRequirements",value:function(e,t){if(!e)throw new Error("Currency is required");var n=a(e,this.LegacyService,this.$http),r=i(e,t),u=this.$http.get(r,n);return"USD"===e&&(u=this.LegacyService.modifyUSD(t,u)),u}},{key:"getRequirementsForQuote",value:function(e,t,n){if(!e||!t)throw new Error("Quote id and currency are required");var r=a(t,this.LegacyService,this.$http),i="/quotes/"+e+"/account-requirements",u=this.$http.get(i,r);return"USD"===t&&(u=this.LegacyService.modifyUSD(n,u)),u}},{key:"refreshRequirements",value:function(e,t){if(!e)throw new Error("Currency is required");var n=this.LegacyService.formatModelForAPI(t),r=a(e,this.LegacyService,this.$http),u=i(e,t.country),o=this.$http.post(u,n,r);return"USD"===e&&(o=this.LegacyService.modifyUSD(t.country,o)),o}},{key:"getAccountCurrencies",value:function(){return this.$http.get("/account-currencies")}},{key:"save",value:function(e){if(!e)throw new Error("Model is required");var t=this.LegacyService.formatModelForAPI(e),n=o(this.$http,this.LegacyService);return this.$http.post("/accounts",t,n)}},{key:"lookupAccountByEmail",value:function(e){if(!e)throw new Error("Email is required");return this.$http.post("/api/v1/uniqueId/uniqueIdLookUp",{email:e,type:"email",currencyCode:"GBP"})}},{key:"getTargetCountries",value:function(e){return"USD"===e?this.$http.get("/api/v1/country/listGlobalUsdCountries").then(function(e){return e.data=e.data.countries.map(function(e){return{value:e.iso2Code,label:e.name}}),e}).catch(function(){return{data:[{currency:"USD"}]}}):this.$q.when({data:[{currency:"GBP"}]})}}]),e}();d.$inject=["$http","$q","AccountDetailsLegacyService"],t.default=d},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(10),a=r(i),u=n(16),o=r(u),c={controller:a.default,template:o.default,bindings:{onChange:"&",onUseUniqueId:"&",onEnterManually:"&"}};t.default=c},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),a=function(){function e(t){r(this,e),this.AccountDetailsService=t,this.requestCount=0,this.lastResponse=0,this.translations={email:{label:"Email address",placeholder:"Recipient email address",success:"is already on TransferWise, and would like to receive into the\n          following account."},uniqueId:{label:"How do you want to send?",toUniqueId:"account ending",toBankDetails:"Send to a different account"}}}return i(e,[{key:"onEmailChange",value:function(){var e=this;if(this.onChange&&this.onChange({email:this.email}),!this.email)return this.recipient=!1,void(this.useUniqueId=!1);this.requestCount++;var t=this.requestCount;this.AccountDetailsService.lookupAccountByEmail(this.email).then(function(n){e.lastResponse>t||(e.recipient=n.data.targetRecipient,e.useUniqueId=!0,e.selectUniqueId())}).catch(function(){e.lastResponse>t||(e.selectManual(),e.recipient=!1,e.useUniqueId=!1)}).finally(function(){e.lastResponse=Math.max(t,e.lastResponse)})}},{key:"selectUniqueId",value:function(){this.onUseUniqueId&&this.onUseUniqueId({recipient:this.recipient})}},{key:"selectManual",value:function(){this.onEnterManually&&this.onEnterManually()}},{key:"onChangeUniqueIdChoice",value:function(e){e.useUniqueId?this.selectUniqueId():this.selectManual()}}]),e}();a.$inject=["AccountDetailsService"],t.default=a},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(0),a=r(i),u=n(9),o=r(u),c=n(1),l=r(c);t.default=a.default.module("tw.account-details.email-lookup",[l.default]).component("accountEmailLookup",o.default).name},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(0),a=r(i),u=n(2),o=r(u),c=n(1),l=r(c),s=n(3),d=r(s),f=n(4),h=r(f);t.default=a.default.module("tw.account-details",[o.default,l.default,d.default,h.default]).name},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(14),a=r(i),u=n(17),o=r(u),c={controller:a.default,template:o.default,bindings:{profileId:"<",onChange:"&",onSuccess:"&",onFailure:"&",saveButtonLabel:"<"}};t.default=c},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),a=function(){function e(t){r(this,e),this.AccountDetailsService=t,this.translations={currency:{label:"Currency",placeholder:"Choose currency"}}}return i(e,[{key:"$onInit",value:function(){var e=this;this.currency||(this.currency="USD"),this.currencies=[],this.AccountDetailsService.getAccountCurrencies().then(function(t){e.currencies=t.data}).catch(function(){})}},{key:"onSaveSuccess",value:function(){this.onSuccess&&this.onSuccess()}},{key:"onSaveFailure",value:function(){this.onFailure&&this.onFailure()}},{key:"onModelChange",value:function(e){this.onChange&&this.onChange({model:e})}}]),e}();a.$inject=["AccountDetailsService"],t.default=a},function(e,t){e.exports=' <div class=form-group> <label class=control-label> {{ $ctrl.translations.accountDetails.label }} </label> <div class=checkbox ng-class="{ \'has-info\': !$ctrl.hasDetails }"> <label> <tw-checkbox ng-init="$ctrl.hasDetails = true;" ng-model=$ctrl.hasDetails ng-true-value=true ng-false-value=false checked=checked></tw-checkbox> {{ $ctrl.translations.accountDetails.value }} </label> <div class="alert alert-info" ng-if=!$ctrl.hasDetails> {{ $ctrl.translations.accountDetails.info }} </div> </div> </div> <account-email-lookup on-change=$ctrl.onEmailChange(email) on-use-unique-id=$ctrl.onUseUniqueId(recipient) on-enter-manually=$ctrl.onEnterManually()></account-email-lookup> <div class=form-group ng-if=$ctrl.isCountrySelectorVisible()> <label class=control-label> {{ $ctrl.translations.country.label }} </label> <tw-select ng-model=$ctrl.model.country options=$ctrl.targetCountries ng-change=$ctrl.refreshRequirements() name=targetCountry></tw-select> </div> <form ng-if=$ctrl.isAccountFormVisible() name=accountCreateForm novalidate ng-submit="accountCreateForm.$valid && $ctrl.saveAccount()" ng-class="{\'m-t-panel\': $ctrl.alternatives.length > 1}"> <tw-requirements-form ng-if=$ctrl.alternatives model=$ctrl.model requirements=$ctrl.alternatives error-messages=$ctrl.errors validation-messages=$ctrl.translations.validation on-refresh-requirements=$ctrl.refreshRequirements()> </tw-requirements-form> <input type=submit value="{{ $ctrl.saveButtonLabel }}" class="btn btn-block btn-primary"/> </form> '},function(e,t){e.exports='<div class=form-group ng-class="{ \'has-success\': $ctrl.recipient }"> <label class=control-label> {{ $ctrl.translations.email.label }} </label> <input name=email class=form-control placeholder="{{ $ctrl.translations.email.placeholder }}" ng-model=$ctrl.email ng-model-options="{ debounce: 500 }" ng-change=$ctrl.onEmailChange() /> <div class="alert alert-success" ng-if=$ctrl.recipient> {{ $ctrl.recipient.name }} {{ $ctrl.translations.email.success }} </div> </div> <div class=form-group ng-if=$ctrl.recipient> <label class=control-label> {{ $ctrl.translations.uniqueId.label }} </label> <div class="radio radio-lg"> <label> <tw-radio name=uniqueId ng-value=true ng-model=$ctrl.useUniqueId ng-change="$ctrl.onChangeUniqueIdChoice({ useUniqueId: true })"></tw-radio> {{ $ctrl.recipient.name }} <small> {{ $ctrl.recipient.currency }} {{ $ctrl.translations.uniqueId.toUniqueId }} {{ $ctrl.recipient.shortAccountString.slice(-4) }} </small> </label> </div> <div class=radio> <label> <tw-radio name=uniqueId ng-value=false ng-model=$ctrl.useUniqueId ng-change="$ctrl.onChangeUniqueIdChoice({ useUniqueId: false })"></tw-radio> {{ $ctrl.translations.uniqueId.toBankDetails }} </label> </div> </div> '},function(e,t){e.exports=" <div class=form-group> <label class=control-label>{{ $ctrl.translations.currency.label }}</label> <tw-select ng-model=$ctrl.currency options=$ctrl.currencies placeholder=$ctrl.translations.currency.placeholder></tw-select> </div> <account-details-create profile-id=$ctrl.profileId currency=$ctrl.currency email=$ctrl.email on-change=$ctrl.onModelChange(model) on-success=$ctrl.onSaveSuccess() on-failure=$ctrl.onSaveFailure() save-button-label=$ctrl.saveButtonLabel> </account-details-create> "}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+module.exports = angular;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _angular = __webpack_require__(0);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _accountDetailsLegacy = __webpack_require__(2);
+
+var _accountDetailsLegacy2 = _interopRequireDefault(_accountDetailsLegacy);
+
+var _accountDetails = __webpack_require__(8);
+
+var _accountDetails2 = _interopRequireDefault(_accountDetails);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _angular2.default.module('tw.account-details.service', [_accountDetailsLegacy2.default]).service('AccountDetailsService', _accountDetails2.default).name;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _angular = __webpack_require__(0);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _accountDetailsLegacy = __webpack_require__(7);
+
+var _accountDetailsLegacy2 = _interopRequireDefault(_accountDetailsLegacy);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _angular2.default.module('tw.account-details.legacy', []).service('AccountDetailsLegacyService', _accountDetailsLegacy2.default).name;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _angular = __webpack_require__(0);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _accountDetailsCreate = __webpack_require__(5);
+
+var _accountDetailsCreate2 = _interopRequireDefault(_accountDetailsCreate);
+
+var _accountDetailsService = __webpack_require__(1);
+
+var _accountDetailsService2 = _interopRequireDefault(_accountDetailsService);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _angular2.default.module('tw.account-details.create', [_accountDetailsService2.default, 'tw.styleguide-components']).component('accountDetailsCreate', _accountDetailsCreate2.default).name;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _angular = __webpack_require__(0);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _multiAccountCreate = __webpack_require__(13);
+
+var _multiAccountCreate2 = _interopRequireDefault(_multiAccountCreate);
+
+var _accountDetailsService = __webpack_require__(1);
+
+var _accountDetailsService2 = _interopRequireDefault(_accountDetailsService);
+
+var _emailLookup = __webpack_require__(11);
+
+var _emailLookup2 = _interopRequireDefault(_emailLookup);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _angular2.default.module('tw.account-details.multi-create', [_accountDetailsService2.default, _emailLookup2.default]).component('multiAccountCreate', _multiAccountCreate2.default).name;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _accountDetailsCreate = __webpack_require__(6);
+
+var _accountDetailsCreate2 = _interopRequireDefault(_accountDetailsCreate);
+
+var _accountDetailsCreate3 = __webpack_require__(15);
+
+var _accountDetailsCreate4 = _interopRequireDefault(_accountDetailsCreate3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var AccountDetailsCreate = {
+  controller: _accountDetailsCreate2.default,
+  template: _accountDetailsCreate4.default,
+  bindings: {
+    currency: '<',
+    quoteId: '<',
+    profileId: '<',
+    onChange: '&',
+    onSuccess: '&',
+    onFailure: '&',
+    saveButtonLabel: '<'
+  }
+};
+
+exports.default = AccountDetailsCreate;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AccountDetailsCreateController = function () {
+  function AccountDetailsCreateController($scope, AccountDetailsService) {
+    _classCallCheck(this, AccountDetailsCreateController);
+
+    this.$scope = $scope;
+    this.AccountDetailsService = AccountDetailsService;
+
+    // TODO translations
+    this.translations = {
+      validation: {
+        required: 'Field is required',
+        pattern: 'Invalid format',
+        minLength: 'The value is too short',
+        maxLength: 'Too value is too long',
+        min: 'The value is too low',
+        max: 'Too value is too high'
+      },
+      country: {
+        label: 'Which country is their account in?'
+      },
+      accountDetails: {
+        label: 'Do you have their account details?',
+        value: 'Yes, I have their details',
+        info: 'No problem, we\'ll send your recipient an email asking them where\n          they want to receive the money.'
+      }
+    };
+
+    this.model = {};
+
+    this.uniqueIdRecipient = false;
+    this.hasDetails = true;
+  }
+
+  _createClass(AccountDetailsCreateController, [{
+    key: '$onInit',
+    value: function $onInit() {
+      var _this = this;
+
+      if (!this.currency) {
+        this.currency = 'GBP';
+      }
+
+      this.$scope.$watch('$ctrl.model', function (model, oldModel) {
+        if (model !== oldModel && _this.onChange) {
+          _this.onChange({ model: model });
+        }
+      }, true);
+    }
+  }, {
+    key: '$onChanges',
+    value: function $onChanges(changes) {
+      var _this2 = this;
+
+      if (changes.currency) {
+        this.model.currency = changes.currency.currentValue || 'GBP';
+
+        this.AccountDetailsService.getTargetCountries(this.model.currency).then(function (response) {
+          _this2.targetCountries = response.data;
+
+          // Default to US for global USD
+          // TODO find a way to do this more generically
+          if (_this2.model.currency === 'USD') {
+            _this2.model.country = 'US';
+          }
+
+          if (_this2.targetCountries && _this2.targetCountries.length <= 1) {
+            delete _this2.model.country;
+          }
+        }).catch(function () {
+          // getTargetCountries catches errors and returns a single country
+        });
+      }
+
+      if (changes.profile && changes.profile.currentValue) {
+        this.model.profile = changes.profile.currentValue;
+      }
+
+      if (changes.currency || changes.quoteId) {
+        this.loadRequirements();
+      }
+    }
+  }, {
+    key: 'loadRequirements',
+    value: function loadRequirements() {
+      var _this3 = this;
+
+      var promise = void 0;
+      if (this.quoteId) {
+        promise = this.AccountDetailsService.getRequirementsForQuote(this.quoteId, this.model.currency);
+      } else {
+        promise = this.AccountDetailsService.getRequirements(this.model.currency, this.model.country);
+      }
+
+      promise.then(function (response) {
+        _this3.alternatives = response.data;
+        if (_this3.alternatives.length) {
+          _this3.model.type = _this3.alternatives[0].type;
+        }
+      }).catch(this.handleRequirementsFailure);
+    }
+  }, {
+    key: 'refreshRequirements',
+    value: function refreshRequirements() {
+      var _this4 = this;
+
+      this.AccountDetailsService.refreshRequirements(this.model.currency, this.model).then(function (response) {
+        _this4.alternatives = response.data;
+      }).catch(this.handleRequirementsFailure);
+    }
+  }, {
+    key: 'handleRequirementsFailure',
+    value: function handleRequirementsFailure(error) {//eslint-disable-line
+      // TODO
+    }
+  }, {
+    key: 'saveAccount',
+    value: function saveAccount() {
+      var _this5 = this;
+
+      this.AccountDetailsService.save(this.model).then(function () {
+        if (_this5.onSuccess) {
+          _this5.onSuccess();
+        }
+      }).catch(function (errors) {
+        _this5.errors = errors;
+        if (_this5.onFailure) {
+          _this5.onFailure();
+        }
+      });
+    }
+  }, {
+    key: 'onEmailChange',
+    value: function onEmailChange(email) {
+      this.model.email = email;
+    }
+  }, {
+    key: 'onUseUniqueId',
+    value: function onUseUniqueId(recipient) {
+      this.uniqueIdRecipient = recipient;
+    }
+  }, {
+    key: 'onEnterManually',
+    value: function onEnterManually() {
+      this.uniqueIdRecipient = false;
+    }
+  }, {
+    key: 'isCountrySelectorVisible',
+    value: function isCountrySelectorVisible() {
+      return !this.uniqueIdRecipient && this.hasDetails && this.targetCountries && this.targetCountries.length > 1;
+    }
+  }, {
+    key: 'isAccountFormVisible',
+    value: function isAccountFormVisible() {
+      return !this.uniqueIdRecipient && this.hasDetails;
+    }
+  }]);
+
+  return AccountDetailsCreateController;
+}();
+
+AccountDetailsCreateController.$inject = ['$scope', 'AccountDetailsService'];
+
+exports.default = AccountDetailsCreateController;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AccountDetailsLegacyService = function () {
+  function AccountDetailsLegacyService(RequirementsService, $http) {
+    _classCallCheck(this, AccountDetailsLegacyService);
+
+    this.RequirementsService = RequirementsService;
+    this.$http = $http;
+  }
+
+  _createClass(AccountDetailsLegacyService, [{
+    key: 'prepareResponse',
+    value: function prepareResponse(currency, alternatives) {
+      // In v2 alternatives are nested inside an object
+      if (alternatives.alternatives) {
+        alternatives = alternatives.alternatives;
+      }
+
+      var preppedAlternatives = this.RequirementsService.prepRequirements(alternatives).filter(function (alternative) {
+        return Object.keys(alternative.properties).length > 0;
+      });
+
+      preppedAlternatives.forEach(function (alternative) {
+        var typeExtensions = currencyExtensions[currency] && currencyExtensions[currency][alternative.type];
+
+        alternative.properties = addMissingFields(alternative.properties, currency);
+        alternative.properties = extendProperties(alternative.properties, typeExtensions);
+        alternative.properties = extendProperties(alternative.properties, globalExtensions);
+        alternative.properties = nestProperties(alternative.properties);
+      });
+
+      return preppedAlternatives;
+    }
+
+    // We now adjust the requirements rather than post-processing
+
+  }, {
+    key: 'formatModelForAPI',
+    value: function formatModelForAPI(model) {
+      // eslint-disable-line
+      return model;
+    }
+
+    // Take flat error structure and map to model structure.
+
+  }, {
+    key: 'formatErrorsForDisplay',
+    value: function formatErrorsForDisplay(errors) {
+      // eslint-disable-line
+      var errorMessagesObject = {};
+      if (Array.isArray(errors)) {
+        errors.forEach(function (error) {
+          // Support 'nested.field' type paths, ONLY SUPPORTS SINGLE LEVEL OF NESTING
+          if (error.path && error.path.indexOf('.') > 0) {
+            // If the key contains a period we need to nest the fields in another object
+            var pathSections = error.path.split('.');
+            var nestedKey = pathSections[0];
+
+            // If this sub object doesn't exist yet, create it
+            if (!errorMessagesObject[nestedKey]) {
+              errorMessagesObject[nestedKey] = {};
+            }
+            errorMessagesObject[nestedKey][pathSections[1]] = error.message;
+          } else {
+            errorMessagesObject[error.path] = error.message;
+          }
+        });
+      }
+      return errorMessagesObject;
+    }
+
+    /**
+     * Apologies about this mess!  If we're sending USD outside of US we need to
+     * check if we should use IBAN format or swift account number.  If IBAN we
+     * modify the response.
+     *
+     * Don't you dare add another one of these! Fix your requirements API!!!
+     */
+
+  }, {
+    key: 'modifyUSD',
+    value: function modifyUSD(country, requirementsPromise) {
+      var _this = this;
+
+      if (country && country !== 'US') {
+        return requirementsPromise.then(function (response) {
+          return checkSwiftTypeAndModifyResponse(response, _this.$http, country);
+        });
+      }
+
+      return requirementsPromise.then(function (response) {
+        response.data = getRequirementsByType(response.data, 'aba');
+        return response;
+      });
+    }
+  }]);
+
+  return AccountDetailsLegacyService;
+}();
+
+/**
+ * These props sit at the top level of a v2 model, all others are nested in the
+ * details object.  This is a mapping from v1 keys to v2.
+ */
+
+
+var topLevelProps = {
+  type: 'type',
+  legalEntityType: 'legalEntityType',
+  profile: 'profile',
+  accountHolderName: 'accountHolderName',
+  currency: 'currency',
+  email: 'email'
+};
+
+function nestProperties(properties) {
+  var newProps = {};
+  var detailsProps = {};
+
+  Object.keys(properties).forEach(function (oldKey) {
+    var newKey = topLevelProps[oldKey];
+
+    // Hold back address until the end to preserve ordering
+    if (oldKey === 'address') {
+      return;
+    }
+    if (oldKey === 'name') {
+      return;
+    }
+
+    if (newKey) {
+      newProps[newKey] = properties[oldKey];
+    } else {
+      detailsProps[oldKey] = properties[oldKey];
+    }
+  });
+
+  if (properties.name) {
+    newProps.name = properties.name;
+  }
+
+  if (detailsProps.details && detailsProps.details.properties) {
+    // In newer v2 specs it already contains the nesting for details
+    newProps.details = detailsProps.details;
+  } else {
+    // In older v1 specs we need to add nesting for details
+    newProps.details = {
+      type: 'object',
+      properties: detailsProps
+    };
+  }
+
+  if (properties.address) {
+    newProps.address = properties.address;
+  }
+
+  return newProps;
+}
+
+function addMissingFields(fields, currency) {
+  var newFields = angular.extend({}, fields);
+  newFields = addNameFields(newFields, currency);
+  return newFields;
+}
+
+function addNameFields(fields, currency) {
+  if (customNameFields[currency]) {
+    return angular.extend(customNameFields[currency], fields);
+  }
+
+  // If not already there, add them
+  // appeared under accountHolderName
+
+  var basicNameField = {
+    name: {
+      type: 'object',
+      properties: {
+        fullName: {
+          type: 'string',
+          title: 'Name', // TODO translation
+          placeholder: 'Enter name...' // TODO translation
+        }
+      }
+    }
+  };
+
+  var newNameFields = basicNameField;
+
+  // Some currencies have specific extensions for parts of the name form, add them.
+  if (nameExtensions[currency]) {
+    newNameFields.name.properties = extendProperties(basicNameField.name.properties, nameExtensions[currency]);
+  }
+
+  return angular.extend(newNameFields, fields);
+}
+
+function extendProperties(properties, extensions) {
+  if (!extensions) {
+    return properties;
+  }
+
+  var extendedProperties = {};
+  Object.keys(properties).forEach(function (key) {
+    if (key === 'legalType') {
+      // In the v2 enpoint, this needs to be mapped to legalEntityType
+      extendedProperties.legalEntityType = mapLegalTypeToV2(properties[key]);
+    } else {
+      extendedProperties[key] = extendProperty(key, properties[key], extensions[key]);
+    }
+  });
+
+  return extendedProperties;
+}
+
+function extendProperty(key, property, extensions) {
+  if (!extensions) {
+    return property;
+  }
+
+  if (key === 'address') {
+    property.title = 'Address details'; // TODO translation
+  }
+
+  if (property.type === 'object') {
+    // If we're dealing with a nested object, we must extend recursively
+    property.properties = extendProperties(property.properties, extensions);
+    return property;
+  }
+
+  // Extend existing field
+  return angular.extend(property, extensions);
+}
+
+/**
+ * Legal type has been changed in V2, the parameter name is different and the
+ * enums have changed.
+ */
+function mapLegalTypeToV2(property) {
+  delete property.control; // The control is incorrect in the API
+
+  if (property.values) {
+    property.values.forEach(function (valueObject) {
+      if (valueObject.value === 'PRIVATE') {
+        valueObject.value = 'PERSON';
+      }
+      if (valueObject.value === 'BUSINESS') {
+        valueObject.value = 'INSTITUTION';
+      }
+    });
+  }
+
+  return property;
+}
+
+/**
+ * Get the format for the global USD details
+ * The API returns one of:
+ * { accountNumberFormat: "ACCOUNT_NUMBER" }
+ * { accountNumberFormat: "IBAN" }
+ * This method returns a promise with the string value
+ */
+function getSwiftFormat($http, country) {
+  var url = '/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=' + country;
+
+  return $http.get(url).then(function (response) {
+    return response.data.accountNumberFormat;
+  });
+}
+
+/**
+ * Load the type of swift accountfrom the API, then modify the original swift
+ * requirement response accordingly
+ */
+function checkSwiftTypeAndModifyResponse(response, $http, country) {
+  var swiftRequirements = getRequirementsByType(response.data, 'swift_code');
+
+  return getSwiftFormat($http, country).then(function (format) {
+    if (format === 'IBAN') {
+      response.data = getIbanRequirements(swiftRequirements);
+    } else {
+      response.data = swiftRequirements;
+    }
+    return response;
+  });
+}
+
+/**
+ * Adapt the swift account number requirements to IBAN requirements
+ */
+function getIbanRequirements(swiftRequirements) {
+  var properties = {};
+  var details = swiftRequirements[0].properties.details.properties;
+
+  Object.keys(details).forEach(function (key) {
+    if (key === 'accountNumber') {
+      properties.IBAN = {
+        name: 'IBAN',
+        type: 'text',
+        required: true,
+        minLength: 2,
+        placeholder: 'IBAN'
+      };
+    } else {
+      properties[key] = details[key];
+    }
+  });
+
+  swiftRequirements[0].properties.details.properties = properties;
+  return swiftRequirements;
+}
+
+function getRequirementsByType(requirements, type) {
+  return requirements.filter(function (requirement) {
+    return requirement.type === type;
+  });
+}
+
+/**
+ * Some countries use custom name fields, specififcations are listed below.
+ */
+var customNameFields = {
+  ZAR: {
+    name: {
+      type: 'object',
+      properties: {
+        firstName: {
+          type: 'string',
+          title: 'First name', // TODO translation
+          required: true,
+          // TODO translation
+          helpText: 'Name must match name registered with bank'
+        },
+        middleName: {
+          type: 'string',
+          title: 'Middle name (optional)', // TODO translation
+          // TODO translation
+          helpText: 'Name must match name registered with bank'
+        },
+        lastName: {
+          type: 'string',
+          title: 'Last name', // TODO translation
+          required: true,
+          // TODO translation
+          helpText: 'Name must match name registered with bank'
+        }
+      }
+    }
+  },
+  RUB: {
+    name: {
+      type: 'object',
+      properties: {
+        givenName: {
+          type: 'string',
+          title: 'Given name', // TODO translation
+          required: true,
+          pattern: '^[а-яА-ЯёЁ\' -]+$',
+          // TODO translation
+          helpText: 'Name must be in Cyrillic'
+        },
+        patronymicName: {
+          type: 'string',
+          title: 'Patronymic name',
+          pattern: '^[а-яА-ЯёЁ\' -]+$',
+          required: true,
+          // TODO translation
+          helpText: 'Name must be in Cyrillic'
+        },
+        familyName: {
+          type: 'string',
+          title: 'Family name', // TODO translation
+          required: true,
+          pattern: '^[а-яА-ЯёЁ\' -]+$',
+          // TODO translation
+          helpText: 'Name must be in Cyrillic'
+        }
+      }
+    }
+  }
+};
+
+/**
+ * These extensions will extend matching property values in any recipient type.
+ * As the API improves these should disapper.
+ */
+var globalExtensions = {
+  address: {
+    city: {
+      width: 'md'
+    },
+    postCode: {
+      width: 'md'
+    }
+  }
+};
+
+/**
+ * These extensions will over-rule specififcations for specific currency & account
+ * types.  As the API improves these should disapper.
+ */
+var currencyExtensions = {
+  USD: {
+    aba: {
+      abartn: {
+        width: 'md'
+      },
+      accountNumber: {
+        width: 'md'
+      }
+    }
+  },
+  GBP: {
+    sort_code: {
+      sortCode: {
+        width: 'md'
+      },
+      accountNumber: {
+        width: 'md'
+      }
+    }
+  }
+};
+
+// TODO Translations & Katakana characters
+var japanNameHelp = "Enter the name exactly as it appears on the recipient's " + 'Japanese bank account (it is usually writtin in XXXX Katakana).  A mismatch ' + 'may cause a delay or rejection of your transfer.';
+
+var colombiaNameHelp = "Please include all of the recipient's given and family names.";
+
+var vietnamNameHelp = "Enter the name exactly as it appears on the recipient's " + 'Vietnamese bank account.  A mismatch may cause a delay on your transfer';
+
+var nameExtensions = {
+  VND: {
+    fullName: {
+      helpText: vietnamNameHelp
+    }
+  },
+  COP: {
+    fullName: {
+      helpText: colombiaNameHelp
+    }
+  },
+  JPY: {
+    fullName: {
+      helpText: japanNameHelp
+    }
+  }
+};
+
+AccountDetailsLegacyService.$inject = ['TwRequirementsService', '$http'];
+
+exports.default = AccountDetailsLegacyService;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AccountDetailsService = function () {
+  function AccountDetailsService($http, $q, AccountDetailsLegacyService) {
+    _classCallCheck(this, AccountDetailsService);
+
+    this.$http = $http;
+    this.$q = $q;
+    this.LegacyService = AccountDetailsLegacyService;
+  }
+
+  /**
+   * Get the account requirments for a currency
+   * Live calls, use source/sourceAmount for special cases
+   * {{host}}/v1/account-requirements?source=EUR&target=USD&sourceAmount=1000
+   */
+
+
+  _createClass(AccountDetailsService, [{
+    key: 'getRequirements',
+    value: function getRequirements(currency, country) {
+      if (!currency) {
+        throw new Error('Currency is required');
+      }
+
+      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http);
+
+      var path = getRequirementsPath(currency, country);
+
+      var promise = this.$http.get(path, options);
+
+      // TODO this shit is here because global USD APIs are a mess, this should be removed
+      if (currency === 'USD') {
+        promise = this.LegacyService.modifyUSD(country, promise);
+      }
+
+      return promise;
+    }
+  }, {
+    key: 'getRequirementsForQuote',
+    value: function getRequirementsForQuote(quoteId, currency, country) {
+      if (!quoteId || !currency) {
+        throw new Error('Quote id and currency are required');
+      }
+
+      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http);
+
+      var path = '/quotes/' + quoteId + '/account-requirements';
+
+      var promise = this.$http.get(path, options);
+
+      // TODO this shit is here because global USD APIs are a mess, this should be removed
+      if (currency === 'USD') {
+        promise = this.LegacyService.modifyUSD(country, promise);
+      }
+
+      return promise;
+    }
+
+    /**
+     * Refresh account requirments for a currency using an existing model
+     */
+
+  }, {
+    key: 'refreshRequirements',
+    value: function refreshRequirements(currency, model) {
+      if (!currency) {
+        throw new Error('Currency is required');
+      }
+      var apiModel = this.LegacyService.formatModelForAPI(model);
+
+      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http);
+
+      var path = getRequirementsPath(currency, model.country);
+
+      var promise = this.$http.post(path, apiModel, options);
+
+      // TODO this shit is here because global USD APIs are a mess, this should be removed
+      if (currency === 'USD') {
+        promise = this.LegacyService.modifyUSD(model.country, promise);
+      }
+
+      return promise;
+    }
+
+    /**
+     * Get the list of currencies for which we can create accounts
+     */
+
+  }, {
+    key: 'getAccountCurrencies',
+    value: function getAccountCurrencies() {
+      return this.$http.get('/account-currencies');
+    }
+
+    /**
+     * Save a new account
+     */
+
+  }, {
+    key: 'save',
+    value: function save(model) {
+      if (!model) {
+        throw new Error('Model is required');
+      }
+      var apiModel = this.LegacyService.formatModelForAPI(model);
+
+      var options = getSaveHttpOptions(this.$http, this.LegacyService);
+
+      return this.$http.post('/accounts', apiModel, options);
+    }
+
+    /**
+     * Do a lookup to see if we have any accounts for given email
+     */
+
+  }, {
+    key: 'lookupAccountByEmail',
+    value: function lookupAccountByEmail(email) {
+      if (!email) {
+        throw new Error('Email is required');
+      }
+      var type = 'email';
+      var currencyCode = 'GBP';
+      return this.$http.post('/api/v1/uniqueId/uniqueIdLookUp', {
+        email: email, type: type, currencyCode: currencyCode
+      });
+    }
+  }, {
+    key: 'getTargetCountries',
+    value: function getTargetCountries(currency) {
+      if (currency === 'USD') {
+        return this.$http.get('/api/v1/country/listGlobalUsdCountries').then(function (response) {
+          response.data = response.data.countries.map(function (country) {
+            return {
+              value: country.iso2Code,
+              label: country.name
+            };
+          });
+          return response;
+        })
+        // If the call fails return a single currency to disable global USD
+        .catch(function () {
+          return { data: [{ currency: 'USD' }] };
+        });
+      }
+      return this.$q.when({ data: [{ currency: 'GBP' }] });
+    }
+  }]);
+
+  return AccountDetailsService;
+}();
+
+function getRequirementsPath(currency, country) {
+  var path = '/account-requirements?target=' + currency;
+  if (country) {
+    path += '&country=' + country;
+  }
+  return path;
+}
+
+/**
+ * We use transformers rather than a 'then', as in Angular >1.5, using a 'then'
+ * without a catch throws a warning, and we do not want to catch at this point.
+ */
+function getRequirementsHttpOptions(currency, LegacyService, $http) {
+  return {
+    transformResponse: getResponseTransformers(function (data, headers, status) {
+      return handleRequirementsResponse(currency, data, status, LegacyService);
+    }, $http)
+  };
+}
+
+/**
+ * Update successful responses to remove any legacy
+ */
+function handleRequirementsResponse(currency, data, status, LegacyService) {
+  if (status === 200) {
+    return LegacyService.prepareResponse(currency, data);
+  }
+  return data;
+}
+
+/**
+ * We use transformers rather than a 'then', as in Angular >1.5, using a 'then'
+ * without a catch throws a warning, and we do not want to catch at this point.
+ */
+function getSaveHttpOptions($http, LegacyService) {
+  return {
+    transformResponse: getResponseTransformers(function (data, headers, status) {
+      return handleSaveResponse(data, status, LegacyService);
+    }, $http)
+  };
+}
+
+function handleSaveResponse(data, status, LegacyService) {
+  if (status === 200) {
+    return data;
+  }
+  return LegacyService.formatErrorsForDisplay(data);
+}
+
+/**
+ * Append new transform rather than replacing any already present.
+ */
+function getResponseTransformers(responseTransformer, $http) {
+  return $http.defaults.transformResponse && $http.defaults.transformResponse.concat && $http.defaults.transformResponse.concat(responseTransformer);
+}
+
+AccountDetailsService.$inject = ['$http', '$q', 'AccountDetailsLegacyService'];
+
+exports.default = AccountDetailsService;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _emailLookup = __webpack_require__(10);
+
+var _emailLookup2 = _interopRequireDefault(_emailLookup);
+
+var _emailLookup3 = __webpack_require__(16);
+
+var _emailLookup4 = _interopRequireDefault(_emailLookup3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var AccountEmailLookup = {
+  controller: _emailLookup2.default,
+  template: _emailLookup4.default,
+  bindings: {
+    onChange: '&',
+    onUseUniqueId: '&',
+    onEnterManually: '&'
+  }
+};
+
+exports.default = AccountEmailLookup;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AccountEmailLookupController = function () {
+  function AccountEmailLookupController(AccountDetailsService) {
+    _classCallCheck(this, AccountEmailLookupController);
+
+    this.AccountDetailsService = AccountDetailsService;
+    this.requestCount = 0;
+    this.lastResponse = 0;
+
+    // TODO translations
+    this.translations = {
+      email: {
+        label: 'Email address',
+        placeholder: 'Recipient email address',
+        success: 'is already on TransferWise, and would like to receive into the\n          following account.'
+      },
+      uniqueId: {
+        label: 'How do you want to send?',
+        toUniqueId: 'account ending',
+        toBankDetails: 'Send to a different account'
+      }
+    };
+  }
+
+  _createClass(AccountEmailLookupController, [{
+    key: 'onEmailChange',
+    value: function onEmailChange() {
+      var _this = this;
+
+      if (this.onChange) {
+        this.onChange({ email: this.email });
+      }
+
+      if (!this.email) {
+        this.recipient = false;
+        this.useUniqueId = false;
+        return;
+      }
+
+      this.requestCount++;
+      var requestCountAtCall = this.requestCount;
+
+      this.AccountDetailsService.lookupAccountByEmail(this.email).then(function (response) {
+        if (_this.lastResponse > requestCountAtCall) {
+          // We already received a response from a subsequent call, so throw this away
+          return;
+        }
+        _this.recipient = response.data.targetRecipient;
+        _this.useUniqueId = true;
+        _this.selectUniqueId();
+      }).catch(function () {
+        if (_this.lastResponse > requestCountAtCall) {
+          // We already received a response from a subsequent call, so throw this away
+          return;
+        }
+        _this.selectManual();
+        _this.recipient = false;
+        _this.useUniqueId = false;
+      }).finally(function () {
+        _this.lastResponse = Math.max(requestCountAtCall, _this.lastResponse);
+      });
+    }
+  }, {
+    key: 'selectUniqueId',
+    value: function selectUniqueId() {
+      if (this.onUseUniqueId) {
+        this.onUseUniqueId({ recipient: this.recipient });
+      }
+    }
+  }, {
+    key: 'selectManual',
+    value: function selectManual() {
+      if (this.onEnterManually) {
+        this.onEnterManually();
+      }
+    }
+  }, {
+    key: 'onChangeUniqueIdChoice',
+    value: function onChangeUniqueIdChoice(args) {
+      if (args.useUniqueId) {
+        this.selectUniqueId();
+      } else {
+        this.selectManual();
+      }
+    }
+  }]);
+
+  return AccountEmailLookupController;
+}();
+
+AccountEmailLookupController.$inject = ['AccountDetailsService'];
+
+exports.default = AccountEmailLookupController;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _angular = __webpack_require__(0);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _emailLookup = __webpack_require__(9);
+
+var _emailLookup2 = _interopRequireDefault(_emailLookup);
+
+var _accountDetailsService = __webpack_require__(1);
+
+var _accountDetailsService2 = _interopRequireDefault(_accountDetailsService);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _angular2.default.module('tw.account-details.email-lookup', [_accountDetailsService2.default]).component('accountEmailLookup', _emailLookup2.default).name;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _angular = __webpack_require__(0);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _accountDetailsLegacy = __webpack_require__(2);
+
+var _accountDetailsLegacy2 = _interopRequireDefault(_accountDetailsLegacy);
+
+var _accountDetailsService = __webpack_require__(1);
+
+var _accountDetailsService2 = _interopRequireDefault(_accountDetailsService);
+
+var _accountDetailsCreate = __webpack_require__(3);
+
+var _accountDetailsCreate2 = _interopRequireDefault(_accountDetailsCreate);
+
+var _multiAccountCreate = __webpack_require__(4);
+
+var _multiAccountCreate2 = _interopRequireDefault(_multiAccountCreate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _angular2.default.module('tw.account-details', [_accountDetailsLegacy2.default, _accountDetailsService2.default, _accountDetailsCreate2.default, _multiAccountCreate2.default]).name;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _multiAccountCreate = __webpack_require__(14);
+
+var _multiAccountCreate2 = _interopRequireDefault(_multiAccountCreate);
+
+var _multiAccountCreate3 = __webpack_require__(17);
+
+var _multiAccountCreate4 = _interopRequireDefault(_multiAccountCreate3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MultiAccountCreate = {
+  controller: _multiAccountCreate2.default,
+  template: _multiAccountCreate4.default,
+  bindings: {
+    profileId: '<',
+    onChange: '&',
+    onSuccess: '&',
+    onFailure: '&',
+    saveButtonLabel: '<'
+  }
+};
+
+exports.default = MultiAccountCreate;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MultiAccountCreateController = function () {
+  function MultiAccountCreateController(AccountDetailsService) {
+    _classCallCheck(this, MultiAccountCreateController);
+
+    this.AccountDetailsService = AccountDetailsService;
+
+    // TODO translations
+    this.translations = {
+      currency: {
+        label: 'Currency',
+        placeholder: 'Choose currency'
+      }
+    };
+  }
+
+  _createClass(MultiAccountCreateController, [{
+    key: '$onInit',
+    value: function $onInit() {
+      var _this = this;
+
+      if (!this.currency) {
+        this.currency = 'USD';
+      }
+
+      this.currencies = [];
+      // this.email = '';
+
+      this.AccountDetailsService.getAccountCurrencies().then(function (response) {
+        _this.currencies = response.data;
+      }).catch(function () {
+        // TODO
+      });
+    }
+  }, {
+    key: 'onSaveSuccess',
+    value: function onSaveSuccess() {
+      if (this.onSuccess) {
+        this.onSuccess();
+      }
+    }
+  }, {
+    key: 'onSaveFailure',
+    value: function onSaveFailure() {
+      if (this.onFailure) {
+        this.onFailure();
+      }
+    }
+  }, {
+    key: 'onModelChange',
+    value: function onModelChange(model) {
+      if (this.onChange) {
+        this.onChange({ model: model });
+      }
+    }
+  }]);
+
+  return MultiAccountCreateController;
+}();
+
+MultiAccountCreateController.$inject = ['AccountDetailsService'];
+
+exports.default = MultiAccountCreateController;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<div class=\"form-group\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.accountDetails.label }}\n  </label>\n  <div class=\"checkbox\" ng-class=\"{ 'has-info': !$ctrl.hasDetails }\">\n    <label>\n      <tw-checkbox\n        ng-init=\"$ctrl.hasDetails = true;\"\n        ng-model=\"$ctrl.hasDetails\"\n        ng-true-value=\"true\"\n        ng-false-value=\"false\" checked></tw-checkbox>\n      {{ $ctrl.translations.accountDetails.value }}\n    </label>\n    <div class=\"alert alert-info\" ng-if=\"!$ctrl.hasDetails\">\n      {{ $ctrl.translations.accountDetails.info }}\n    </div>\n  </div>\n</div>\n\n<account-email-lookup\n  on-change=\"$ctrl.onEmailChange(email)\"\n  on-use-unique-id=\"$ctrl.onUseUniqueId(recipient)\"\n  on-enter-manually=\"$ctrl.onEnterManually()\"\n></account-email-lookup>\n\n<div class=\"form-group\"\n  ng-if=\"$ctrl.isCountrySelectorVisible()\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.country.label }}\n  </label>\n  <tw-select\n    ng-model=\"$ctrl.model.country\"\n    options=\"$ctrl.targetCountries\"\n    ng-change=\"$ctrl.refreshRequirements()\"\n    name=\"targetCountry\"\n  ></tw-select>\n</div>\n\n<form\n  ng-if=\"$ctrl.isAccountFormVisible()\"\n  name=\"accountCreateForm\"\n  novalidate\n  ng-submit=\"accountCreateForm.$valid && $ctrl.saveAccount()\"\n  ng-class=\"{'m-t-panel': $ctrl.alternatives.length > 1}\">\n\n  <tw-requirements-form\n    ng-if=\"$ctrl.alternatives\"\n    model=\"$ctrl.model\"\n    requirements=\"$ctrl.alternatives\"\n    error-messages=\"$ctrl.errors\"\n    validation-messages=\"$ctrl.translations.validation\"\n    on-refresh-requirements=\"$ctrl.refreshRequirements()\">\n  </tw-requirements-form >\n  <input type=\"submit\"\n    value=\"{{ $ctrl.saveButtonLabel }}\"\n    class=\"btn btn-block btn-primary\" />\n</form>\n";
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"form-group\"\n  ng-class=\"{ 'has-success': $ctrl.recipient }\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.email.label }}\n  </label>\n  <input\n    name=\"email\"\n    class=\"form-control\"\n    placeholder=\"{{ $ctrl.translations.email.placeholder }}\"\n    ng-model=\"$ctrl.email\"\n    ng-model-options=\"{ debounce: 500 }\"\n    ng-change=\"$ctrl.onEmailChange()\" />\n  <div class=\"alert alert-success\" ng-if=\"$ctrl.recipient\">\n    {{ $ctrl.recipient.name }} {{ $ctrl.translations.email.success }}\n  </div>\n</div>\n<div class=\"form-group\"\n  ng-if=\"$ctrl.recipient\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.uniqueId.label }}\n  </label>\n  <div class=\"radio radio-lg\">\n    <label>\n      <tw-radio\n        name=\"uniqueId\"\n        ng-value=\"true\"\n        ng-model=\"$ctrl.useUniqueId\"\n        ng-change=\"$ctrl.onChangeUniqueIdChoice({ useUniqueId: true })\"></tw-radio>\n      {{ $ctrl.recipient.name }}\n      <small>\n        {{ $ctrl.recipient.currency }} {{ $ctrl.translations.uniqueId.toUniqueId }}\n        {{ $ctrl.recipient.shortAccountString.slice(-4) }}\n      </small>\n    </label>\n  </div>\n  <div class=\"radio\">\n    <label>\n      <tw-radio\n        name=\"uniqueId\"\n        ng-value=\"false\"\n        ng-model=\"$ctrl.useUniqueId\"\n        ng-change=\"$ctrl.onChangeUniqueIdChoice({ useUniqueId: false })\"></tw-radio>\n      {{ $ctrl.translations.uniqueId.toBankDetails }}\n    </label>\n  </div>\n</div>\n";
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<div class=\"form-group\">\n  <label class=\"control-label\">{{ $ctrl.translations.currency.label }}</label>\n  <tw-select\n    ng-model=\"$ctrl.currency\"\n    options=\"$ctrl.currencies\"\n    placeholder=\"$ctrl.translations.currency.placeholder\"\n  ></tw-select>\n</div>\n\n<account-details-create\n  profile-id=\"$ctrl.profileId\"\n  currency=\"$ctrl.currency\"\n  email=\"$ctrl.email\"\n  on-change=\"$ctrl.onModelChange(model)\"\n  on-success=\"$ctrl.onSaveSuccess()\"\n  on-failure=\"$ctrl.onSaveFailure()\"\n  save-button-label=\"$ctrl.saveButtonLabel\">\n</account-details-create>\n";
+
+/***/ })
+/******/ ]);
