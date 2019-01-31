@@ -4,6 +4,8 @@ describe('given a system for creating account details, when initialised', functi
   beforeEach(module('tw.styleguide-components'));
   beforeEach(module('tw.account-details.create'));
 
+  var path = 'https://api.transferwise.com';
+
   beforeEach(inject(function($injector) {
     $compile = $injector.get('$compile');
     $scope = $injector.get('$rootScope').$new();
@@ -16,9 +18,9 @@ describe('given a system for creating account details, when initialised', functi
 
     $httpBackend = $injector.get('$httpBackend');
 
-    $httpBackend.whenGET('/account-requirements?target=GBP').respond(requirements);
+    $httpBackend.whenGET(path + '/v2/account-requirements?targetCurrency=GBP').respond(requirements);
 
-    $httpBackend.whenPOST('/accounts').respond(function(method, url, data) {
+    $httpBackend.whenPOST(path + '/v2/accounts').respond(function(method, url, data) {
       return [200, data];
     });
   }));
@@ -37,7 +39,7 @@ describe('given a system for creating account details, when initialised', functi
     });
 
     it('should call the API to get the account requirements', function() {
-      $httpBackend.expectGET('/account-requirements?target=GBP');
+      $httpBackend.expectGET(path + '/v2/account-requirements?targetCurrency=GBP');
       component = getComponent($compile, $scope, template);
       $httpBackend.flush();
     });
@@ -59,7 +61,7 @@ describe('given a system for creating account details, when initialised', functi
     });
 
     it('should call the API to save the account', function() {
-      $httpBackend.expectPOST('/accounts', {
+      $httpBackend.expectPOST(path + '/v2/accounts', {
         currency: 'GBP',
         type: 'test',
         name: {
