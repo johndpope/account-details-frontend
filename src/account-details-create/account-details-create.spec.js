@@ -12,6 +12,7 @@ describe('Given a component for creating accounts', function() {
     <account-details-create \
       currency='currency' \
       quote-id='quoteId' \
+      locale='locale' \
       on-success='onSuccess()' \
       on-failure='onFailure()' \
       save-button-label='saveButtonLabel'> \
@@ -49,6 +50,7 @@ describe('Given a component for creating accounts', function() {
       .and.returnValue($q.resolve(alternatives));
 
     $scope.currency = 'GBP';
+    $scope.locale = 'fr-FR';
     $scope.saveButtonLabel = 'Button Label';
     $scope.onSuccess = jasmine.createSpy('onSuccess');
     $scope.onFailure = jasmine.createSpy('onFailure');
@@ -60,7 +62,7 @@ describe('Given a component for creating accounts', function() {
     });
 
     it('should load the requirements from the account details service with the given currency', function() {
-      expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP', undefined);
+      expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP', 'fr-FR', undefined);
       expect(AccountDetailsService.getRequirements.calls.count()).toBe(1);
     });
 
@@ -79,7 +81,7 @@ describe('Given a component for creating accounts', function() {
       });
 
       it('should refresh the requirements via account details service', function() {
-        expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP', undefined);
+        expect(AccountDetailsService.getRequirements).toHaveBeenCalledWith('GBP', 'fr-FR', undefined);
       });
     });
 
@@ -195,11 +197,15 @@ describe('Given a component for creating accounts', function() {
             angular.element(targetCountrySelect).controller('ngModel').$setViewValue('CA');
           });
           it('should refresh the requirements with the country', function() {
-            expect(AccountDetailsService.refreshRequirements).toHaveBeenCalledWith('USD', {
-              currency: 'USD',
-              country: 'CA',
-              type: alternatives.data[0].type
-            });
+            expect(AccountDetailsService.refreshRequirements).toHaveBeenCalledWith(
+              'USD',
+              {
+                currency: 'USD',
+                country: 'CA',
+                type: alternatives.data[0].type
+              },
+              'fr-FR'
+            );
           });
         });
       });
@@ -225,7 +231,9 @@ describe('Given a component for creating accounts', function() {
         $scope.$apply();
       });
       it('should request the new requirements', function() {
-        expect(AccountDetailsService.getRequirementsForQuote).toHaveBeenCalledWith(123, 'GBP');
+        expect(AccountDetailsService.getRequirementsForQuote).toHaveBeenCalledWith(
+          123, 'GBP', 'fr-FR'
+        );
       });
     });
   });

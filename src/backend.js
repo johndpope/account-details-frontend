@@ -68,11 +68,11 @@ function mockBackend($httpBackend) {
 const accountCreateErrors = [{
   code: 'NOT_VALID',
   message: 'Incorrect value',
-  path: 'sortCode'
+  path: 'details.sortCode'
 }, {
   code: 'REQUIRED',
   message: 'Required',
-  path: 'name'
+  path: 'name.fullName'
 }];
 
 

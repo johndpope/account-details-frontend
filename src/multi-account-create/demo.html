@@ -17,6 +17,14 @@
 &gt;&lt;/multi-account-create&gt;
 </pre>
 
+      <div class="form-group">
+        <label class="control-label">Locale</label>
+        <tw-select
+          options="$ctrl.locales"
+          ng-model="$ctrl.locale">
+        </tw-select>
+      </div>
+
       <dl class="dl-horizontal">
         <dt>profileID</dt>
         <dd>Which profile will own this account.</dd>
@@ -44,14 +52,6 @@
           Localised label for the save button.
         </dd>
       </dl>
-
-      <div class="form-group">
-        <label class="control-label">Locale</label>
-        <tw-select
-          options="$ctrl.locales"
-          ng-model="$ctrl.locale">
-        </tw-select>
-      </div>
 
       <h4>Internal model</h4>
       <pre>{{ $ctrl.model | json }}</pre>

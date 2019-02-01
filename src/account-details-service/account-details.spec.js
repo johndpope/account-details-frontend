@@ -88,7 +88,7 @@ describe('Given a service for interacting with the acount details API', function
         spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
         spyOn(AccountDetailsLegacyService, 'modifyUSD').and.returnValue($q.resolve(['modified']));
 
-        service.getRequirements('USD', 'HK');
+        service.getRequirements('USD', 'fr-FR', 'HK');
       });
       it('should pass the country to the API', function() {
         $httpBackend.expectGET(restGwRequirements + '?targetCurrency=USD&country=HK');

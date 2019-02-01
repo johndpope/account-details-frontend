@@ -8,15 +8,30 @@
 <pre>
 &lt;account-details-create
   profile-id="..."
-  currency="'USD'"
+  currency="'{{ $ctrl.currency }}'"
   locale="'{{ $ctrl.locale }}'"
   quote-id="..."
   on-change="myChangeHandler(model)"
-  on-save-success="mySuccessHandler()"
-  on-save-failure="myFailureHandler()"
+  on-success="mySuccessHandler()"
+  on-failure="myFailureHandler()"
   save-button-label="'Save'"
 &gt;&lt;/account-details-create&gt;
 </pre>
+
+      <div class="form-group">
+        <label class="control-label">Currency</label>
+        <tw-select
+          options="$ctrl.currencies"
+          ng-model="$ctrl.currency">
+        </tw-select>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Locale</label>
+        <tw-select
+          options="$ctrl.locales"
+          ng-model="$ctrl.locale">
+        </tw-select>
+      </div>
 
       <dl class="dl-horizontal">
         <dt>profileID</dt>
@@ -53,25 +68,17 @@
         </dd>
       </dl>
 
-      <div class="form-group">
-        <label class="control-label">Locale</label>
-        <tw-select
-          options="$ctrl.locales"
-          ng-model="$ctrl.locale">
-        </tw-select>
-      </div>
-
       <h4>Internal model</h4>
       <pre>{{ $ctrl.model | json }}</pre>
     </div>
     <div class="col-md-6">
       <account-details-create
-        currency="'EUR'"
+        currency="$ctrl.currency"
         profile-id="1234"
         locale="$ctrl.locale"
         on-change="$ctrl.onModelChange"
-        on-save-success="$ctrl.logSuccess"
-        on-save-failure="$ctrl.logFailure"
+        on-success="$ctrl.logSuccess"
+        on-failure="$ctrl.logFailure"
         save-button-label="'Save'"
       ></account-details-create>
 

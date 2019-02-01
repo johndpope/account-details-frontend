@@ -111,7 +111,7 @@ class AccountDetailsService {
 
     const path = '/v2/accounts';
 
-    return this.$http.post(this.domain + path, apiModel, options);
+    return this.$http.post(path, apiModel, options);
   }
 
   /**

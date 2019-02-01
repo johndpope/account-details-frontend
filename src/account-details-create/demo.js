@@ -17,6 +17,18 @@ class controller {
       value: 'en-GB',
       label: 'English'
     }];
+
+    this.currency = 'GBP';
+    this.currencies = [{
+      value: 'GBP',
+      label: 'Great British Pounds'
+    }, {
+      value: 'USD',
+      label: 'United States Dollar'
+    }, {
+      value: 'EUR',
+      label: 'Euro'
+    }];
   }
 
   onModelChange(model) { // eslint-disable-line

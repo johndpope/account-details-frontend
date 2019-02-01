@@ -115,8 +115,10 @@ class AccountDetailsCreateController {
   }
 
   saveAccount() {
-    this.AccountDetailsService.save(this.model)
+    this.AccountDetailsService
+      .save(this.model)
       .then(() => {
+        this.errors = {};
         if (this.onSuccess) {
           this.onSuccess();
         }
