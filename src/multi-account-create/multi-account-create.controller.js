@@ -1,4 +1,6 @@
 
+let bindings;
+
 class MultiAccountCreateController {
   constructor(AccountDetailsService) {
     this.AccountDetailsService = AccountDetailsService;
@@ -10,11 +12,16 @@ class MultiAccountCreateController {
         placeholder: 'Choose currency'
       }
     };
+
+    bindings = this;
   }
 
   $onInit() {
     if (!this.currency) {
       this.currency = 'USD';
+    }
+    if (!this.locale) {
+      this.locale = 'en-GB';
     }
 
     this.currencies = [];
@@ -39,9 +46,12 @@ class MultiAccountCreateController {
       this.onFailure();
     }
   }
-  onModelChange(model) {
-    if (this.onChange) {
-      this.onChange({ model });
+  onDetailsModelChange(model) { // eslint-disable-line
+    // It looks like we should be able to use 'this' instead of creating this
+    // variable, yet when this executes 'this' is actually pointing to the child
+    // 'AccountDetailsCreateController'.  Not sure why...
+    if (bindings.onChange) {
+      bindings.onChange(model);
     }
   }
 }

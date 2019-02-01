@@ -2,13 +2,23 @@ import angular from 'angular';
 import template from './demo.html';
 import component from './index';
 
+let ctrl;
+
 class controller {
-  onModelChange(model) {
-    this.model = model;
+  constructor() {
+    ctrl = this;
+    ctrl.model = {};
+  }
+
+  onModelChange(model) { // eslint-disable-line
+    ctrl.model = model;
     console.log('model changed', model); // eslint-disable-line
   }
-  log(message) { // eslint-disable-line
-    console.log(message); // eslint-disable-line
+  logSuccess() { // eslint-disable-line
+    console.log('success'); // eslint-disable-line
+  }
+  logFailure() { // eslint-disable-line
+    onsole.log('failure'); // eslint-disable-line
   }
 }
 

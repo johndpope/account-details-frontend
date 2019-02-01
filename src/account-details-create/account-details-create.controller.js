@@ -35,15 +35,13 @@ class AccountDetailsCreateController {
       this.currency = 'GBP';
     }
 
-    this.$scope.$watch('$ctrl.model', (model, oldModel) => {
-      if (model !== oldModel && this.onChange) {
-        this.onChange({ model });
-      }
-    }, true);
+    if (!this.locale) {
+      this.locale = 'en-GB';
+    }
   }
 
   $onChanges(changes) {
-    if (changes.currency) {
+    if (changes.currency || changes.locale) {
       this.model.currency = changes.currency.currentValue || 'GBP';
 
       this.AccountDetailsService.getTargetCountries(this.model.currency)
@@ -69,7 +67,7 @@ class AccountDetailsCreateController {
       this.model.profile = changes.profile.currentValue;
     }
 
-    if (changes.currency || changes.quoteId) {
+    if (changes.currency || changes.quoteId || changes.locale) {
       this.loadRequirements();
     }
   }
@@ -79,18 +77,21 @@ class AccountDetailsCreateController {
     if (this.quoteId) {
       promise = this.AccountDetailsService.getRequirementsForQuote(
         this.quoteId,
-        this.model.currency
+        this.model.currency,
+        this.locale
       );
     } else {
       promise = this.AccountDetailsService.getRequirements(
         this.model.currency,
+        this.locale,
         this.model.country
       );
     }
 
     promise
       .then((response) => {
-        this.alternatives = response.data;
+        // Filter out email alternative as we have custom handling
+        this.alternatives = response.data.filter(alternative => !isEmailAlternative(alternative));
         if (this.alternatives.length) {
           this.model.type = this.alternatives[0].type;
         }
@@ -98,10 +99,12 @@ class AccountDetailsCreateController {
       .catch(this.handleRequirementsFailure);
   }
 
+
   refreshRequirements() {
     this.AccountDetailsService.refreshRequirements(
       this.model.currency,
-      this.model
+      this.model,
+      this.locale
     ).then((response) => {
       this.alternatives = response.data;
     }).catch(this.handleRequirementsFailure);
@@ -128,6 +131,9 @@ class AccountDetailsCreateController {
 
   onEmailChange(email) {
     this.model.email = email;
+    if (this.onChange) {
+      this.onChange(this.model);
+    }
   }
 
   onUseUniqueId(recipient) {
@@ -135,6 +141,19 @@ class AccountDetailsCreateController {
   }
   onEnterManually() {
     this.uniqueIdRecipient = false;
+  }
+
+  onFormModelChange(model) {
+    if (this.onChange) {
+      this.onChange(model);
+    }
+  }
+
+  onCountryChange() {
+    this.refreshRequirements();
+    if (this.onChange) {
+      this.onChange(this.model);
+    }
   }
 
   isCountrySelectorVisible() {
@@ -147,6 +166,13 @@ class AccountDetailsCreateController {
   isAccountFormVisible() {
     return !this.uniqueIdRecipient && this.hasDetails;
   }
+}
+
+function isEmailAlternative(alternative) {
+  return alternative.properties &&
+    alternative.properties.type &&
+    alternative.properties.type.enum &&
+    alternative.properties.type.enum[0] === 'email';
 }
 
 AccountDetailsCreateController.$inject = ['$scope', 'AccountDetailsService'];
