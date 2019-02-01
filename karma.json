@@ -16,7 +16,7 @@
   "autoWatch": false,
   "frameworks": ["jasmine"],
   "browsers": [
-    "PhantomJS"
+    "ChromeHeadless"
   ],
   "reporters": ["coverage", "mocha"],
   "preprocessors": {
@@ -24,6 +24,7 @@
   },
   "plugins": [
     "karma-phantomjs-launcher",
+    "karma-chrome-launcher",
     "karma-jasmine",
     "karma-coverage",
     "karma-mocha-reporter"
