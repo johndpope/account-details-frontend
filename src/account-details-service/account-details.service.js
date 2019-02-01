@@ -212,8 +212,8 @@ function mapCurrencyToOption(currency) {
     value: currency.code,
     label: currency.name,
     currency: currency.code,
-    searchable: currency.countryKeywords ?
-      currency.countryKeywords.reduce((acc, cur) => `${acc}, ${cur}`) : ''
+    searchable: currency.countryKeywords
+      ? currency.countryKeywords.reduce((acc, cur) => `${acc}, ${cur}`) : ''
   };
 }
 
@@ -241,9 +241,9 @@ function handleSaveResponse(data, status, LegacyService) {
  * Append new transform rather than replacing any already present.
  */
 function getResponseTransformers(responseTransformer, $http) {
-  return $http.defaults.transformResponse &&
-    $http.defaults.transformResponse.concat &&
-    $http.defaults.transformResponse.concat(responseTransformer);
+  return $http.defaults.transformResponse
+    && $http.defaults.transformResponse.concat
+    && $http.defaults.transformResponse.concat(responseTransformer);
 }
 
 

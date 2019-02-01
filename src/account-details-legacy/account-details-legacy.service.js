@@ -404,14 +404,14 @@ const currencyExtensions = {
 };
 
 // TODO Translations & Katakana characters
-const japanNameHelp = "Enter the name exactly as it appears on the recipient's " +
-  'Japanese bank account (it is usually writtin in XXXX Katakana).  A mismatch ' +
-  'may cause a delay or rejection of your transfer.';
+const japanNameHelp = "Enter the name exactly as it appears on the recipient's "
+  + 'Japanese bank account (it is usually writtin in XXXX Katakana).  A mismatch '
+  + 'may cause a delay or rejection of your transfer.';
 
 const colombiaNameHelp = "Please include all of the recipient's given and family names.";
 
-const vietnamNameHelp = "Enter the name exactly as it appears on the recipient's " +
- 'Vietnamese bank account.  A mismatch may cause a delay on your transfer';
+const vietnamNameHelp = "Enter the name exactly as it appears on the recipient's "
+ + 'Vietnamese bank account.  A mismatch may cause a delay on your transfer';
 
 
 const nameExtensions = {

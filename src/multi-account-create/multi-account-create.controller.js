@@ -1,4 +1,3 @@
-
 class MultiAccountCreateController {
   constructor(AccountDetailsService) {
     this.AccountDetailsService = AccountDetailsService;
@@ -34,11 +33,13 @@ class MultiAccountCreateController {
       this.onSuccess();
     }
   }
+
   onSaveFailure() {
     if (this.onFailure) {
       this.onFailure();
     }
   }
+
   onModelChange(model) {
     if (this.onChange) {
       this.onChange({ model });

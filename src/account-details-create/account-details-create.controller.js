@@ -133,15 +133,16 @@ class AccountDetailsCreateController {
   onUseUniqueId(recipient) {
     this.uniqueIdRecipient = recipient;
   }
+
   onEnterManually() {
     this.uniqueIdRecipient = false;
   }
 
   isCountrySelectorVisible() {
-    return !this.uniqueIdRecipient &&
-      this.hasDetails &&
-      this.targetCountries &&
-      this.targetCountries.length > 1;
+    return !this.uniqueIdRecipient
+      && this.hasDetails
+      && this.targetCountries
+      && this.targetCountries.length > 1;
   }
 
   isAccountFormVisible() {

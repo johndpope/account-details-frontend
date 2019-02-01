@@ -64,11 +64,13 @@ class AccountEmailLookupController {
       this.onUseUniqueId({ recipient: this.recipient });
     }
   }
+
   selectManual() {
     if (this.onEnterManually) {
       this.onEnterManually();
     }
   }
+
   onChangeUniqueIdChoice(args) {
     if (args.useUniqueId) {
       this.selectUniqueId();

@@ -1,5 +1,5 @@
 import angular from 'angular';
-import AccountDetailsLegacyService from '../account-details-legacy/';
+import AccountDetailsLegacyService from '../account-details-legacy';
 import AccountDetailsService from './account-details.service';
 
 export default angular

@@ -54,8 +54,7 @@ function mockBackend($httpBackend) {
 
   $httpBackend.whenGET('/api/v1/country/listGlobalUsdCountries').respond(globalUsdCountries);
 
-  const swiftFormatRegex =
-    /^\/api\/v1\/recipient\/swiftAccountNumberFormat\?recipientCountry=[A-Z]{2}/;
+  const swiftFormatRegex = /^\/api\/v1\/recipient\/swiftAccountNumberFormat\?recipientCountry=[A-Z]{2}/;
 
   $httpBackend.whenGET('/api/v1/recipient/swiftAccountNumberFormat?recipientCountry=GB')
     .respond({ accountNumberFormat: 'ACCOUNT_NUMBER' });
