@@ -1,3 +1,7 @@
+# v0.8.0
+## Introduces Webpack 4
+Update the build pipeline to use Webpack 4.
+
 # v0.7.2
 ## Use the real V2 requirements API in the demo page
 
