@@ -1,4 +1,8 @@
 # v0.7.2
+## Add optional locale parameter, switch to React style callbacks
+We switch from the '&' syntax to '<' to allow the component to be wrapped with angular2react.
+
+# v0.7.2
 ## Use the real V2 requirements API in the demo page
 
 # v0.7.1
