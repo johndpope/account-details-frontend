@@ -1,5 +1,5 @@
 const path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // Inlines templates
 const htmlLoader = {
@@ -30,19 +30,12 @@ const babelLoader = {
   loader: 'babel-loader'
 };
 
-const jsonLoader = {
-  test: /\.json$/,
-  exclude: [/node_modules/],
-  loader: 'json-loader'
-};
-
 const webpackModule = {
   rules: [
     htmlLoader,
     // jshintLoader,
     eslintLoader,
     babelLoader,
-    jsonLoader
   ]
 };
 
@@ -51,20 +44,20 @@ const webpackExternals = [{
   'angular-mocks': 'angular-mocks'
 }];
 
-const webpackPlugins = [
-  new UglifyJSPlugin({
-    include: /\.min\.js$/,
-    ie8: false,
-    ecma: 6,
-    mangle: true,
-    output: {
-      beautify: false,
-      indent_level: 2
+const webpackOptimizationPlugins = {
+  minimizer: [new UglifyJsPlugin({
+    uglifyOptions: {
+      include: /\.min\.js$/,
+      mangle: true,
+      ie8: false,
+      warnings: false,
+      output: {
+        beautify: false,
+        indent_level: 2
+      },
     },
-    compress: true,
-    warnings: false
-  })
-];
+  })],
+};
 
 const distBuild = {
   entry: {
@@ -77,7 +70,7 @@ const distBuild = {
   },
   externals: webpackExternals,
   module: webpackModule,
-  plugins: webpackPlugins
+  optimization: webpackOptimizationPlugins,
 };
 
 const docsBuild = {
