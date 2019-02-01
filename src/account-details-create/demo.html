@@ -9,7 +9,7 @@
 &lt;account-details-create
   profile-id="..."
   currency="'USD'"
-  locale="'fr-FR'"
+  locale="'{{ $ctrl.locale }}'"
   quote-id="..."
   on-change="myChangeHandler(model)"
   on-save-success="mySuccessHandler()"
@@ -53,6 +53,14 @@
         </dd>
       </dl>
 
+      <div class="form-group">
+        <label class="control-label">Locale</label>
+        <tw-select
+          options="$ctrl.locales"
+          ng-model="$ctrl.locale">
+        </tw-select>
+      </div>
+
       <h4>Internal model</h4>
       <pre>{{ $ctrl.model | json }}</pre>
     </div>
@@ -60,7 +68,7 @@
       <account-details-create
         currency="'EUR'"
         profile-id="1234"
-        locale="'fr-FR'"
+        locale="$ctrl.locale"
         on-change="$ctrl.onModelChange"
         on-save-success="$ctrl.logSuccess"
         on-save-failure="$ctrl.logFailure"

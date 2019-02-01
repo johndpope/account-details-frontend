@@ -8,6 +8,15 @@ class controller {
   constructor() {
     ctrl = this;
     ctrl.model = {};
+
+    this.locale = 'en-GB';
+    this.locales = [{
+      value: 'fr-FR',
+      label: 'French'
+    }, {
+      value: 'en-GB',
+      label: 'English'
+    }];
   }
 
   onModelChange(model) { // eslint-disable-line

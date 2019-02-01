@@ -41,7 +41,7 @@ class AccountDetailsCreateController {
   }
 
   $onChanges(changes) {
-    if (changes.currency || changes.locale) {
+    if (changes.currency) {
       this.model.currency = changes.currency.currentValue || 'GBP';
 
       this.AccountDetailsService.getTargetCountries(this.model.currency)
