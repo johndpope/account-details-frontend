@@ -36,20 +36,22 @@ class MultiAccountCreateController {
       });
   }
 
-  onSaveSuccess() {
-    if (this.onSuccess) {
-      this.onSuccess();
+  // Inthese callback handlers it looks like we should be able to use 'this',
+  // instead of creating the bindings variable, yet when this executes 'this'
+  // is actually pointing to the child 'AccountDetailsCreateController'.
+  // I think webpack must convert this to an arrow function and pass by reference
+  // losing the parent scope.
+  onSaveSuccess() { // eslint-disable-line
+    if (bindings.onSuccess) {
+      bindings.onSuccess();
     }
   }
-  onSaveFailure() {
-    if (this.onFailure) {
-      this.onFailure();
+  onSaveFailure() { // eslint-disable-line
+    if (bindings.onFailure) {
+      bindings.onFailure();
     }
   }
   onDetailsModelChange(model) { // eslint-disable-line
-    // It looks like we should be able to use 'this' instead of creating this
-    // variable, yet when this executes 'this' is actually pointing to the child
-    // 'AccountDetailsCreateController'.  Not sure why...
     if (bindings.onChange) {
       bindings.onChange(model);
     }
