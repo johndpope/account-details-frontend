@@ -1,3 +1,6 @@
+# v0.8.1
+## Fix build by removing unused CSS pipeline
+
 # v0.8.0
 ## Add optional locale parameter, switch to React style callbacks
 We switch from the '&' syntax to '<' to allow the component to be wrapped with angular2react.
