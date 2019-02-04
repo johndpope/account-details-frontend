@@ -15,7 +15,33 @@ class AccountDetailsLegacyService {
       .prepRequirements(alternatives)
       .filter(alternative => Object.keys(alternative.properties).length > 0);
 
+    const propertiesToRemove = [
+      'fields', // TODO move to requirements service
+      'actions',
+      'dataModel',
+      'image',
+      'label',
+      'prepared',
+      'refreshUrl',
+      'repeatText',
+      'repeatable',
+      'repeatableLabel',
+      'repeatableListItemLabel',
+      'reviewFields'
+    ];
+
     preppedAlternatives.forEach((alternative) => {
+      propertiesToRemove.forEach((property) => {
+        delete alternative[property];
+      });
+
+      // TODO this should not be necessary, for some reason enum isn't lower case
+      // It must be coming from somewhere else.
+      if (alternative.typeString && alternative.properties.type) {
+        alternative.properties.type.enum = [alternative.typeString];
+        delete alternative.typeString;
+      }
+
       const typeExtensions = currencyExtensions[currency]
         && currencyExtensions[currency][alternative.type];
 
@@ -373,6 +399,14 @@ const globalExtensions = {
     postCode: {
       width: 'md'
     }
+  },
+  details: {
+    phoneNumber: {
+      format: 'phone'
+    }
+  },
+  legalEntityType: {
+    control: 'radio'
   }
 };
 

@@ -20,7 +20,7 @@ describe('given a system for creating account details, when initialised', functi
 
     $httpBackend.whenGET(path + '/v2/account-requirements?targetCurrency=GBP').respond(requirements);
 
-    $httpBackend.whenPOST(path + '/v2/accounts').respond(function(method, url, data) {
+    $httpBackend.whenPOST('/v2/accounts').respond(function(method, url, data) {
       return [200, data];
     });
   }));
@@ -61,7 +61,7 @@ describe('given a system for creating account details, when initialised', functi
     });
 
     it('should call the API to save the account', function() {
-      $httpBackend.expectPOST(path + '/v2/accounts', {
+      $httpBackend.expectPOST('/v2/accounts', {
         currency: 'GBP',
         type: 'test',
         name: {

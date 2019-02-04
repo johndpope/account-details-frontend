@@ -88,7 +88,7 @@ describe('Given a service for interacting with the acount details API', function
         spyOn(AccountDetailsLegacyService, 'prepareResponse').and.returnValue(['prepared']);
         spyOn(AccountDetailsLegacyService, 'modifyUSD').and.returnValue($q.resolve(['modified']));
 
-        service.getRequirements('USD', 'HK');
+        service.getRequirements('USD', 'fr-FR', 'HK');
       });
       it('should pass the country to the API', function() {
         $httpBackend.expectGET(restGwRequirements + '?targetCurrency=USD&country=HK');
@@ -191,7 +191,7 @@ describe('Given a service for interacting with the acount details API', function
 
       spyOn(AccountDetailsLegacyService, 'formatModelForAPI').and.returnValue(formattedModel);
       spyOn(AccountDetailsLegacyService, 'formatErrorsForDisplay').and.returnValue(['formatted']);
-      $httpBackend.whenPOST('https://api.transferwise.com/v2/accounts').respond(401, ['errors']);
+      $httpBackend.whenPOST('/v2/accounts').respond(401, ['errors']);
 
       promise = service.save(model);
     });
@@ -203,7 +203,7 @@ describe('Given a service for interacting with the acount details API', function
     });
     it('should POST the formatted model to the API', function() {
       promise.catch(function() {});
-      $httpBackend.expectPOST('https://api.transferwise.com/v2/accounts', formattedModel);
+      $httpBackend.expectPOST('/v2/accounts', formattedModel);
       $httpBackend.flush();
     });
     it('should use the legacy service to format error responses', function() {

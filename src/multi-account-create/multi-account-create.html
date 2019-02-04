@@ -11,9 +11,10 @@
 <account-details-create
   profile-id="$ctrl.profileId"
   currency="$ctrl.currency"
+  locale="$ctrl.locale"
   email="$ctrl.email"
-  on-change="$ctrl.onModelChange(model)"
-  on-success="$ctrl.onSaveSuccess()"
-  on-failure="$ctrl.onSaveFailure()"
+  on-change="$ctrl.onDetailsModelChange"
+  on-success="$ctrl.onSaveSuccess"
+  on-failure="$ctrl.onSaveFailure"
   save-button-label="$ctrl.saveButtonLabel">
 </account-details-create>

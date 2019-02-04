@@ -19,6 +19,7 @@
 </div>
 
 <account-email-lookup
+  locale="$ctrl.locale"
   on-change="$ctrl.onEmailChange(email)"
   on-use-unique-id="$ctrl.onUseUniqueId(recipient)"
   on-enter-manually="$ctrl.onEnterManually()"
@@ -32,7 +33,7 @@
   <tw-select
     ng-model="$ctrl.model.country"
     options="$ctrl.targetCountries"
-    ng-change="$ctrl.refreshRequirements()"
+    ng-change="$ctrl.onCountryChange()"
     name="targetCountry"
   ></tw-select>
 </div>
@@ -47,6 +48,7 @@
   <tw-requirements-form
     ng-if="$ctrl.alternatives"
     model="$ctrl.model"
+    on-model-change="$ctrl.onFormModelChange(model)"
     requirements="$ctrl.alternatives"
     error-messages="$ctrl.errors"
     validation-messages="$ctrl.translations.validation"

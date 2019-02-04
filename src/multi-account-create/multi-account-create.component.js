@@ -7,9 +7,10 @@ const MultiAccountCreate = {
   bindings: {
     profileId: '<',
     currency: '<',
-    onChange: '&',
-    onSuccess: '&',
-    onFailure: '&',
+    locale: '<',
+    onChange: '<',
+    onSuccess: '<',
+    onFailure: '<',
     saveButtonLabel: '<'
   }
 };

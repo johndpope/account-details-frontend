@@ -8,9 +8,10 @@ const AccountDetailsCreate = {
     currency: '<',
     quoteId: '<',
     profileId: '<',
-    onChange: '&',
-    onSuccess: '&',
-    onFailure: '&',
+    locale: '<',
+    onChange: '<',
+    onSuccess: '<',
+    onFailure: '<',
     saveButtonLabel: '<'
   }
 };

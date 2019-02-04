@@ -7,27 +7,46 @@
         currency.</p>
 <pre>
 &lt;account-details-create
-  currency="'USD'"
-  quote-id="..."
   profile-id="..."
+  currency="'{{ $ctrl.currency }}'"
+  locale="'{{ $ctrl.locale }}'"
+  quote-id="..."
   on-change="myChangeHandler(model)"
-  on-save-success="mySuccessHandler()"
-  on-save-failure="myFailureHandler()"
+  on-success="mySuccessHandler()"
+  on-failure="myFailureHandler()"
   save-button-label="'Save'"
 &gt;&lt;/account-details-create&gt;
 </pre>
 
+      <div class="form-group">
+        <label class="control-label">Currency</label>
+        <tw-select
+          options="$ctrl.currencies"
+          ng-model="$ctrl.currency">
+        </tw-select>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Locale</label>
+        <tw-select
+          options="$ctrl.locales"
+          ng-model="$ctrl.locale">
+        </tw-select>
+      </div>
+
       <dl class="dl-horizontal">
+        <dt>profileID</dt>
+        <dd>Which profile will own this account.</dd>
+
         <dt>currency</dt>
         <dd>3 digit currency code, used to determine the requirements for the new account.</dd>
 
-        <dt>profileID</dt>
-        <dd>Which profile will own this account.</dd>
+        <dt>locale</dt>
+        <dd>(Optional) Which language should we show? Default: en-GB</dd>
 
         <dt>quoteID</dt>
         <dd>
           (Optional) If we're creating a new recipient for a quote, provide the quote id
-          in addition to the currenct.  Occasionally the requirements may change
+          in addition to the currency.  Occasionally the requirements may change
           based on other aspects of the quote (e.g. amount).
         </dd>
 
@@ -54,13 +73,15 @@
     </div>
     <div class="col-md-6">
       <account-details-create
-        currency="'EUR'"
+        currency="$ctrl.currency"
         profile-id="1234"
-        on-change="$ctrl.onModelChange(model)"
-        on-save-success="$ctrl.log('success')"
-        on-save-failure="$ctrl.log('failure')"
+        locale="$ctrl.locale"
+        on-change="$ctrl.onModelChange"
+        on-success="$ctrl.logSuccess"
+        on-failure="$ctrl.logFailure"
         save-button-label="'Save'"
       ></account-details-create>
+
     </div>
   </div>
 </div>

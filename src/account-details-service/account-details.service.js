@@ -13,7 +13,7 @@ class AccountDetailsService {
    * Live calls, use source/sourceAmount for special cases
    * {{host}}/v1/account-requirements?source=EUR&target=USD&sourceAmount=1000
    */
-  getRequirements(currency, country) {
+  getRequirements(currency, locale, country) {
     if (!currency) {
       throw new Error('Currency is required');
     }
@@ -21,7 +21,8 @@ class AccountDetailsService {
     const options = getRequirementsHttpOptions(
       currency,
       this.LegacyService,
-      this.$http
+      this.$http,
+      locale
     );
 
     const path = getRequirementsPath(currency, country);
@@ -36,7 +37,7 @@ class AccountDetailsService {
     return promise;
   }
 
-  getRequirementsForQuote(quoteId, currency, country) {
+  getRequirementsForQuote(quoteId, currency, locale, country) {
     if (!quoteId || !currency) {
       throw new Error('Quote id and currency are required');
     }
@@ -44,7 +45,8 @@ class AccountDetailsService {
     const options = getRequirementsHttpOptions(
       currency,
       this.LegacyService,
-      this.$http
+      this.$http,
+      locale
     );
 
     const path = `/v2/quotes/${quoteId}/account-requirements`;
@@ -62,7 +64,7 @@ class AccountDetailsService {
   /**
    * Refresh account requirments for a currency using an existing model
    */
-  refreshRequirements(currency, model) {
+  refreshRequirements(currency, model, locale) {
     if (!currency) {
       throw new Error('Currency is required');
     }
@@ -71,7 +73,8 @@ class AccountDetailsService {
     const options = getRequirementsHttpOptions(
       currency,
       this.LegacyService,
-      this.$http
+      this.$http,
+      locale
     );
 
     const path = getRequirementsPath(currency, model.country);
@@ -108,7 +111,7 @@ class AccountDetailsService {
 
     const path = '/v2/accounts';
 
-    return this.$http.post(this.domain + path, apiModel, options);
+    return this.$http.post(path, apiModel, options);
   }
 
   /**
@@ -159,8 +162,11 @@ function getRequirementsPath(currency, country) {
  * We use transformers rather than a 'then', as in Angular >1.5, using a 'then'
  * without a catch throws a warning, and we do not want to catch at this point.
  */
-function getRequirementsHttpOptions(currency, LegacyService, $http) {
+function getRequirementsHttpOptions(currency, LegacyService, $http, locale) {
   return {
+    headers: {
+      'Accept-Language': locale
+    },
     transformResponse: getResponseTransformers(
       (data, headers, status) => handleRequirementsResponse(
         currency,

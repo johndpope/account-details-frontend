@@ -8,6 +8,8 @@
 <pre>
 &lt;multi-account-create
   profile-id="..."
+  currency="'EUR'"
+  locale="'{{$ctrl.locale}}'"
   on-change="myChangeHandler(model)"
   on-success="mySuccessHandler()"
   on-failure="myFailureHandler()"
@@ -15,9 +17,23 @@
 &gt;&lt;/multi-account-create&gt;
 </pre>
 
+      <div class="form-group">
+        <label class="control-label">Locale</label>
+        <tw-select
+          options="$ctrl.locales"
+          ng-model="$ctrl.locale">
+        </tw-select>
+      </div>
+
       <dl class="dl-horizontal">
         <dt>profileID</dt>
         <dd>Which profile will own this account.</dd>
+
+        <dt>currency</dt>
+        <dd>Initial currency to select.</dd>
+
+        <dt>locale</dt>
+        <dd>(Optional) Which language should we show? Default: en-GB</dd>
 
         <dt>onChange(model)</dt>
         <dd>(Optional) Triggered every time the model changes.</dd>
@@ -44,10 +60,11 @@
     <div class="col-md-6">
       <multi-account-create
         currency="'EUR'"
+        locale="$ctrl.locale"
         profile-id="1234"
-        on-change="$ctrl.onModelChange(model)"
-        on-success="$ctrl.log('demo success')"
-        on-failure="$ctrl.log('demo failure')"
+        on-change="$ctrl.onModelChange"
+        on-success="$ctrl.logSuccess"
+        on-failure="$ctrl.logFailure"
         save-button-label="'Save'"
       ></multi-account-create>
     </div>
