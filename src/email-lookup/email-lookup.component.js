@@ -5,6 +5,7 @@ const AccountEmailLookup = {
   controller,
   template,
   bindings: {
+    locale: '<',
     onChange: '&',
     onUseUniqueId: '&',
     onEnterManually: '&'
