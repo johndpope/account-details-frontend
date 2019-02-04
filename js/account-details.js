@@ -208,9 +208,10 @@ var AccountDetailsCreate = {
     currency: '<',
     quoteId: '<',
     profileId: '<',
-    onChange: '&',
-    onSuccess: '&',
-    onFailure: '&',
+    locale: '<',
+    onChange: '<',
+    onSuccess: '<',
+    onFailure: '<',
     saveButtonLabel: '<'
   }
 };
@@ -268,37 +269,33 @@ var AccountDetailsCreateController = function () {
   _createClass(AccountDetailsCreateController, [{
     key: '$onInit',
     value: function $onInit() {
-      var _this = this;
-
       if (!this.currency) {
         this.currency = 'GBP';
       }
 
-      this.$scope.$watch('$ctrl.model', function (model, oldModel) {
-        if (model !== oldModel && _this.onChange) {
-          _this.onChange({ model: model });
-        }
-      }, true);
+      if (!this.locale) {
+        this.locale = 'en-GB';
+      }
     }
   }, {
     key: '$onChanges',
     value: function $onChanges(changes) {
-      var _this2 = this;
+      var _this = this;
 
       if (changes.currency) {
         this.model.currency = changes.currency.currentValue || 'GBP';
 
         this.AccountDetailsService.getTargetCountries(this.model.currency).then(function (response) {
-          _this2.targetCountries = response.data;
+          _this.targetCountries = response.data;
 
           // Default to US for global USD
           // TODO find a way to do this more generically
-          if (_this2.model.currency === 'USD') {
-            _this2.model.country = 'US';
+          if (_this.model.currency === 'USD') {
+            _this.model.country = 'US';
           }
 
-          if (_this2.targetCountries && _this2.targetCountries.length <= 1) {
-            delete _this2.model.country;
+          if (_this.targetCountries && _this.targetCountries.length <= 1) {
+            delete _this.model.country;
           }
         }).catch(function () {
           // getTargetCountries catches errors and returns a single country
@@ -309,36 +306,39 @@ var AccountDetailsCreateController = function () {
         this.model.profile = changes.profile.currentValue;
       }
 
-      if (changes.currency || changes.quoteId) {
+      if (changes.currency || changes.quoteId || changes.locale) {
         this.loadRequirements();
       }
     }
   }, {
     key: 'loadRequirements',
     value: function loadRequirements() {
-      var _this3 = this;
+      var _this2 = this;
 
       var promise = void 0;
       if (this.quoteId) {
-        promise = this.AccountDetailsService.getRequirementsForQuote(this.quoteId, this.model.currency);
+        promise = this.AccountDetailsService.getRequirementsForQuote(this.quoteId, this.model.currency, this.locale);
       } else {
-        promise = this.AccountDetailsService.getRequirements(this.model.currency, this.model.country);
+        promise = this.AccountDetailsService.getRequirements(this.model.currency, this.locale, this.model.country);
       }
 
       promise.then(function (response) {
-        _this3.alternatives = response.data;
-        if (_this3.alternatives.length) {
-          _this3.model.type = _this3.alternatives[0].type;
+        // Filter out email alternative as we have custom handling
+        _this2.alternatives = response.data.filter(function (alternative) {
+          return !isEmailAlternative(alternative);
+        });
+        if (_this2.alternatives.length) {
+          _this2.model.type = _this2.alternatives[0].type;
         }
       }).catch(this.handleRequirementsFailure);
     }
   }, {
     key: 'refreshRequirements',
     value: function refreshRequirements() {
-      var _this4 = this;
+      var _this3 = this;
 
-      this.AccountDetailsService.refreshRequirements(this.model.currency, this.model).then(function (response) {
-        _this4.alternatives = response.data;
+      this.AccountDetailsService.refreshRequirements(this.model.currency, this.model, this.locale).then(function (response) {
+        _this3.alternatives = response.data;
       }).catch(this.handleRequirementsFailure);
     }
   }, {
@@ -349,23 +349,21 @@ var AccountDetailsCreateController = function () {
   }, {
     key: 'saveAccount',
     value: function saveAccount() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.AccountDetailsService.save(this.model).then(function () {
-        if (_this5.onSuccess) {
-          _this5.onSuccess();
-        }
+        _this4.errors = {};
+        triggerCallback(_this4.onSuccess);
       }).catch(function (errors) {
-        _this5.errors = errors;
-        if (_this5.onFailure) {
-          _this5.onFailure();
-        }
+        _this4.errors = errors;
+        triggerCallback(_this4.onFailure);
       });
     }
   }, {
     key: 'onEmailChange',
     value: function onEmailChange(email) {
       this.model.email = email;
+      triggerCallback(this.onChange, this.model);
     }
   }, {
     key: 'onUseUniqueId',
@@ -376,6 +374,17 @@ var AccountDetailsCreateController = function () {
     key: 'onEnterManually',
     value: function onEnterManually() {
       this.uniqueIdRecipient = false;
+    }
+  }, {
+    key: 'onFormModelChange',
+    value: function onFormModelChange(model) {
+      triggerCallback(this.onChange, model);
+    }
+  }, {
+    key: 'onCountryChange',
+    value: function onCountryChange() {
+      this.refreshRequirements();
+      triggerCallback(this.onChange, this.model);
     }
   }, {
     key: 'isCountrySelectorVisible',
@@ -391,6 +400,16 @@ var AccountDetailsCreateController = function () {
 
   return AccountDetailsCreateController;
 }();
+
+function triggerCallback(callback, data) {
+  if (typeof callback === 'function') {
+    callback(data);
+  }
+}
+
+function isEmailAlternative(alternative) {
+  return alternative.properties && alternative.properties.type && alternative.properties.type.enum && alternative.properties.type.enum[0] === 'email';
+}
 
 AccountDetailsCreateController.$inject = ['$scope', 'AccountDetailsService'];
 
@@ -431,7 +450,21 @@ var AccountDetailsLegacyService = function () {
         return Object.keys(alternative.properties).length > 0;
       });
 
+      var propertiesToRemove = ['fields', // TODO move to requirements service
+      'actions', 'dataModel', 'image', 'label', 'prepared', 'refreshUrl', 'repeatText', 'repeatable', 'repeatableLabel', 'repeatableListItemLabel', 'reviewFields'];
+
       preppedAlternatives.forEach(function (alternative) {
+        propertiesToRemove.forEach(function (property) {
+          delete alternative[property];
+        });
+
+        // TODO this should not be necessary, for some reason enum isn't lower case
+        // It must be coming from somewhere else.
+        if (alternative.typeString && alternative.properties.type) {
+          alternative.properties.type.enum = [alternative.typeString];
+          delete alternative.typeString;
+        }
+
         var typeExtensions = currencyExtensions[currency] && currencyExtensions[currency][alternative.type];
 
         alternative.properties = addMissingFields(alternative.properties, currency);
@@ -802,6 +835,14 @@ var globalExtensions = {
     postCode: {
       width: 'md'
     }
+  },
+  details: {
+    phoneNumber: {
+      format: 'phone'
+    }
+  },
+  legalEntityType: {
+    control: 'radio'
   }
 };
 
@@ -896,12 +937,12 @@ var AccountDetailsService = function () {
 
   _createClass(AccountDetailsService, [{
     key: 'getRequirements',
-    value: function getRequirements(currency, country) {
+    value: function getRequirements(currency, locale, country) {
       if (!currency) {
         throw new Error('Currency is required');
       }
 
-      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http);
+      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http, locale);
 
       var path = getRequirementsPath(currency, country);
 
@@ -916,12 +957,12 @@ var AccountDetailsService = function () {
     }
   }, {
     key: 'getRequirementsForQuote',
-    value: function getRequirementsForQuote(quoteId, currency, country) {
+    value: function getRequirementsForQuote(quoteId, currency, locale, country) {
       if (!quoteId || !currency) {
         throw new Error('Quote id and currency are required');
       }
 
-      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http);
+      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http, locale);
 
       var path = '/v2/quotes/' + quoteId + '/account-requirements';
 
@@ -941,13 +982,13 @@ var AccountDetailsService = function () {
 
   }, {
     key: 'refreshRequirements',
-    value: function refreshRequirements(currency, model) {
+    value: function refreshRequirements(currency, model, locale) {
       if (!currency) {
         throw new Error('Currency is required');
       }
       var apiModel = this.LegacyService.formatModelForAPI(model);
 
-      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http);
+      var options = getRequirementsHttpOptions(currency, this.LegacyService, this.$http, locale);
 
       var path = getRequirementsPath(currency, model.country);
 
@@ -989,7 +1030,7 @@ var AccountDetailsService = function () {
 
       var path = '/v2/accounts';
 
-      return this.$http.post(this.domain + path, apiModel, options);
+      return this.$http.post(path, apiModel, options);
     }
 
     /**
@@ -1050,8 +1091,11 @@ function getRequirementsPath(currency, country) {
  * We use transformers rather than a 'then', as in Angular >1.5, using a 'then'
  * without a catch throws a warning, and we do not want to catch at this point.
  */
-function getRequirementsHttpOptions(currency, LegacyService, $http) {
+function getRequirementsHttpOptions(currency, LegacyService, $http, locale) {
   return {
+    headers: {
+      'Accept-Language': locale
+    },
     transformResponse: getResponseTransformers(function (data, headers, status) {
       return handleRequirementsResponse(currency, data, status, LegacyService);
     }, $http)
@@ -1149,6 +1193,7 @@ var AccountEmailLookup = {
   controller: _emailLookup2.default,
   template: _emailLookup4.default,
   bindings: {
+    locale: '<',
     onChange: '&',
     onUseUniqueId: '&',
     onEnterManually: '&'
@@ -1354,9 +1399,10 @@ var MultiAccountCreate = {
   bindings: {
     profileId: '<',
     currency: '<',
-    onChange: '&',
-    onSuccess: '&',
-    onFailure: '&',
+    locale: '<',
+    onChange: '<',
+    onSuccess: '<',
+    onFailure: '<',
     saveButtonLabel: '<'
   }
 };
@@ -1378,6 +1424,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var bindings = void 0;
+
 var MultiAccountCreateController = function () {
   function MultiAccountCreateController(AccountDetailsService) {
     _classCallCheck(this, MultiAccountCreateController);
@@ -1391,6 +1439,8 @@ var MultiAccountCreateController = function () {
         placeholder: 'Choose currency'
       }
     };
+
+    bindings = this;
   }
 
   _createClass(MultiAccountCreateController, [{
@@ -1400,6 +1450,9 @@ var MultiAccountCreateController = function () {
 
       if (!this.currency) {
         this.currency = 'USD';
+      }
+      if (!this.locale) {
+        this.locale = 'en-GB';
       }
 
       this.currencies = [];
@@ -1411,31 +1464,41 @@ var MultiAccountCreateController = function () {
         // TODO
       });
     }
+
+    // Inthese callback handlers it looks like we should be able to use 'this',
+    // instead of creating the bindings variable, yet when this executes 'this'
+    // is actually pointing to the child 'AccountDetailsCreateController'.
+    // I think webpack must convert this to an arrow function and pass by reference
+    // losing the parent scope.
+
   }, {
     key: 'onSaveSuccess',
     value: function onSaveSuccess() {
-      if (this.onSuccess) {
-        this.onSuccess();
-      }
+      // eslint-disable-line
+      triggerCallback(bindings.onSuccess);
     }
   }, {
     key: 'onSaveFailure',
     value: function onSaveFailure() {
-      if (this.onFailure) {
-        this.onFailure();
-      }
+      // eslint-disable-line
+      triggerCallback(bindings.onFailure);
     }
   }, {
-    key: 'onModelChange',
-    value: function onModelChange(model) {
-      if (this.onChange) {
-        this.onChange({ model: model });
-      }
+    key: 'onDetailsModelChange',
+    value: function onDetailsModelChange(model) {
+      // eslint-disable-line
+      triggerCallback(bindings.onChange, model);
     }
   }]);
 
   return MultiAccountCreateController;
 }();
+
+function triggerCallback(callback, data) {
+  if (typeof callback === 'function') {
+    callback(data);
+  }
+}
 
 MultiAccountCreateController.$inject = ['AccountDetailsService'];
 
@@ -1445,7 +1508,7 @@ exports.default = MultiAccountCreateController;
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"form-group\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.accountDetails.label }}\n  </label>\n  <div class=\"checkbox\" ng-class=\"{ 'has-info': !$ctrl.hasDetails }\">\n    <label>\n      <tw-checkbox\n        ng-init=\"$ctrl.hasDetails = true;\"\n        ng-model=\"$ctrl.hasDetails\"\n        ng-true-value=\"true\"\n        ng-false-value=\"false\" checked></tw-checkbox>\n      {{ $ctrl.translations.accountDetails.value }}\n    </label>\n    <div class=\"alert alert-info\" ng-if=\"!$ctrl.hasDetails\">\n      {{ $ctrl.translations.accountDetails.info }}\n    </div>\n  </div>\n</div>\n\n<account-email-lookup\n  on-change=\"$ctrl.onEmailChange(email)\"\n  on-use-unique-id=\"$ctrl.onUseUniqueId(recipient)\"\n  on-enter-manually=\"$ctrl.onEnterManually()\"\n></account-email-lookup>\n\n<div class=\"form-group\"\n  ng-if=\"$ctrl.isCountrySelectorVisible()\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.country.label }}\n  </label>\n  <tw-select\n    ng-model=\"$ctrl.model.country\"\n    options=\"$ctrl.targetCountries\"\n    ng-change=\"$ctrl.refreshRequirements()\"\n    name=\"targetCountry\"\n  ></tw-select>\n</div>\n\n<form\n  ng-if=\"$ctrl.isAccountFormVisible()\"\n  name=\"accountCreateForm\"\n  novalidate\n  ng-submit=\"accountCreateForm.$valid && $ctrl.saveAccount()\"\n  ng-class=\"{'m-t-panel': $ctrl.alternatives.length > 1}\">\n\n  <tw-requirements-form\n    ng-if=\"$ctrl.alternatives\"\n    model=\"$ctrl.model\"\n    requirements=\"$ctrl.alternatives\"\n    error-messages=\"$ctrl.errors\"\n    validation-messages=\"$ctrl.translations.validation\"\n    on-refresh-requirements=\"$ctrl.refreshRequirements()\">\n  </tw-requirements-form >\n  <input type=\"submit\"\n    value=\"{{ $ctrl.saveButtonLabel }}\"\n    class=\"btn btn-block btn-primary\" />\n</form>\n";
+module.exports = "\n<div class=\"form-group\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.accountDetails.label }}\n  </label>\n  <div class=\"checkbox\" ng-class=\"{ 'has-info': !$ctrl.hasDetails }\">\n    <label>\n      <tw-checkbox\n        ng-init=\"$ctrl.hasDetails = true;\"\n        ng-model=\"$ctrl.hasDetails\"\n        ng-true-value=\"true\"\n        ng-false-value=\"false\" checked></tw-checkbox>\n      {{ $ctrl.translations.accountDetails.value }}\n    </label>\n    <div class=\"alert alert-info\" ng-if=\"!$ctrl.hasDetails\">\n      {{ $ctrl.translations.accountDetails.info }}\n    </div>\n  </div>\n</div>\n\n<account-email-lookup\n  locale=\"$ctrl.locale\"\n  on-change=\"$ctrl.onEmailChange(email)\"\n  on-use-unique-id=\"$ctrl.onUseUniqueId(recipient)\"\n  on-enter-manually=\"$ctrl.onEnterManually()\"\n></account-email-lookup>\n\n<div class=\"form-group\"\n  ng-if=\"$ctrl.isCountrySelectorVisible()\">\n  <label class=\"control-label\">\n    {{ $ctrl.translations.country.label }}\n  </label>\n  <tw-select\n    ng-model=\"$ctrl.model.country\"\n    options=\"$ctrl.targetCountries\"\n    ng-change=\"$ctrl.onCountryChange()\"\n    name=\"targetCountry\"\n  ></tw-select>\n</div>\n\n<form\n  ng-if=\"$ctrl.isAccountFormVisible()\"\n  name=\"accountCreateForm\"\n  novalidate\n  ng-submit=\"accountCreateForm.$valid && $ctrl.saveAccount()\"\n  ng-class=\"{'m-t-panel': $ctrl.alternatives.length > 1}\">\n\n  <tw-requirements-form\n    ng-if=\"$ctrl.alternatives\"\n    model=\"$ctrl.model\"\n    on-model-change=\"$ctrl.onFormModelChange(model)\"\n    requirements=\"$ctrl.alternatives\"\n    error-messages=\"$ctrl.errors\"\n    validation-messages=\"$ctrl.translations.validation\"\n    on-refresh-requirements=\"$ctrl.refreshRequirements()\">\n  </tw-requirements-form >\n  <input type=\"submit\"\n    value=\"{{ $ctrl.saveButtonLabel }}\"\n    class=\"btn btn-block btn-primary\" />\n</form>\n";
 
 /***/ }),
 /* 16 */
@@ -1457,7 +1520,7 @@ module.exports = "<div class=\"form-group\"\n  ng-class=\"{ 'has-success': $ctrl
 /* 17 */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"form-group\">\n  <label class=\"control-label\">{{ $ctrl.translations.currency.label }}</label>\n  <tw-select\n    ng-model=\"$ctrl.currency\"\n    options=\"$ctrl.currencies\"\n    placeholder=\"{{ $ctrl.translations.currency.placeholder }}\"\n  ></tw-select>\n</div>\n\n<account-details-create\n  profile-id=\"$ctrl.profileId\"\n  currency=\"$ctrl.currency\"\n  email=\"$ctrl.email\"\n  on-change=\"$ctrl.onModelChange(model)\"\n  on-success=\"$ctrl.onSaveSuccess()\"\n  on-failure=\"$ctrl.onSaveFailure()\"\n  save-button-label=\"$ctrl.saveButtonLabel\">\n</account-details-create>\n";
+module.exports = "\n<div class=\"form-group\">\n  <label class=\"control-label\">{{ $ctrl.translations.currency.label }}</label>\n  <tw-select\n    ng-model=\"$ctrl.currency\"\n    options=\"$ctrl.currencies\"\n    placeholder=\"{{ $ctrl.translations.currency.placeholder }}\"\n  ></tw-select>\n</div>\n\n<account-details-create\n  profile-id=\"$ctrl.profileId\"\n  currency=\"$ctrl.currency\"\n  locale=\"$ctrl.locale\"\n  email=\"$ctrl.email\"\n  on-change=\"$ctrl.onDetailsModelChange\"\n  on-success=\"$ctrl.onSaveSuccess\"\n  on-failure=\"$ctrl.onSaveFailure\"\n  save-button-label=\"$ctrl.saveButtonLabel\">\n</account-details-create>\n";
 
 /***/ })
 /******/ ]);
