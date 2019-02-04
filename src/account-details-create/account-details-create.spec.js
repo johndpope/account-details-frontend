@@ -13,8 +13,8 @@ describe('Given a component for creating accounts', function() {
       currency='currency' \
       quote-id='quoteId' \
       locale='locale' \
-      on-success='onSuccess()' \
-      on-failure='onFailure()' \
+      on-success='onSuccess' \
+      on-failure='onFailure' \
       save-button-label='saveButtonLabel'> \
     </account-details-create>";
 
