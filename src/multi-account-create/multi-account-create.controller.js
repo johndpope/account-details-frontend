@@ -42,19 +42,19 @@ class MultiAccountCreateController {
   // I think webpack must convert this to an arrow function and pass by reference
   // losing the parent scope.
   onSaveSuccess() { // eslint-disable-line
-    if (bindings.onSuccess) {
-      bindings.onSuccess();
-    }
+    triggerCallback(bindings.onSuccess);
   }
   onSaveFailure() { // eslint-disable-line
-    if (bindings.onFailure) {
-      bindings.onFailure();
-    }
+    triggerCallback(bindings.onFailure);
   }
   onDetailsModelChange(model) { // eslint-disable-line
-    if (bindings.onChange) {
-      bindings.onChange(model);
-    }
+    triggerCallback(bindings.onChange, model);
+  }
+}
+
+function triggerCallback(callback, data) {
+  if (typeof callback === 'function') {
+    callback(data);
   }
 }
 

@@ -119,23 +119,17 @@ class AccountDetailsCreateController {
       .save(this.model)
       .then(() => {
         this.errors = {};
-        if (this.onSuccess) {
-          this.onSuccess();
-        }
+        triggerCallback(this.onSuccess);
       })
       .catch((errors) => {
         this.errors = errors;
-        if (this.onFailure) {
-          this.onFailure();
-        }
+        triggerCallback(this.onFailure);
       });
   }
 
   onEmailChange(email) {
     this.model.email = email;
-    if (this.onChange) {
-      this.onChange(this.model);
-    }
+    triggerCallback(this.onChange, this.model);
   }
 
   onUseUniqueId(recipient) {
@@ -146,16 +140,12 @@ class AccountDetailsCreateController {
   }
 
   onFormModelChange(model) {
-    if (this.onChange) {
-      this.onChange(model);
-    }
+    triggerCallback(this.onChange, model);
   }
 
   onCountryChange() {
     this.refreshRequirements();
-    if (this.onChange) {
-      this.onChange(this.model);
-    }
+    triggerCallback(this.onChange, this.model);
   }
 
   isCountrySelectorVisible() {
@@ -167,6 +157,12 @@ class AccountDetailsCreateController {
 
   isAccountFormVisible() {
     return !this.uniqueIdRecipient && this.hasDetails;
+  }
+}
+
+function triggerCallback(callback, data) {
+  if (typeof callback === 'function') {
+    callback(data);
   }
 }
 

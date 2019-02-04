@@ -27,7 +27,7 @@ class controller {
     console.log('success'); // eslint-disable-line
   }
   logFailure() { // eslint-disable-line
-    onsole.log('failure'); // eslint-disable-line
+    console.log('failure'); // eslint-disable-line
   }
 }
 
